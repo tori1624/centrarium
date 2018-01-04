@@ -18,7 +18,7 @@ goyang.sp <- readOGR("D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp")
 seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/seoul_tm.shp")
 {% endhighlight %}
 
-{% highlight javascript %}
+{% highlight %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp", layer: "koyang_WGS"
 with 39 features
@@ -36,7 +36,7 @@ proj4string(goyang.sp)
 proj4string(seoul.sp)
 {% endhighlight %}
 
-{% highlight javascript %}
+{% highlight %}
 [1] "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
 [1] "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs"
 {% endhighlight %}
