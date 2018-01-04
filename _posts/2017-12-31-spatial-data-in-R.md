@@ -114,7 +114,7 @@ with 99510 features
 It has 23 fields
 {% endhighlight %}
 
-% highlight javascript %}
+{% highlight javascript %}
 plot(seoul.wgs, border = "darkgray")
 plot(montly.sp, pch = 19, cex = 0.6, add = TRUE, col = "Navy")
 {% endhighlight %}
