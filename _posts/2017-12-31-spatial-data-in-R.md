@@ -10,7 +10,7 @@ categories: Dummy
 
 R 자체에는 일반 숫자와 좌표를 구분하는 것과 같이 공간 데이터와 관련된 기능이 내장되어있지 않다. 이에 따라 많은 사용자들이 공간 데이터를 다루기 위한 패키지들을 개발하였지만, 과거에는 이러한 패키지들이 서로 다른 가정을 가지고 만들어져 서로 호환되지 않는 문제가 발생하였다. 현재에는 `sp` 패키지가 공간 데이터를 다루기 위한 표준 역할을 하게 되면서 공간 데이터의 클래스는  하나로 통일되었으며, 공간 데이터와 관련된 패키지들은 대부분 `sp` 패키지를 기반으로 작동하게 되었다. 공간 데이터를 불러오기 위해 많이 사용되는 함수는 `readOGR()`로 `rgdal` 패키지에 내장되어 있다.
 
-{% highlight r linenos %}
+{% highlight javascript %}
 # install.packages("rgdal")
 library(rgdal)
 
@@ -18,7 +18,7 @@ goyang.sp <- readOGR("D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp")
 seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/seoul_tm.shp")
 {% endhighlight %}
 
-{% highlight javascript %}
+{% highlight %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp", layer: "koyang_WGS"
 with 39 features
@@ -34,6 +34,11 @@ It has 4 fields
 {% highlight javascript %}
 proj4string(goyang.sp)
 proj4string(seoul.sp)
+{% endhighlight %}
+
+{% highlight %}
+[1] "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+[1] "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs"
 {% endhighlight %}
 
 좌표체계를 변환하기 위해서는 `sp` 패키지에 내장되어 있는 `spTransform()` 함수를 이용하면 된다. 첫 번째 코드와 같이 `CRS projection`을 직접 입력해도 되지만, 두 번째 코드와 같이 좌표체계가 다른 데이터를 활용해서 변환하는 것도 가능하다.
@@ -54,7 +59,20 @@ goyang.tm3 <- readOGR("D:/Study/spatial_data_R/data/goyang/koyang_dong.shp")
 goyang.wgs <- spTransform(goyang.tm3, CRS(proj4string(goyang.sp)))
 seoul.tm <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 seoul.wgs <- spTransform(seoul.tm, CRS(proj4string(goyang.sp)))
+{% endhighlight %}
 
+{% highlight %}
+OGR data source with driver: ESRI Shapefile 
+Source: "D:/Study/spatial_data_R/data/goyang/koyang_dong.shp", layer: "koyang_dong"
+with 39 features
+It has 3 fields
+OGR data source with driver: ESRI Shapefile 
+Source: "D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp", layer: "Seoul_dong"
+with 423 features
+It has 3 fields
+{% endhighlight %}
+
+{% highlight javascript %}
 plot(seoul.wgs, border = "darkgray")
 plot(goyang.wgs, add = TRUE, border = "darkgray")
 {% endhighlight %}
@@ -64,6 +82,15 @@ plot(goyang.wgs, add = TRUE, border = "darkgray")
 {% highlight javascript %}
 bbox(seoul.wgs)
 bbox(goyang.wgs)
+{% endhighlight %}
+
+{% highlight %}
+        min       max
+x 126.76428 127.18355
+y  37.42849  37.70138
+        min       max
+x 126.66633 126.99426
+y  37.57462  37.74929
 {% endhighlight %}
 
 {% highlight javascript %}
@@ -78,7 +105,16 @@ plot(goyang.wgs, border = "white", col = "gray", add = TRUE)
 
 {% highlight javascript %}
 montly.sp <- readOGR("D:/Study/spatial_data_R/data/montly/montly_seoul.shp")
+{% endhighlight %}
 
+{% highlight %}
+OGR data source with driver: ESRI Shapefile 
+Source: "D:/Study/spatial_data_R/data/montly/montly_seoul.shp", layer: "montly_seoul"
+with 99510 features
+It has 23 fields
+{% endhighlight %}
+
+% highlight javascript %}
 plot(seoul.wgs, border = "darkgray")
 plot(montly.sp, pch = 19, cex = 0.6, add = TRUE, col = "Navy")
 {% endhighlight %}
