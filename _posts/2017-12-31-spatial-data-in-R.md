@@ -18,7 +18,7 @@ goyang.sp <- readOGR("D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp")
 seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/seoul_tm.shp")
 {% endhighlight %}
 
-{% highlight %}
+{% highlight javascript %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/goyang/koyang_WGS.shp", layer: "koyang_WGS"
 with 39 features
@@ -36,7 +36,7 @@ proj4string(goyang.sp)
 proj4string(seoul.sp)
 {% endhighlight %}
 
-{% highlight %}
+{% highlight javascript %}
 [1] "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
 [1] "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs"
 {% endhighlight %}
@@ -61,7 +61,7 @@ seoul.tm <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 seoul.wgs <- spTransform(seoul.tm, CRS(proj4string(goyang.sp)))
 {% endhighlight %}
 
-{% highlight %}
+{% highlight javascript %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/goyang/koyang_dong.shp", layer: "koyang_dong"
 with 39 features
@@ -84,7 +84,7 @@ bbox(seoul.wgs)
 bbox(goyang.wgs)
 {% endhighlight %}
 
-{% highlight %}
+{% highlight javascript %}
         min       max
 x 126.76428 127.18355
 y  37.42849  37.70138
@@ -107,7 +107,7 @@ plot(goyang.wgs, border = "white", col = "gray", add = TRUE)
 montly.sp <- readOGR("D:/Study/spatial_data_R/data/montly/montly_seoul.shp")
 {% endhighlight %}
 
-{% highlight %}
+{% highlight javascript %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/montly/montly_seoul.shp", layer: "montly_seoul"
 with 99510 features
