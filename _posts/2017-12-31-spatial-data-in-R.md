@@ -78,6 +78,8 @@ plot(seoul.wgs, border = "darkgray")
 plot(goyang.wgs, add = TRUE, border = "darkgray")
 {% endhighlight %}
 
+<img src = "/assets/sptialdata_inR_1/rplot1.png" title = "plot" alt =" plot" width =" 1008" style = "display: block; margin: auto;" />
+
 위의 지도에서는 나타난 지도가 서울시를 중심으로 되어있기 때문에, 고양시 일부분이 생략된 것을 볼 수 있다. 이와 같은 문제를 해결하기 위해서는 `sp` 패키지에 내장되어 있는 `bbox()` 함수를 이용하면 된다. `bbox()` 함수는 공간 데이터의 x,y 좌표의 최댓값과 최솟값을 보여주기 때문에, 이 함수를 통해 우선 x,y 좌표의 범위를 확인하고 `plot()` 함수의 xlim, ylim 인자를 활용하면 전체적인 지도를 확인할 수 있게 된다. `plot()` 함수는 xlim, ylim 인자 외에도 border, col, pch, cex 등과 같이 R에 내장된 `plot()` 함수의 인자들과 유사한 인자들을 포함하고 있다.
 
 {% highlight javascript %}
