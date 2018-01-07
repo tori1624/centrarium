@@ -51,7 +51,7 @@ goyang.tm <- spTransform(goyang.sp, CRS("+proj=tmerc +lat_0=38 +lon_0=127 +k=1
 goyang.tm2 <- spTransform(goyang.sp, CRS(proj4string(seoul.sp)))
 {% endhighlight %}
 
-## 2. 공간 데이터의 시각화 (1)
+## 2. 공간 데이터의 시각화 (기초)
 
 공간 데이터의 시각화는 `plot()` 함수를 이용하면 된다. 만약 나타난 지도 위에 다른 지도를 나타내고 싶다면, add = TRUE 인자를 활용하면 된다. 여기서 주의할 점은 `add = TRUE` 인자는 R에 기본적으로 내장된 함수인 `plot()` 함수에는 존재하지 않고, `sp` 패키지에 내장된 `plot()` 함수에 존재한다는 것을 알고 있어야 한다. 위에서 사용한 데이터들을 같은 지도 위에 나타냈을 때, 경계가 정확히 맞지 않았으므로 공간데이터의 시각화 부분에서는 다른 데이터들을 활용하였으며, 좌표체계는 WGS로 설정하였다. (R mark down에서는 add = TRUE 인자를 활용할 때, 따로 실행하면 실행이 되지 않는다. 따라서 나타내고자 하는 모든 지도들을 동시에 실행시켜야 한다.)
 
@@ -104,9 +104,9 @@ plot(goyang.wgs, border = "white", col = "gray", add = TRUE)
 
 <img src = "/assets/sptialdata_inR_1/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
-## 3. 공간 데이터의 시각화 (2)
+## 3. 공간 데이터의 시각화 (point 데이터)
 
-공간 데이터의 시각화 부분을 더 자세하게 설명하기 위해 실제 데이터를 활용하고자 하였다. 활용한 데이터는 2016년 부동산 실거래가 자료로 월세만을 추출한 데이터이다. 월세 데이터는 월세를 속성값으로 가지고 있으며 각 주택의 위치 정보가 있는 점 데이터이기 때문에, 위와 동일하게 `readOGR()` 함수를 이용하여 데이터 불러오기를 하면 된다. add = TRUE 인자를 활용하여 서울시 지도 위에 월세 정보를 가진 각 주택의 위치만을 나타낸 결과는 다음과 같다.
+공간 데이터의 시각화 부분을 더 자세하게 설명하기 위해 실제 데이터를 활용하고자 하였다. 활용한 데이터는 2016년 부동산 실거래가 자료로 월세만을 추출한 데이터이다. 월세 데이터는 월세를 속성값으로 가지고 있으며 각 주택의 위치 정보가 있는 point 데이터이기 때문에, 위와 동일하게 `readOGR()` 함수를 이용하여 데이터 불러오기를 하면 된다. add = TRUE 인자를 활용하여 서울시 지도 위에 월세 정보를 가진 각 주택의 위치만을 나타낸 결과는 다음과 같다.
 
 {% highlight javascript %}
 montly.sp <- readOGR("D:/Study/spatial_data_R/data/montly/montly_seoul.shp")
@@ -164,7 +164,7 @@ north.arrow(127.18, 37.67, 0.007, col = "Grey 50")
 
 <img src = "/assets/sptialdata_inR_1/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
 
-`ggplot2` 패키지를 이용해서도 다음과 같이 지도를 만들 수 있다.
+`ggplot2` 패키지를 이용해서도 다음과 같이 지도를 만들 수 있다. 여기서 주의할 점은 `geom_point()` 함수의 color 인자에는 `findCols()`함수를 통해 각 점들의 클래스 결과를 나타낸 것이 숫자형이므로 범주형으로 바꿔준 결과가 입력되어야 한다는 것이다. 또한 `scale_color_brewer()` 함수의 결과를 반대로 나타내고 싶다면 `direction = -1` 인자를 추가해주면 된다.
 
 {% highlight javascript %}
 # install.packages("ggplot2")
