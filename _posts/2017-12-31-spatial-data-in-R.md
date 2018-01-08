@@ -126,7 +126,7 @@ plot(montly.sp, pch = 19, cex = 0.6, add = TRUE, col = "Navy")
 
 <img src = "/assets/sptialdata_inR_1/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
 
-이번에는 서울에서 무슨 지역이 월세가 높은지 확인하기 위해 월세를 5개의 클래스로 구분하여 다른 색으로 나타내고자 하였다. 우선 속성 정보가 있는 파일을 불러온 후, `classInt`와 `RColorBrewer` 패키지를 호출한다. 다음으로 `RColorBrewer` 패키지의 `brewer.pal()` 함수를 이용하여 구분하고자 하는 클래스의 수와 색을 지정해준다. 그리고 `classInt` 패키지의 `classIntervals()` 함수를 이용하여 구분하고자 하는 데이터와 클래스의 수를 지정해준다(style 인자를 활용하여 natural jenks로 클래수를 구분할 수 있으나 시간이 오래걸려 default 값을 활용하였다). 지금까지의 결과를 지도로 나타내면 다음과 같다.
+이번에는 서울에서 어느 지역이 월세가 높은지 확인하기 위해 월세를 5개의 클래스로 구분하여 다른 색으로 나타내고자 하였다. 우선 속성 정보가 있는 파일을 불러온 후, `classInt`와 `RColorBrewer` 패키지를 호출한다. 다음으로 `RColorBrewer` 패키지의 `brewer.pal()` 함수를 이용하여 구분하고자 하는 클래스의 수와 색을 지정해준다. 그리고 `classInt` 패키지의 `classIntervals()` 함수를 이용하여 구분하고자 하는 데이터와 클래스의 수를 지정해준다(style 인자를 활용하여 natural jenks로 클래수를 구분할 수 있으나 시간이 오래걸려 default 값을 활용하였다). 지금까지의 결과를 지도로 나타내면 다음과 같다.
 
 {% highlight javascript %}
 seoul.montly <- read.csv("D:/Study/spatial_data_R/data/montly/seoul2016_final.csv")
