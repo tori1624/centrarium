@@ -89,12 +89,12 @@ wifi.sp <- readOGR("D:/Study/spatial_data_R/data/etc/wifi.shp")
 wifi <- read.csv("D:/Data/Public_data/Wifi/seoul_wifi_location.csv")
 {% endhighlight %}
 
-```{r}
+{% highlight javascript %}
 OGR data source with driver: ESRI Shapefile 
 Source: "D:/Study/spatial_data_R/data/etc/wifi.shp", layer: "wifi"
 with 2994 features
 It has 6 fields
-```
+{% endhighlight %}
 
 먼저 polygon 데이터를 나타낸 후, 여기서는 `xlim()`과 `ylim()` 함수를 통해 x축과 y축의 범위를 지정해주었는데, 이는 wifi 데이터에 oulier가 존재하기 때문이다. 다음으로 point 데이터 시각화 부분과 동일하게 point 데이터를 나타내준다. 이후에 사용되는 함수들이 point density와 관련된 함수들이다. `geom_density2d()` 함수는 point density를 등고선의 형태로 보여주고, `stat_density2d()` 함수는 point density를 색으로 보여준다. 기본적인 인자를 지정해준 결과는 다음과 같다.
 
