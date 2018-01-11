@@ -76,4 +76,100 @@ plot(seoul.wgs, col = findColours(greenclass, greens), border = "Grey 50",
 par(par.origin)
 {% endhighlight %}
 
-<img src = "/assets/2018-01-08-sptialdata/rplot2.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/2018-01-08-sptialdata/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
+
+## 공간 데이터의 시각화 (point density)
+
+다음은 point density의 시각화에 대해 설명하고자 한다. point density 시각화 부분에서 사용하고자 하는 데이터는 서울시 wifi 위치 정보를 가지고 있는 데이터이다. 이 부분에서는 이전처럼 공간 데이터 시각화의 기본적인 요소들로 시각화를 하는 방법을 아직 찾지 못했기 때문에, `ggplot2` 패키지의 함수들을 활용하고자 한다. 우선 `ggplot2` 패키지를 호출하고 필요한 데이터들을 불러온다. 
+
+{% highlight javascript %}
+library(ggplot2)
+
+wifi.sp <- readOGR("D:/Study/spatial_data_R/data/etc/wifi.shp")
+wifi <- read.csv("D:/Data/Public_data/Wifi/seoul_wifi_location.csv")
+{% endhighlight %}
+
+```{r}
+OGR data source with driver: ESRI Shapefile 
+Source: "D:/Study/spatial_data_R/data/etc/wifi.shp", layer: "wifi"
+with 2994 features
+It has 6 fields
+```
+
+먼저 polygon 데이터를 나타낸 후, 여기서는 `xlim()`과 `ylim()` 함수를 통해 x축과 y축의 범위를 지정해주었는데, 이는 wifi 데이터에 oulier가 존재하기 때문이다. 다음으로 point 데이터 시각화 부분과 동일하게 point 데이터를 나타내준다. 이후에 사용되는 함수들이 point density와 관련된 함수들이다. `geom_density2d()` 함수는 point density를 등고선의 형태로 보여주고, `stat_density2d()` 함수는 point density를 색으로 보여준다. 기본적인 인자를 지정해준 결과는 다음과 같다.
+
+{% highlight javascript %}
+ggplot() +
+  geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group),
+               fill = 'white', color = 'Grey 50') +
+  xlim(126.75, 127.2) + ylim(37.42, 37.7) +
+  geom_point(data = wifi, aes(x = lon, y = lat, alpha = 0.5), 
+             color = 'Grey 50') +
+  geom_density2d(data = wifi, aes(x = lon, y = lat), size = 0.3, 
+                 color = 'Grey50') +
+  stat_density2d(data = wifi, aes(x = lon, y = lat, 
+                                  fill = ..level.., alpha = ..level..), 
+                 size = 0.3, geom = "polygon")
+{% endhighlight %}
+
+<img src = "/assets/2018-01-08-sptialdata/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
+
+다음으로는 위의 지도의 요소들을 바꿔 꾸미는 방법에 대해 설명하고자 한다. `scale_fill_gradient()` 함수는 `stat_density2d()` 함수뿐만 아니라 다양한 시각화 함수에서 나타날 색을 지정해줄 수 있다. `scale_alpha()` 함수는 투명도의 범위를 지정해줄 수 있고, `guide = FALSE` 인자를 통해 범례에서 생략할 수 있다. `theme_classic()`는 테마를 지정할 수 있는 함수로, 이 함수 외에도 `theme_void()` 등 다양한 테마들이 있다. 마지막으로 `theme()` 함수는 범례, x축, y축 등 세부적인 요소들을 지정해줄 수 있는 기능을 한다. 여기서는 범례와 범례 글씨의 크기를 지정하였다. 지금까지의 결과는 다음과 같다. 
+
+{% highlight javascript %}
+ggplot() +
+  geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group),
+               fill = 'white', color = 'Grey 50') +
+  xlim(126.75, 127.2) + ylim(37.42, 37.7) +
+  geom_point(data = wifi, aes(x = lon, y = lat, alpha = 0.5), 
+             color = 'Grey 50') +
+  geom_density2d(data = wifi, aes(x = lon, y = lat), size = 0.3, 
+                 color = 'Grey50') +
+  stat_density2d(data = wifi, aes(x = lon, y = lat, 
+                                  fill = ..level.., alpha = ..level..), 
+                 size = 0.3, geom = "polygon") + 
+  scale_fill_gradient(low = "Light Green", high = "Indian Red") + 
+  scale_alpha(range = c(0.2, 0.4), guide = FALSE) +
+  theme_classic() + theme(legend.key.heigh = unit(1.3,'cm'), 
+                          legend.key.width = unit(1.3,'cm'),
+                          legend.title = element_text(size = 17),
+                          legend.text = element_text(size = 15))
+{% endhighlight %}
+
+<img src = "/assets/2018-01-08-sptialdata/rplot4.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
+
+추가적으로 `ggplot2` 패키지에서 방위와 축척을 추가하는 방법에 대해 살펴볼 것이다. 이를 위해서는 `ggsn` 패키지를 설치하고 호출해야만 한다. 그리고 polygon 데이터를 `fortify()` 함수를 통해 data frame 형태의 객체로 따로 만들어야 한다. 
+
+{% highlight javascript %}
+# install.packages("ggsn")
+library(ggsn)
+
+seoul.fortify <- fortify(seoul.wgs)
+{% endhighlight %}
+
+`north()`는 방위를 추가해주는 함수이며, `scalebar()`는 축척을 추가해주는 함수이다. 각 함수에 `fortify()` 함수를 통해 만든 객체를 넣어주고 위치와 같은 인자들을 지정해주면 된다. 결과는 다음과 같다. 
+
+{% highlight javascript %}
+ggplot() +
+  geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group),
+               fill = 'white', color = 'Grey 50') +
+  xlim(126.75, 127.2) + ylim(37.42, 37.7) +
+  geom_point(data = wifi, aes(x = lon, y = lat, alpha = 0.5), 
+             color = 'Grey 50') +
+  geom_density2d(data = wifi, aes(x = lon, y = lat), size = 0.3, 
+                 color = 'Grey50') +
+  stat_density2d(data = wifi, aes(x = lon, y = lat, 
+                                  fill = ..level.., alpha = ..level..), 
+                 size = 0.3, geom = "polygon") + 
+  scale_fill_gradient(low = "Light Green", high = "Indian Red") + 
+  scale_alpha(range = c(0.2, 0.4), guide = FALSE) +
+  theme_classic() + theme(legend.key.heigh = unit(1.3,'cm'), 
+                          legend.key.width = unit(1.3,'cm'),
+                          legend.title = element_text(size = 17),
+                          legend.text = element_text(size = 15)) +
+  north(seoul.fortify, location = 'topright', symbol = 3, scale = 0.1) +
+  scalebar(seoul.fortify, dist = 2.5, dd2km = TRUE, model = 'WGS84', 
+           location = 'bottomleft')
+{% endhighlight %}
+
+<img src = "/assets/2018-01-08-sptialdata/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
