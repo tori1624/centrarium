@@ -164,7 +164,7 @@ north.arrow(127.18, 37.67, 0.007, col = "Grey 50")
 
 <img src = "/assets/sptialdata_inR_1/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
 
-`ggplot2` 패키지를 이용해서도 다음과 같이 지도를 만들 수 있다. 여기서 주의할 점은 `geom_point()` 함수의 color 인자에는 `findCols()`함수를 통해 각 점들의 클래스 결과를 나타낸 것이 숫자형이므로 범주형으로 바꿔준 결과가 입력되어야 한다는 것이다. 또한 `scale_color_brewer()` 함수의 결과를 반대로 나타내고 싶다면 `direction = -1` 인자를 추가해주면 된다.
+`ggplot2` 패키지를 이용해서도 다음과 같이 지도를 만들 수 있다. `ggplot2` 패키지의 `geom_polygon()` 함수는 polygon 데이터 시각화에 사용하고, `geom_point()` 함수는 point 데이터 시각화에 사용한다. 이 부분에서 사용된 `alpha` 인자는 투명도를 지정해주는 기능을 하며, color 인자는 색을 지정해주는 기능을 한다. 여기서 주의할 점은 `geom_point()` 함수의 `color` 인자에는 `findCols()`함수를 통해 각 점들의 클래스 결과를 나타낸 것이 숫자형이므로 범주형으로 바꿔준 결과가 입력되어야 한다는 것이다. `scale_color_brewer()` 함수는 범례와 관련된 함수이다. `scale_color_brewer()` 함수의 결과를 반대로 나타내고 싶다면 direction = -1 인자를 추가해주면 된다. 
 
 {% highlight javascript %}
 # install.packages("ggplot2")
