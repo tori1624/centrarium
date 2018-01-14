@@ -3,7 +3,7 @@ layout: post
 title:  "R과 공간 데이터 (2)"
 date:   2018-01-08 23:40:00
 author: Youngho Lee
-categories: Dummy
+categories: Spatial-Data
 cover:  "/assets/sptialdata_inR_1/spatial.jpg"
 ---
 
