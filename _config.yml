@@ -10,11 +10,11 @@ exclude:
 
 # Site settings
 title: Tori
-subtitle: "A simple yet classy theme for your Jekyll website or blog"
+subtitle: "My place"
 email: emfo0124@gmail.com
 name: Youngho Lee
 description: >
-  A simple yet classy theme for your Jekyll website or blog.
+  My place.
 # Base URL of site (i.e. /blog). It should always start with a slash,
 # and never end with a slash. Set it to a blank value if hosting at the
 # root of your server.
@@ -94,7 +94,7 @@ social:
   - name: LinkedIn
     icon: linkedin
     username: 
-    url: a
+    url: 
     desc: Connect with me on LinkedIn
     share: true
 
