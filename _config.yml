@@ -19,8 +19,8 @@ description: >
 # and never end with a slash. Set it to a blank value if hosting at the
 # root of your server.
 baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://bencentra.github.io" # the base hostname & protocol for your site
-cover: "/assets/header_image.jpg"
+url: "https://tori1624.github.io" # the base hostname & protocol for your site
+cover: "/assets/header_image2.jpg"
 logo: "/assets/logo.png"
 
 # Build settings
@@ -51,8 +51,8 @@ descriptions:
   - cat: jekyll
     desc: "Posts describing Jekyll setup techniques."
 
-  - cat: dummy
-    desc: "Just some placeholder posts, lorem ipsum and the rest."
+  - cat: Spatial-data
+    desc: "Sptial data in R"
 
 # Social icons and sharing options
 #
@@ -72,14 +72,14 @@ descriptions:
 social:
   - name: Twitter
     icon: twitter
-    username: TheBenCentra
-    url: https://twitter.com/TheBenCentra
+    username: 
+    url: 
     desc: Follow me on Twitter
     share: true
 
   - name: Facebook
     icon: facebook
-    username: thebencentra
+    username: 
     url:
     desc: Friend me on Facebook
     share: true
@@ -93,8 +93,8 @@ social:
 
   - name: LinkedIn
     icon: linkedin
-    username: Ben Centra
-    url: https://www.linkedin.com/pub/ben-centra/47/769/60a
+    username: 
+    url: a
     desc: Connect with me on LinkedIn
     share: true
 
