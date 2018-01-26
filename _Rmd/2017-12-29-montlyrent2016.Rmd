@@ -1,0 +1,458 @@
+---
+title: "seoul2016"
+author: "Young Ho Lee"
+date: "2017.10.02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Basic Packages
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(gridExtra)
+library(openxlsx)
+
+#setwd
+knitr::opts_chunk$set(root.dir = "D:/Data/Public_data/real_transaction_price_2017/2016/")
+```
+
+# 1. Data Import
+```{r}
+seoul2016 <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/seoul2016.xlsx")
+
+split_gu <- function(x){
+  strsplit(x, split = ',')[[1]][2]
+}
+
+split_dong <- function(x){
+  strsplit(x, split = ',')[[1]][3]
+}
+
+seoul2016$구 <- sapply(seoul2016$시군구, split_gu)
+seoul2016$동 <- sapply(seoul2016$시군구, split_dong)
+
+seoul2016$계약일 <- as.factor(seoul2016$계약일)
+seoul2016$건물종류 <- as.factor(seoul2016$건물종류)
+seoul2016$구 <- as.factor(seoul2016$구)
+seoul2016$동 <- as.factor(seoul2016$동)
+
+seoul2016 <- seoul2016 %>%
+  select(-시군구)
+
+str(seoul2016)
+summary(seoul2016)
+```
+
+# 2. Data Exploration
+## 1) Visualization
+### 1-1) 전용면적
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = seoul2016$`전용면적(㎡)`, y = log(seoul2016$`월세(만원)`), 
+             color = seoul2016$`전용면적(㎡)`)) +
+  geom_point(shape = 21) + geom_line() +
+  xlab("전용면적(㎡)") + ylab("log(월세(만원))") + 
+  scale_color_gradient(low = "deepskyblue", high = "hotpink",
+                       name = "전용면적(㎡)") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-2) 계약년월
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = factor(seoul2016$계약년월), y = log(seoul2016$`월세(만원)`), 
+             fill = factor(seoul2016$계약년월))) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("계약년월") + ylab("log(월세(만원))") +
+  scale_fill_discrete(name = "계약년월") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-3) 계약일
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$계약일, y = log(seoul2016$`월세(만원)`), 
+             fill = seoul2016$계약일)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("계약일") + ylab("log(월세(만원))") +
+  scale_fill_discrete(name = "계약일") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-4) 보증금(만원)
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = log(seoul2016$`보증금(만원)`), y = log(seoul2016$`월세(만원)`), 
+             color = log(seoul2016$`보증금(만원)`))) +
+  geom_point(shape = 21) + geom_line() +
+  xlab("보증금(만원)") + ylab("log(월세(만원))") +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink",
+                       name = "보증금(만원)") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-5) 층
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = factor(seoul2016$층), y = log(seoul2016$`월세(만원)`), 
+             fill = factor(seoul2016$층))) +
+  geom_boxplot() +
+  xlab("층") + ylab("log(월세(만원))") +
+  scale_fill_discrete(name = "층") + theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-6) 건축년도
+```{r}
+seoul2016 %>%
+  mutate(built_year = cut(seoul2016$건축년도, seq(1960, 2020, by = 10),
+                            labels = paste0(seq(1960, 2010, by = 10), "s"))) %>%
+  ggplot(aes(x = factor(built_year), y = log(seoul2016$`월세(만원)`),
+             fill = factor(built_year))) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("건축년도") + ylab("log(월세(만원))") +
+  scale_fill_discrete(name = "건축년도")  +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-7) 건물종류
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$건물종류, y = log(seoul2016$`월세(만원)`), 
+             fill = seoul2016$건물종류)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("건물종류") + ylab("log(월세(만원))") +
+  scale_fill_discrete(name = "건물종류") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-8) 구
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$구, y = log(seoul2016$`월세(만원)`), 
+             fill = seoul2016$구)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("자치구") + ylab("log(월세(만원))") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16)) + 
+  theme(legend.position = "none")
+```
+
+### 1-9) log(월세(만원))
+```{r}
+library(ggmap)
+
+Seoul <- get_map(location = 'seoul',
+                 zoom = 11,
+                 maptype = "roadmap")
+
+seoul2016.arrange <- seoul2016 %>%
+  arrange(`월세(만원)`)
+
+ggmap(Seoul) + 
+    geom_point(data = seoul2016.arrange, aes(x = x, y = y, 
+                                             color = log(`월세(만원)`)), 
+               alpha = .075) + 
+    scale_color_gradient(low = "green", high = "red")
+```
+
+
+# 3. Modeling
+```{r}
+seoul2016$`월세(만원)` <- ifelse(seoul2016$`월세(만원)` == 0, 1, seoul2016$`월세(만원)`)
+
+set.seed(1234)
+trainIndex <- sample(x = 1:nrow(seoul2016), size = 0.7 * nrow(seoul2016))
+train <- seoul2016[trainIndex, ]
+test <- seoul2016[-trainIndex, ]
+```
+
+## 1) Raw Model
+```{r}
+monthlyRent_model <- lm(`월세(만원)` ~ ., data = train[, -12])
+summary(monthlyRent_model)
+```
+
+## 2) Log model
+```{r}
+log_model <- lm(log(`월세(만원)`) ~ ., data = train[, -12])
+summary(log_model)
+```
+
+
+# 4. Model Evaluation
+## 1) Raw model
+```{r}
+rmse <- function(actual, predict){
+  if(length(actual) != length(predict))
+      stop("The length of two vectors are different")
+
+  length <- length(actual)
+  errorSum <- sum((actual - predict)^2)
+  
+  return(sqrt(errorSum / length))
+}
+```
+
+```{r}
+predict_price <- predict(monthlyRent_model, test)
+plot(predict_price)
+
+rmse(test$`월세(만원)`, predict_price)
+```
+
+## 2) Log model
+```{r}
+rmsle <- function(pred, act) {
+    if(length(pred) != length(act))
+        stop("The length of two vectors are different")
+    
+    len <- length(pred)
+    pred <- log(pred + 1)
+    act <- log(act + 1)
+    
+    msle <- mean((pred - act)^2)
+    
+    return(sqrt(msle))
+}
+```
+
+```{r}
+log_pred <- predict(log_model, test)
+log_pred <- exp(log_pred)
+plot(log_pred)
+
+rmsle(log_pred, test$`월세(만원)`)
+```
+
+```{r}
+write.csv(seoul2016, "seoul2016.csv", row.names = FALSE)
+```
+
+# 5. Model Improvement
+## 1) Data Import
+```{r}
+final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/seoul2016_final.xlsx")
+
+str(final)
+summary(final)
+
+final <- final %>%
+  mutate(강남구 = ifelse(final$구 == "강남구", 1, 0),
+         강동구 = ifelse(final$구 == "강동구", 1, 0),
+         강북구 = ifelse(final$구 == "강북구", 1, 0),
+         강서구 = ifelse(final$구 == "강서구", 1, 0),
+         관악구 = ifelse(final$구 == "관악구", 1, 0),
+         광진구 = ifelse(final$구 == "광진구", 1, 0),
+         구로구 = ifelse(final$구 == "구로구", 1, 0),
+         금천구 = ifelse(final$구 == "금천구", 1, 0),
+         노원구 = ifelse(final$구 == "노원구", 1, 0),
+         도봉구 = ifelse(final$구 == "도봉구", 1, 0),
+         동대문구 = ifelse(final$구 == "동대문구", 1, 0),
+         동작구 = ifelse(final$구 == "동작구", 1, 0),
+         마포구 = ifelse(final$구 == "마포구", 1, 0),
+         서대문구 = ifelse(final$구 == "서대문구", 1, 0),
+         서초구 = ifelse(final$구 == "서초구", 1, 0),
+         성동구 = ifelse(final$구 == "성동구", 1, 0),
+         성북구 = ifelse(final$구 == "성북구", 1, 0),
+         송파구 = ifelse(final$구 == "송파구", 1, 0),
+         양천구 = ifelse(final$구 == "양천구", 1, 0),
+         영등포구 = ifelse(final$구 == "영등포구", 1, 0),
+         용산구 = ifelse(final$구 == "용산구", 1, 0),
+         은평구 = ifelse(final$구 == "은평구", 1, 0),
+         종로구 = ifelse(final$구 == "종로구", 1, 0),
+         중구 = ifelse(final$구 == "중구", 1, 0),
+         중랑구 = ifelse(final$구 == "중랑구", 1, 0),
+         아파트 = ifelse(final$건물종류 == "아파트", 1, 0),
+         "연립/다세대" = ifelse(final$건물종류 == "연립/다세대", 1, 0),
+         오피스텔 = ifelse(final$건물종류 == "오피스텔", 1, 0),
+         초 = ifelse(final$계약일 == "1~10", 1, 0),
+         중 = ifelse(final$계약일 == "11~20", 1, 0),
+         말 = ifelse(final$계약일 == "21~31", 1, 0)) %>%
+  select(-c(구, 건물종류, 계약일))
+
+# Data split
+raw <- final[, c(2:9, 21:51)]
+final <- final[, c(2:9, 16:51)]
+```
+
+## 2) Raw model
+```{r}
+raw$`월세(만원)` <- ifelse(raw$`월세(만원)` == 0, 1, raw$`월세(만원)`)
+
+set.seed(1234)
+trainIndex <- sample(x = 1:nrow(raw), size = 0.7 * nrow(raw))
+tr.raw <- raw[trainIndex, ]
+te.raw <- raw[-trainIndex, ]
+```
+
+```{r}
+raw.model <- lm(log(`월세(만원)`) ~ ., data = tr.raw)
+summary(raw.model)
+```
+
+```{r}
+rmsle <- function(pred, act) {
+    if(length(pred) != length(act))
+        stop("The length of two vectors are different")
+    
+    len <- length(pred)
+    pred <- log(pred + 1)
+    act <- log(act + 1)
+    
+    msle <- mean((pred - act)^2)
+    
+    return(sqrt(msle))
+}
+```
+
+```{r}
+raw.pred <- predict(raw.model, te.raw)
+raw.pred <- exp(raw.pred)
+plot(raw.pred)
+
+rmsle(raw.pred, te.raw$`월세(만원)`)
+```
+
+## 3) Visualization
+```{r}
+final <- final %>%
+  dplyr::mutate(theater_c = ifelse(theater_dist < 300, 5, 
+                            ifelse(theater_dist > 300 & theater_dist < 600, 4,
+                            ifelse(theater_dist > 600 & theater_dist < 900, 3, 
+                            ifelse(theater_dist > 900 & theater_dist < 1200, 2,
+                            ifelse(theater_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(subway_c = ifelse(subway_dist < 300, 5, 
+                           ifelse(subway_dist > 300 & subway_dist < 600, 4,
+                           ifelse(subway_dist > 600 & subway_dist < 900, 3, 
+                           ifelse(subway_dist > 900 & subway_dist < 1200, 2,
+                           ifelse(subway_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(univ_c = ifelse(univ_dist < 300, 5, 
+                         ifelse(univ_dist > 300 & univ_dist < 600, 4,
+                         ifelse(univ_dist > 600 & univ_dist < 900, 3, 
+                         ifelse(univ_dist > 900 & univ_dist < 1200, 2,
+                         ifelse(univ_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(host_c = ifelse(host_dist < 300, 5, 
+                         ifelse(host_dist > 300 & host_dist < 600, 4,
+                         ifelse(host_dist > 600 & host_dist < 900, 3, 
+                         ifelse(host_dist > 900 & host_dist < 1200, 2,
+                         ifelse(host_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(police_c = ifelse(police_dist < 300, 5, 
+                           ifelse(police_dist > 300 & police_dist < 600, 4,
+                           ifelse(police_dist > 600 & police_dist < 900, 3, 
+                           ifelse(police_dist > 900 & police_dist < 1200, 2,
+                           ifelse(police_dist > 1200, 1, NA)))))) %>%
+  select(-c(theater_dist, subway_dist, univ_dist, host_dist, police_dist))
+```
+
+### 3-1) Theater
+```{r}
+final %>%
+  ggplot(aes(x = factor(theater_c), y = log(`월세(만원)`), 
+             color = factor(theater_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("극장과의 거리(가중치)") + scale_color_discrete(name = "가중치") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-2) Subway
+```{r}
+final %>%
+  ggplot(aes(x = factor(subway_c), y = log(`월세(만원)`), 
+             color = factor(subway_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("지하철역과의 거리(가중치)") + scale_color_discrete(name = "가중치") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-3) University
+```{r}
+final %>%
+  ggplot(aes(x = factor(univ_c), y = log(`월세(만원)`), 
+             color = factor(univ_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("대학교와의 거리(가중치)") + scale_color_discrete(name = "가중치") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-4) Hospital
+```{r}
+final %>%
+  ggplot(aes(x = factor(host_c), y = log(`월세(만원)`), 
+             color = factor(host_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("종합병원과의 거리(가중치)") + scale_color_discrete(name = "가중치") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-5) Police Office
+```{r}
+final %>%
+  ggplot(aes(x = factor(police_c), y = log(`월세(만원)`), 
+             color = factor(police_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("경찰서와의 거리(가중치)") + scale_color_discrete(name = "가중치") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+## 4) Final model
+```{r}
+final$`월세(만원)` <- ifelse(final$`월세(만원)` == 0, 1, final$`월세(만원)`)
+
+tr.final <- final[trainIndex, ]
+te.final <- final[-trainIndex, ]
+```
+
+```{r}
+final.model <- lm(log(`월세(만원)`) ~ ., data = tr.final[, -16])
+summary(final.model)
+```
+
+```{r}
+final.pred <- predict(final.model, te.final)
+final.pred <- exp(final.pred)
+plot(final.pred)
+
+rmsle(final.pred, te.final$`월세(만원)`)
+```
+
+```{r}
+# log x : 67.59016
+# raw(log o) : 0.4986276
+# + Theater : 0.4974584
+# + Theater, subway : 0.4938038
+# + Theater, subway, university : 0.4935597
+# + Theater, subway, university, hospital : 0.4915776
+# + Theater, subway, university, hospital, police office : 0.4907772
+
+# dist
+# + Theater : 0.4950176
+# + Theater, subway : 0.4893252
+# + Theater, subway, university : 0.4893243
+# + Theater, subway, university, hospital : 0.486896
+# + Theater, subway, university, hospital, police office : 0.4868355
+
+# distance category
+# + Theater : 0.4972346
+# + Theater, subway : 0.4911091
+# + Theater, subway, university : 0.49091
+# + Theater, subway, university, hospital : 0.4886029
+# + Theater, subway, university, hospital, police office : 0.4880586
+```
+
