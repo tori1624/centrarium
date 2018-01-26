@@ -44,7 +44,7 @@ plot(seoul.wgs, col = findColours(heatclass, reds), border = "Grey 50",
      main = "서울시 동별 폭염일수")
 {% endhighlight %}
 
-<img src = "/assets/spatialdata/2018-01-08-sptialdata/rplot1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
 
 polygon 데이터 시각화에 대해 설명하는 부분이 짧았기 때문에 추가적으로 하나의 그림에 여러 개의 지도르 나타내는 방법에 대해 설명하고자 한다. 우선 폭염일수를 제외한 다른 속성 정보들도 클래스를 구분하고 색을 지정해준다.
 
@@ -76,7 +76,7 @@ plot(seoul.wgs, col = findColours(greenclass, greens), border = "Grey 50",
 par(par.origin)
 {% endhighlight %}
 
-<img src = "/assets/spatialdata/2018-01-08-sptialdata/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
 ## 공간 데이터의 시각화 (point density)
 
@@ -112,7 +112,7 @@ ggplot() +
                  size = 0.3, geom = "polygon")
 {% endhighlight %}
 
-<img src = "/assets/spatialdata/2018-01-08-sptialdata/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
 
 다음으로는 위의 지도의 요소들을 바꿔 꾸미는 방법에 대해 설명하고자 한다. `scale_fill_gradient()` 함수는 `stat_density2d()` 함수뿐만 아니라 다양한 시각화 함수에서 나타날 색을 지정해줄 수 있다. `scale_alpha()` 함수는 투명도의 범위를 지정해줄 수 있고, `guide = FALSE` 인자를 통해 범례에서 생략할 수 있다. `theme_classic()`는 테마를 지정할 수 있는 함수로, 이 함수 외에도 `theme_void()` 등 다양한 테마들이 있다. 마지막으로 `theme()` 함수는 범례, x축, y축 등 세부적인 요소들을 지정해줄 수 있는 기능을 한다. 여기서는 범례와 범례 글씨의 크기를 지정하였다. 지금까지의 결과는 다음과 같다. 
 
@@ -136,7 +136,7 @@ ggplot() +
                           legend.text = element_text(size = 15))
 {% endhighlight %}
 
-<img src = "/assets/spatialdata/2018-01-08-sptialdata/rplot4.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot4.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
 
 추가적으로 `ggplot2` 패키지에서 방위와 축척을 추가하는 방법에 대해 살펴볼 것이다. 이를 위해서는 `ggsn` 패키지를 설치하고 호출해야만 한다. 그리고 polygon 데이터를 `fortify()` 함수를 통해 data frame 형태의 객체로 따로 만들어야 한다. 
 
@@ -172,4 +172,4 @@ ggplot() +
            location = 'bottomleft')
 {% endhighlight %}
 
-<img src = "/assets/spatialdata/2018-01-08-sptialdata/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
