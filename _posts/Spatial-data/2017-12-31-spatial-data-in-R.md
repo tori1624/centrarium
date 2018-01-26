@@ -4,7 +4,7 @@ title:  "R과 공간 데이터 (1)"
 date:   2017-12-31 16:40:00
 author: Youngho Lee
 categories: Spatial-Data
-cover:  "/assets/sptialdata_inR_1/spatial.jpg"
+cover:  "/assets/spatialdata/2017-12-31-spatialdata/spatial.jpg"
 ---
 
 ## 1. 공간 데이터 불러오기와 좌표체계
@@ -78,7 +78,7 @@ plot(seoul.wgs, border = "darkgray")
 plot(goyang.wgs, add = TRUE, border = "darkgray")
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
 
 위의 지도에서는 나타난 지도가 서울시를 중심으로 되어있기 때문에, 고양시 일부분이 생략된 것을 볼 수 있다. 이와 같은 문제를 해결하기 위해서는 `sp` 패키지에 내장되어 있는 `bbox()` 함수를 이용하면 된다. `bbox()` 함수는 공간 데이터의 x,y 좌표의 최댓값과 최솟값을 보여주기 때문에, 이 함수를 통해 우선 x,y 좌표의 범위를 확인하고 `plot()` 함수의 xlim, ylim 인자를 활용하면 전체적인 지도를 확인할 수 있게 된다. `plot()` 함수는 xlim, ylim 인자 외에도 border, col, pch, cex 등과 같이 R에 내장된 `plot()` 함수의 인자들과 유사한 인자들을 포함하고 있다.
 
@@ -102,7 +102,7 @@ plot(seoul.wgs, xlim = c(126.66, 127.2), ylim = c(37.4, 37.76),
 plot(goyang.wgs, border = "white", col = "gray", add = TRUE)
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
 ## 3. 공간 데이터의 시각화 (point 데이터)
 
@@ -124,7 +124,7 @@ plot(seoul.wgs, border = "darkgray")
 plot(montly.sp, pch = 19, cex = 0.6, add = TRUE, col = "Navy")
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot3.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
 
 이번에는 서울에서 어느 지역이 월세가 높은지 확인하기 위해 월세를 5개의 클래스로 구분하여 다른 색으로 나타내고자 하였다. 우선 속성 정보가 있는 파일을 불러온 후, `classInt`와 `RColorBrewer` 패키지를 호출한다. 다음으로 `RColorBrewer` 패키지의 `brewer.pal()` 함수를 이용하여 구분하고자 하는 클래스의 수와 색을 지정해준다. 그리고 `classInt` 패키지의 `classIntervals()` 함수를 이용하여 구분하고자 하는 데이터와 클래스의 수를 지정해준다(style 인자를 활용하여 natural jenks로 클래수를 구분할 수 있으나 시간이 오래걸려 default 값을 활용하였다). 지금까지의 결과를 지도로 나타내면 다음과 같다.
 
@@ -144,7 +144,7 @@ plot(montly.sp, col = findColours(montlyclass, orrd), add = TRUE,
      pch = 19, cex = 1.2)
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot4.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot4.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
 
 지도에는 기본적으로 범례, 축척, 방위가 들어가야 하는데, R에서도 이러한 요소들을 지도에 나타내는 것이 가능하다. 범례의 경우에는 R에 기본적으로 내장된 `legend()` 함수를 이용하여 나타내는 것이 가능하다. `legend()` 함수에서는 위치와 구분한 클래스에 대한 정보를 입력해주고, cex 인자를 통해 크기를 지정할 수 있으며, bty = "n" 인자를 통해 범례의 박스를 없앨 수 있다. 축척과 방위의 경우에는 `GISTools` 패키지의 `map.scale()` 과 `north.arrow()` 함수를 이용하여 나타내는 것이 가능하다. `legend()` 함수와 마찬가지로 위치를 지정해주고, 길이를 통해 크기를 지정해준다. 하지만 이번에는 임의로 나타낸 것이므로, 어떠한 단위를 기준으로 값이 설정되는지 자세하게 알아볼 필요가 있다.
 
@@ -162,7 +162,7 @@ map.scale(126.75, 37.46, 0.1, "KiloMeters", 4, 0.5)
 north.arrow(127.18, 37.67, 0.007, col = "Grey 50")
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot5.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
 
 `ggplot2` 패키지를 이용해서도 다음과 같이 지도를 만들 수 있다. `ggplot2` 패키지의 `geom_polygon()` 함수는 polygon 데이터 시각화에 사용하고, `geom_point()` 함수는 point 데이터 시각화에 사용한다. 이 부분에서 사용된 `alpha` 인자는 투명도를 지정해주는 기능을 하며, color 인자는 색을 지정해주는 기능을 한다. 여기서 주의할 점은 `geom_point()` 함수의 `color` 인자에는 `findCols()`함수를 통해 각 점들의 클래스 결과를 나타낸 것이 숫자형이므로 범주형으로 바꿔준 결과가 입력되어야 한다는 것이다. `scale_color_brewer()` 함수는 범례와 관련된 함수이다. `scale_color_brewer()` 함수의 결과를 반대로 나타내고 싶다면 direction = -1 인자를 추가해주면 된다. 
 
@@ -181,4 +181,4 @@ ggplot() +
   guides(alpha = "none")
 {% endhighlight %}
 
-<img src = "/assets/sptialdata_inR_1/rplot6.png" title = "plot6" alt = "plot6" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/spatialdata/2017-12-31-spatialdata/rplot6.png" title = "plot6" alt = "plot6" width = "1008" style = "display: block; margin: auto;" />
