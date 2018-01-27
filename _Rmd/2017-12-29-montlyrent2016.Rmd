@@ -1,8 +1,10 @@
 ---
+layout: posts
 title: "seoul2016"
 author: "Young Ho Lee"
 date: "2017.10.02"
 output: html_document
+categories: Contest
 ---
 
 ```{r setup, include=FALSE}
@@ -30,16 +32,16 @@ split_dong <- function(x){
   strsplit(x, split = ',')[[1]][3]
 }
 
-seoul2016$±¸ <- sapply(seoul2016$½Ã±º±¸, split_gu)
-seoul2016$µ¿ <- sapply(seoul2016$½Ã±º±¸, split_dong)
+seoul2016$êµ¬ <- sapply(seoul2016$ì‹œêµ°êµ¬, split_gu)
+seoul2016$ë™ <- sapply(seoul2016$ì‹œêµ°êµ¬, split_dong)
 
-seoul2016$°è¾àÀÏ <- as.factor(seoul2016$°è¾àÀÏ)
-seoul2016$°Ç¹°Á¾·ù <- as.factor(seoul2016$°Ç¹°Á¾·ù)
-seoul2016$±¸ <- as.factor(seoul2016$±¸)
-seoul2016$µ¿ <- as.factor(seoul2016$µ¿)
+seoul2016$ê³„ì•½ì¼ <- as.factor(seoul2016$ê³„ì•½ì¼)
+seoul2016$ê±´ë¬¼ì¢…ë¥˜ <- as.factor(seoul2016$ê±´ë¬¼ì¢…ë¥˜)
+seoul2016$êµ¬ <- as.factor(seoul2016$êµ¬)
+seoul2016$ë™ <- as.factor(seoul2016$ë™)
 
 seoul2016 <- seoul2016 %>%
-  select(-½Ã±º±¸)
+  select(-ì‹œêµ°êµ¬)
 
 str(seoul2016)
 summary(seoul2016)
@@ -47,109 +49,109 @@ summary(seoul2016)
 
 # 2. Data Exploration
 ## 1) Visualization
-### 1-1) Àü¿ë¸éÀû
+### 1-1) ì „ìš©ë©´ì 
 ```{r}
 seoul2016 %>%  
-  ggplot(aes(x = seoul2016$`Àü¿ë¸éÀû(§³)`, y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             color = seoul2016$`Àü¿ë¸éÀû(§³)`)) +
+  ggplot(aes(x = seoul2016$`ì „ìš©ë©´ì (ã¡)`, y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             color = seoul2016$`ì „ìš©ë©´ì (ã¡)`)) +
   geom_point(shape = 21) + geom_line() +
-  xlab("Àü¿ë¸éÀû(§³)") + ylab("log(¿ù¼¼(¸¸¿ø))") + 
+  xlab("ì „ìš©ë©´ì (ã¡)") + ylab("log(ì›”ì„¸(ë§Œì›))") + 
   scale_color_gradient(low = "deepskyblue", high = "hotpink",
-                       name = "Àü¿ë¸éÀû(§³)") +
+                       name = "ì „ìš©ë©´ì (ã¡)") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-2) °è¾à³â¿ù
+### 1-2) ê³„ì•½ë…„ì›”
 ```{r}
 seoul2016 %>%
-  ggplot(aes(x = factor(seoul2016$°è¾à³â¿ù), y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             fill = factor(seoul2016$°è¾à³â¿ù))) +
+  ggplot(aes(x = factor(seoul2016$ê³„ì•½ë…„ì›”), y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             fill = factor(seoul2016$ê³„ì•½ë…„ì›”))) +
   geom_jitter(color = 'grey', alpha = .2) +
-  geom_violin(alpha = .7) + xlab("°è¾à³â¿ù") + ylab("log(¿ù¼¼(¸¸¿ø))") +
-  scale_fill_discrete(name = "°è¾à³â¿ù") +
+  geom_violin(alpha = .7) + xlab("ê³„ì•½ë…„ì›”") + ylab("log(ì›”ì„¸(ë§Œì›))") +
+  scale_fill_discrete(name = "ê³„ì•½ë…„ì›”") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-3) °è¾àÀÏ
+### 1-3) ê³„ì•½ì¼
 ```{r}
 seoul2016 %>%
-  ggplot(aes(x = seoul2016$°è¾àÀÏ, y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             fill = seoul2016$°è¾àÀÏ)) +
+  ggplot(aes(x = seoul2016$ê³„ì•½ì¼, y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             fill = seoul2016$ê³„ì•½ì¼)) +
   geom_jitter(color = 'grey', alpha = .2) +
-  geom_violin(alpha = .7) + xlab("°è¾àÀÏ") + ylab("log(¿ù¼¼(¸¸¿ø))") +
-  scale_fill_discrete(name = "°è¾àÀÏ") +
+  geom_violin(alpha = .7) + xlab("ê³„ì•½ì¼") + ylab("log(ì›”ì„¸(ë§Œì›))") +
+  scale_fill_discrete(name = "ê³„ì•½ì¼") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-4) º¸Áõ±İ(¸¸¿ø)
+### 1-4) ë³´ì¦ê¸ˆ(ë§Œì›)
 ```{r}
 seoul2016 %>%  
-  ggplot(aes(x = log(seoul2016$`º¸Áõ±İ(¸¸¿ø)`), y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             color = log(seoul2016$`º¸Áõ±İ(¸¸¿ø)`))) +
+  ggplot(aes(x = log(seoul2016$`ë³´ì¦ê¸ˆ(ë§Œì›)`), y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             color = log(seoul2016$`ë³´ì¦ê¸ˆ(ë§Œì›)`))) +
   geom_point(shape = 21) + geom_line() +
-  xlab("º¸Áõ±İ(¸¸¿ø)") + ylab("log(¿ù¼¼(¸¸¿ø))") +
+  xlab("ë³´ì¦ê¸ˆ(ë§Œì›)") + ylab("log(ì›”ì„¸(ë§Œì›))") +
   scale_color_gradient(low = "deepskyblue", high = "hotpink",
-                       name = "º¸Áõ±İ(¸¸¿ø)") +
+                       name = "ë³´ì¦ê¸ˆ(ë§Œì›)") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-5) Ãş
+### 1-5) ì¸µ
 ```{r}
 seoul2016 %>%  
-  ggplot(aes(x = factor(seoul2016$Ãş), y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             fill = factor(seoul2016$Ãş))) +
+  ggplot(aes(x = factor(seoul2016$ì¸µ), y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             fill = factor(seoul2016$ì¸µ))) +
   geom_boxplot() +
-  xlab("Ãş") + ylab("log(¿ù¼¼(¸¸¿ø))") +
-  scale_fill_discrete(name = "Ãş") + theme(legend.position = "none") +
+  xlab("ì¸µ") + ylab("log(ì›”ì„¸(ë§Œì›))") +
+  scale_fill_discrete(name = "ì¸µ") + theme(legend.position = "none") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-6) °ÇÃà³âµµ
+### 1-6) ê±´ì¶•ë…„ë„
 ```{r}
 seoul2016 %>%
-  mutate(built_year = cut(seoul2016$°ÇÃà³âµµ, seq(1960, 2020, by = 10),
+  mutate(built_year = cut(seoul2016$ê±´ì¶•ë…„ë„, seq(1960, 2020, by = 10),
                             labels = paste0(seq(1960, 2010, by = 10), "s"))) %>%
-  ggplot(aes(x = factor(built_year), y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`),
+  ggplot(aes(x = factor(built_year), y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`),
              fill = factor(built_year))) +
   geom_jitter(color = 'grey', alpha = .2) +
-  geom_violin(alpha = .7) + xlab("°ÇÃà³âµµ") + ylab("log(¿ù¼¼(¸¸¿ø))") +
-  scale_fill_discrete(name = "°ÇÃà³âµµ")  +
+  geom_violin(alpha = .7) + xlab("ê±´ì¶•ë…„ë„") + ylab("log(ì›”ì„¸(ë§Œì›))") +
+  scale_fill_discrete(name = "ê±´ì¶•ë…„ë„")  +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-7) °Ç¹°Á¾·ù
+### 1-7) ê±´ë¬¼ì¢…ë¥˜
 ```{r}
 seoul2016 %>%
-  ggplot(aes(x = seoul2016$°Ç¹°Á¾·ù, y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             fill = seoul2016$°Ç¹°Á¾·ù)) +
+  ggplot(aes(x = seoul2016$ê±´ë¬¼ì¢…ë¥˜, y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             fill = seoul2016$ê±´ë¬¼ì¢…ë¥˜)) +
   geom_jitter(color = 'grey', alpha = .2) +
-  geom_violin(alpha = .7) + xlab("°Ç¹°Á¾·ù") + ylab("log(¿ù¼¼(¸¸¿ø))") +
-  scale_fill_discrete(name = "°Ç¹°Á¾·ù") +
+  geom_violin(alpha = .7) + xlab("ê±´ë¬¼ì¢…ë¥˜") + ylab("log(ì›”ì„¸(ë§Œì›))") +
+  scale_fill_discrete(name = "ê±´ë¬¼ì¢…ë¥˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
-### 1-8) ±¸
+### 1-8) êµ¬
 ```{r}
 seoul2016 %>%
-  ggplot(aes(x = seoul2016$±¸, y = log(seoul2016$`¿ù¼¼(¸¸¿ø)`), 
-             fill = seoul2016$±¸)) +
+  ggplot(aes(x = seoul2016$êµ¬, y = log(seoul2016$`ì›”ì„¸(ë§Œì›)`), 
+             fill = seoul2016$êµ¬)) +
   geom_jitter(color = 'grey', alpha = .2) +
-  geom_violin(alpha = .7) + xlab("ÀÚÄ¡±¸") + ylab("log(¿ù¼¼(¸¸¿ø))") +
+  geom_violin(alpha = .7) + xlab("ìì¹˜êµ¬") + ylab("log(ì›”ì„¸(ë§Œì›))") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16)) + 
   theme(legend.position = "none")
 ```
 
-### 1-9) log(¿ù¼¼(¸¸¿ø))
+### 1-9) log(ì›”ì„¸(ë§Œì›))
 ```{r}
 library(ggmap)
 
@@ -158,11 +160,11 @@ Seoul <- get_map(location = 'seoul',
                  maptype = "roadmap")
 
 seoul2016.arrange <- seoul2016 %>%
-  arrange(`¿ù¼¼(¸¸¿ø)`)
+  arrange(`ì›”ì„¸(ë§Œì›)`)
 
 ggmap(Seoul) + 
     geom_point(data = seoul2016.arrange, aes(x = x, y = y, 
-                                             color = log(`¿ù¼¼(¸¸¿ø)`)), 
+                                             color = log(`ì›”ì„¸(ë§Œì›)`)), 
                alpha = .075) + 
     scale_color_gradient(low = "green", high = "red")
 ```
@@ -170,7 +172,7 @@ ggmap(Seoul) +
 
 # 3. Modeling
 ```{r}
-seoul2016$`¿ù¼¼(¸¸¿ø)` <- ifelse(seoul2016$`¿ù¼¼(¸¸¿ø)` == 0, 1, seoul2016$`¿ù¼¼(¸¸¿ø)`)
+seoul2016$`ì›”ì„¸(ë§Œì›)` <- ifelse(seoul2016$`ì›”ì„¸(ë§Œì›)` == 0, 1, seoul2016$`ì›”ì„¸(ë§Œì›)`)
 
 set.seed(1234)
 trainIndex <- sample(x = 1:nrow(seoul2016), size = 0.7 * nrow(seoul2016))
@@ -180,13 +182,13 @@ test <- seoul2016[-trainIndex, ]
 
 ## 1) Raw Model
 ```{r}
-monthlyRent_model <- lm(`¿ù¼¼(¸¸¿ø)` ~ ., data = train[, -12])
+monthlyRent_model <- lm(`ì›”ì„¸(ë§Œì›)` ~ ., data = train[, -12])
 summary(monthlyRent_model)
 ```
 
 ## 2) Log model
 ```{r}
-log_model <- lm(log(`¿ù¼¼(¸¸¿ø)`) ~ ., data = train[, -12])
+log_model <- lm(log(`ì›”ì„¸(ë§Œì›)`) ~ ., data = train[, -12])
 summary(log_model)
 ```
 
@@ -209,7 +211,7 @@ rmse <- function(actual, predict){
 predict_price <- predict(monthlyRent_model, test)
 plot(predict_price)
 
-rmse(test$`¿ù¼¼(¸¸¿ø)`, predict_price)
+rmse(test$`ì›”ì„¸(ë§Œì›)`, predict_price)
 ```
 
 ## 2) Log model
@@ -233,7 +235,7 @@ log_pred <- predict(log_model, test)
 log_pred <- exp(log_pred)
 plot(log_pred)
 
-rmsle(log_pred, test$`¿ù¼¼(¸¸¿ø)`)
+rmsle(log_pred, test$`ì›”ì„¸(ë§Œì›)`)
 ```
 
 ```{r}
@@ -249,38 +251,38 @@ str(final)
 summary(final)
 
 final <- final %>%
-  mutate(°­³²±¸ = ifelse(final$±¸ == "°­³²±¸", 1, 0),
-         °­µ¿±¸ = ifelse(final$±¸ == "°­µ¿±¸", 1, 0),
-         °­ºÏ±¸ = ifelse(final$±¸ == "°­ºÏ±¸", 1, 0),
-         °­¼­±¸ = ifelse(final$±¸ == "°­¼­±¸", 1, 0),
-         °ü¾Ç±¸ = ifelse(final$±¸ == "°ü¾Ç±¸", 1, 0),
-         ±¤Áø±¸ = ifelse(final$±¸ == "±¤Áø±¸", 1, 0),
-         ±¸·Î±¸ = ifelse(final$±¸ == "±¸·Î±¸", 1, 0),
-         ±İÃµ±¸ = ifelse(final$±¸ == "±İÃµ±¸", 1, 0),
-         ³ë¿ø±¸ = ifelse(final$±¸ == "³ë¿ø±¸", 1, 0),
-         µµºÀ±¸ = ifelse(final$±¸ == "µµºÀ±¸", 1, 0),
-         µ¿´ë¹®±¸ = ifelse(final$±¸ == "µ¿´ë¹®±¸", 1, 0),
-         µ¿ÀÛ±¸ = ifelse(final$±¸ == "µ¿ÀÛ±¸", 1, 0),
-         ¸¶Æ÷±¸ = ifelse(final$±¸ == "¸¶Æ÷±¸", 1, 0),
-         ¼­´ë¹®±¸ = ifelse(final$±¸ == "¼­´ë¹®±¸", 1, 0),
-         ¼­ÃÊ±¸ = ifelse(final$±¸ == "¼­ÃÊ±¸", 1, 0),
-         ¼ºµ¿±¸ = ifelse(final$±¸ == "¼ºµ¿±¸", 1, 0),
-         ¼ººÏ±¸ = ifelse(final$±¸ == "¼ººÏ±¸", 1, 0),
-         ¼ÛÆÄ±¸ = ifelse(final$±¸ == "¼ÛÆÄ±¸", 1, 0),
-         ¾çÃµ±¸ = ifelse(final$±¸ == "¾çÃµ±¸", 1, 0),
-         ¿µµîÆ÷±¸ = ifelse(final$±¸ == "¿µµîÆ÷±¸", 1, 0),
-         ¿ë»ê±¸ = ifelse(final$±¸ == "¿ë»ê±¸", 1, 0),
-         ÀºÆò±¸ = ifelse(final$±¸ == "ÀºÆò±¸", 1, 0),
-         Á¾·Î±¸ = ifelse(final$±¸ == "Á¾·Î±¸", 1, 0),
-         Áß±¸ = ifelse(final$±¸ == "Áß±¸", 1, 0),
-         Áß¶û±¸ = ifelse(final$±¸ == "Áß¶û±¸", 1, 0),
-         ¾ÆÆÄÆ® = ifelse(final$°Ç¹°Á¾·ù == "¾ÆÆÄÆ®", 1, 0),
-         "¿¬¸³/´Ù¼¼´ë" = ifelse(final$°Ç¹°Á¾·ù == "¿¬¸³/´Ù¼¼´ë", 1, 0),
-         ¿ÀÇÇ½ºÅÚ = ifelse(final$°Ç¹°Á¾·ù == "¿ÀÇÇ½ºÅÚ", 1, 0),
-         ÃÊ = ifelse(final$°è¾àÀÏ == "1~10", 1, 0),
-         Áß = ifelse(final$°è¾àÀÏ == "11~20", 1, 0),
-         ¸» = ifelse(final$°è¾àÀÏ == "21~31", 1, 0)) %>%
-  select(-c(±¸, °Ç¹°Á¾·ù, °è¾àÀÏ))
+  mutate(ê°•ë‚¨êµ¬ = ifelse(final$êµ¬ == "ê°•ë‚¨êµ¬", 1, 0),
+         ê°•ë™êµ¬ = ifelse(final$êµ¬ == "ê°•ë™êµ¬", 1, 0),
+         ê°•ë¶êµ¬ = ifelse(final$êµ¬ == "ê°•ë¶êµ¬", 1, 0),
+         ê°•ì„œêµ¬ = ifelse(final$êµ¬ == "ê°•ì„œêµ¬", 1, 0),
+         ê´€ì•…êµ¬ = ifelse(final$êµ¬ == "ê´€ì•…êµ¬", 1, 0),
+         ê´‘ì§„êµ¬ = ifelse(final$êµ¬ == "ê´‘ì§„êµ¬", 1, 0),
+         êµ¬ë¡œêµ¬ = ifelse(final$êµ¬ == "êµ¬ë¡œêµ¬", 1, 0),
+         ê¸ˆì²œêµ¬ = ifelse(final$êµ¬ == "ê¸ˆì²œêµ¬", 1, 0),
+         ë…¸ì›êµ¬ = ifelse(final$êµ¬ == "ë…¸ì›êµ¬", 1, 0),
+         ë„ë´‰êµ¬ = ifelse(final$êµ¬ == "ë„ë´‰êµ¬", 1, 0),
+         ë™ëŒ€ë¬¸êµ¬ = ifelse(final$êµ¬ == "ë™ëŒ€ë¬¸êµ¬", 1, 0),
+         ë™ì‘êµ¬ = ifelse(final$êµ¬ == "ë™ì‘êµ¬", 1, 0),
+         ë§ˆí¬êµ¬ = ifelse(final$êµ¬ == "ë§ˆí¬êµ¬", 1, 0),
+         ì„œëŒ€ë¬¸êµ¬ = ifelse(final$êµ¬ == "ì„œëŒ€ë¬¸êµ¬", 1, 0),
+         ì„œì´ˆêµ¬ = ifelse(final$êµ¬ == "ì„œì´ˆêµ¬", 1, 0),
+         ì„±ë™êµ¬ = ifelse(final$êµ¬ == "ì„±ë™êµ¬", 1, 0),
+         ì„±ë¶êµ¬ = ifelse(final$êµ¬ == "ì„±ë¶êµ¬", 1, 0),
+         ì†¡íŒŒêµ¬ = ifelse(final$êµ¬ == "ì†¡íŒŒêµ¬", 1, 0),
+         ì–‘ì²œêµ¬ = ifelse(final$êµ¬ == "ì–‘ì²œêµ¬", 1, 0),
+         ì˜ë“±í¬êµ¬ = ifelse(final$êµ¬ == "ì˜ë“±í¬êµ¬", 1, 0),
+         ìš©ì‚°êµ¬ = ifelse(final$êµ¬ == "ìš©ì‚°êµ¬", 1, 0),
+         ì€í‰êµ¬ = ifelse(final$êµ¬ == "ì€í‰êµ¬", 1, 0),
+         ì¢…ë¡œêµ¬ = ifelse(final$êµ¬ == "ì¢…ë¡œêµ¬", 1, 0),
+         ì¤‘êµ¬ = ifelse(final$êµ¬ == "ì¤‘êµ¬", 1, 0),
+         ì¤‘ë‘êµ¬ = ifelse(final$êµ¬ == "ì¤‘ë‘êµ¬", 1, 0),
+         ì•„íŒŒíŠ¸ = ifelse(final$ê±´ë¬¼ì¢…ë¥˜ == "ì•„íŒŒíŠ¸", 1, 0),
+         "ì—°ë¦½/ë‹¤ì„¸ëŒ€" = ifelse(final$ê±´ë¬¼ì¢…ë¥˜ == "ì—°ë¦½/ë‹¤ì„¸ëŒ€", 1, 0),
+         ì˜¤í”¼ìŠ¤í…” = ifelse(final$ê±´ë¬¼ì¢…ë¥˜ == "ì˜¤í”¼ìŠ¤í…”", 1, 0),
+         ì´ˆ = ifelse(final$ê³„ì•½ì¼ == "1~10", 1, 0),
+         ì¤‘ = ifelse(final$ê³„ì•½ì¼ == "11~20", 1, 0),
+         ë§ = ifelse(final$ê³„ì•½ì¼ == "21~31", 1, 0)) %>%
+  select(-c(êµ¬, ê±´ë¬¼ì¢…ë¥˜, ê³„ì•½ì¼))
 
 # Data split
 raw <- final[, c(2:9, 21:51)]
@@ -289,7 +291,7 @@ final <- final[, c(2:9, 16:51)]
 
 ## 2) Raw model
 ```{r}
-raw$`¿ù¼¼(¸¸¿ø)` <- ifelse(raw$`¿ù¼¼(¸¸¿ø)` == 0, 1, raw$`¿ù¼¼(¸¸¿ø)`)
+raw$`ì›”ì„¸(ë§Œì›)` <- ifelse(raw$`ì›”ì„¸(ë§Œì›)` == 0, 1, raw$`ì›”ì„¸(ë§Œì›)`)
 
 set.seed(1234)
 trainIndex <- sample(x = 1:nrow(raw), size = 0.7 * nrow(raw))
@@ -298,7 +300,7 @@ te.raw <- raw[-trainIndex, ]
 ```
 
 ```{r}
-raw.model <- lm(log(`¿ù¼¼(¸¸¿ø)`) ~ ., data = tr.raw)
+raw.model <- lm(log(`ì›”ì„¸(ë§Œì›)`) ~ ., data = tr.raw)
 summary(raw.model)
 ```
 
@@ -322,7 +324,7 @@ raw.pred <- predict(raw.model, te.raw)
 raw.pred <- exp(raw.pred)
 plot(raw.pred)
 
-rmsle(raw.pred, te.raw$`¿ù¼¼(¸¸¿ø)`)
+rmsle(raw.pred, te.raw$`ì›”ì„¸(ë§Œì›)`)
 ```
 
 ## 3) Visualization
@@ -359,10 +361,10 @@ final <- final %>%
 ### 3-1) Theater
 ```{r}
 final %>%
-  ggplot(aes(x = factor(theater_c), y = log(`¿ù¼¼(¸¸¿ø)`), 
+  ggplot(aes(x = factor(theater_c), y = log(`ì›”ì„¸(ë§Œì›)`), 
              color = factor(theater_c))) +
   geom_point(position = "jitter", alpha = 0.1) +
-  xlab("±ØÀå°úÀÇ °Å¸®(°¡ÁßÄ¡)") + scale_color_discrete(name = "°¡ÁßÄ¡") +
+  xlab("ê·¹ì¥ê³¼ì˜ ê±°ë¦¬(ê°€ì¤‘ì¹˜)") + scale_color_discrete(name = "ê°€ì¤‘ì¹˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
@@ -370,10 +372,10 @@ final %>%
 ### 3-2) Subway
 ```{r}
 final %>%
-  ggplot(aes(x = factor(subway_c), y = log(`¿ù¼¼(¸¸¿ø)`), 
+  ggplot(aes(x = factor(subway_c), y = log(`ì›”ì„¸(ë§Œì›)`), 
              color = factor(subway_c))) +
   geom_point(position = "jitter", alpha = 0.1) +
-  xlab("ÁöÇÏÃ¶¿ª°úÀÇ °Å¸®(°¡ÁßÄ¡)") + scale_color_discrete(name = "°¡ÁßÄ¡") +
+  xlab("ì§€í•˜ì² ì—­ê³¼ì˜ ê±°ë¦¬(ê°€ì¤‘ì¹˜)") + scale_color_discrete(name = "ê°€ì¤‘ì¹˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
@@ -381,10 +383,10 @@ final %>%
 ### 3-3) University
 ```{r}
 final %>%
-  ggplot(aes(x = factor(univ_c), y = log(`¿ù¼¼(¸¸¿ø)`), 
+  ggplot(aes(x = factor(univ_c), y = log(`ì›”ì„¸(ë§Œì›)`), 
              color = factor(univ_c))) +
   geom_point(position = "jitter", alpha = 0.1) +
-  xlab("´ëÇĞ±³¿ÍÀÇ °Å¸®(°¡ÁßÄ¡)") + scale_color_discrete(name = "°¡ÁßÄ¡") +
+  xlab("ëŒ€í•™êµì™€ì˜ ê±°ë¦¬(ê°€ì¤‘ì¹˜)") + scale_color_discrete(name = "ê°€ì¤‘ì¹˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
@@ -392,10 +394,10 @@ final %>%
 ### 3-4) Hospital
 ```{r}
 final %>%
-  ggplot(aes(x = factor(host_c), y = log(`¿ù¼¼(¸¸¿ø)`), 
+  ggplot(aes(x = factor(host_c), y = log(`ì›”ì„¸(ë§Œì›)`), 
              color = factor(host_c))) +
   geom_point(position = "jitter", alpha = 0.1) +
-  xlab("Á¾ÇÕº´¿ø°úÀÇ °Å¸®(°¡ÁßÄ¡)") + scale_color_discrete(name = "°¡ÁßÄ¡") +
+  xlab("ì¢…í•©ë³‘ì›ê³¼ì˜ ê±°ë¦¬(ê°€ì¤‘ì¹˜)") + scale_color_discrete(name = "ê°€ì¤‘ì¹˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
@@ -403,24 +405,24 @@ final %>%
 ### 3-5) Police Office
 ```{r}
 final %>%
-  ggplot(aes(x = factor(police_c), y = log(`¿ù¼¼(¸¸¿ø)`), 
+  ggplot(aes(x = factor(police_c), y = log(`ì›”ì„¸(ë§Œì›)`), 
              color = factor(police_c))) +
   geom_point(position = "jitter", alpha = 0.1) +
-  xlab("°æÂû¼­¿ÍÀÇ °Å¸®(°¡ÁßÄ¡)") + scale_color_discrete(name = "°¡ÁßÄ¡") +
+  xlab("ê²½ì°°ì„œì™€ì˜ ê±°ë¦¬(ê°€ì¤‘ì¹˜)") + scale_color_discrete(name = "ê°€ì¤‘ì¹˜") +
   theme(axis.title.x = element_text(size = 16),
         axis.title.y = element_text(size = 16))
 ```
 
 ## 4) Final model
 ```{r}
-final$`¿ù¼¼(¸¸¿ø)` <- ifelse(final$`¿ù¼¼(¸¸¿ø)` == 0, 1, final$`¿ù¼¼(¸¸¿ø)`)
+final$`ì›”ì„¸(ë§Œì›)` <- ifelse(final$`ì›”ì„¸(ë§Œì›)` == 0, 1, final$`ì›”ì„¸(ë§Œì›)`)
 
 tr.final <- final[trainIndex, ]
 te.final <- final[-trainIndex, ]
 ```
 
 ```{r}
-final.model <- lm(log(`¿ù¼¼(¸¸¿ø)`) ~ ., data = tr.final[, -16])
+final.model <- lm(log(`ì›”ì„¸(ë§Œì›)`) ~ ., data = tr.final[, -16])
 summary(final.model)
 ```
 
@@ -429,7 +431,7 @@ final.pred <- predict(final.model, te.final)
 final.pred <- exp(final.pred)
 plot(final.pred)
 
-rmsle(final.pred, te.final$`¿ù¼¼(¸¸¿ø)`)
+rmsle(final.pred, te.final$`ì›”ì„¸(ë§Œì›)`)
 ```
 
 ```{r}
