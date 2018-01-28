@@ -338,7 +338,7 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -350,7 +350,7 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
 ### (2) bathrooms
 
@@ -363,7 +363,7 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -376,7 +376,7 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
 
 ### (3) floors
 
@@ -388,7 +388,7 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png" title = "plot5" alt = "plot5" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -400,7 +400,7 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png" title = "plot6" alt = "plot6" width = "1008" style = "display: block; margin: auto;" />
 
 ### (4) Water Front & View
 
@@ -412,7 +412,7 @@ train %>%
   scale_fill_discrete(name = "waterfront")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png" title = "plot7" alt = "plot7" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -422,7 +422,7 @@ train %>%
   scale_fill_discrete(name = "view")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png" title = "plot8" alt = "plot8" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -434,7 +434,7 @@ train %>%
   scale_fill_discrete("waterfront")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png" title = "plot9" alt = "plot9" width = "1008" style = "display: block; margin: auto;" />
 
 ### (5) Condition & Grade
 
@@ -446,7 +446,7 @@ train %>%
   scale_fill_discrete("condition")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png" title = "plot10" alt = "plot10" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -456,8 +456,7 @@ train %>%
   scale_fill_discrete("grade")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png)
-
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png" title = "plot11" alt = "plot11" width = "1008" style = "display: block; margin: auto;" />
 {% highlight javascript %}
 train %>%
   group_by(condition, grade) %>%
@@ -468,7 +467,7 @@ train %>%
   scale_fill_discrete(name = "grade")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png" title = "plot12" alt = "plot12" width = "1008" style = "display: block; margin: auto;" />
 
 ### (6) Built Year
 
@@ -482,7 +481,7 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png" title = "plot13" alt = "plot13" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -496,7 +495,7 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png" title = "plot14" alt = "plot14" width = "1008" style = "display: block; margin: auto;" />
 
 ### (7) Renovated Year
 
@@ -511,7 +510,7 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png" title = "plot15" alt = "plot15" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -526,7 +525,7 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-2.png" title = "plot16" alt = "plot16" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -537,7 +536,7 @@ train %>%
   scale_fill_discrete(name = "renovated")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-3.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-3.png" title = "plot17" alt = "plot17" width = "1008" style = "display: block; margin: auto;" />
 
 ### (8) Sale Year / Month
 
@@ -549,7 +548,7 @@ train %>%
   scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png" title = "plot18" alt = "plot18" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -559,7 +558,7 @@ train %>%
   scale_fill_discrete(name = "sale_month")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png" title = "plot19" alt = "plot19" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -570,7 +569,7 @@ train %>%
   xlab("sale_month") + scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-3.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-3.png" title = "plot20" alt = "plot20" width = "1008" style = "display: block; margin: auto;" />
 
 ### (9) Lat / Long
 
@@ -582,7 +581,7 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-15](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-1.png" title = "plot21" alt = "plot21" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -592,7 +591,7 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-15](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-2.png" title = "plot22" alt = "plot22" width = "1008" style = "display: block; margin: auto;" />
 
 ### (10) Zipcode
 
@@ -604,7 +603,7 @@ train %>%
   xlab("zipcode")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-16](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-16-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-16-1.png" title = "plot23" alt = "plot23" width = "1008" style = "display: block; margin: auto;" />
 
 ### (11) Sqft
 
@@ -645,7 +644,7 @@ train %>%
 grid.arrange(g1, g2, g3, g4, nrow = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-17](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-1.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-1.png" title = "plot24" alt = "plot24" width = "1008" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
@@ -668,7 +667,7 @@ train %>%
 grid.arrange(m1, m2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-17](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-2.png)
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-2.png" title = "plot25" alt = "plot25" width = "1008" style = "display: block; margin: auto;" />
 
 # 3. Feature Engineering
 
