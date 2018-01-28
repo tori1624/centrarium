@@ -4,7 +4,7 @@ title: "King County House Price"
 author: "Young Ho Lee"
 date: "2017.03.24"
 categories: Lecture
-cover: "assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
+cover: "/assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
 ---
 
 
@@ -29,7 +29,7 @@ head(train)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##     price bedrooms bathrooms sqft_living sqft_lot floors waterfront view
 ## 1  175003        3      1.50        1390     1882      2          0    0
 ## 2  705000        6      2.75        2830    10579      1          0    0
@@ -61,7 +61,7 @@ str(train)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## 'data.frame':	15129 obs. of  21 variables:
 ##  $ price        : num  175003 705000 800000 300000 467000 ...
 ##  $ bedrooms     : int  3 6 3 2 3 3 3 4 2 3 ...
@@ -94,7 +94,7 @@ summary(train)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##      price            bedrooms        bathrooms      sqft_living   
 ##  Min.   :  80000   Min.   : 0.000   Min.   :0.000   Min.   :  370  
 ##  1st Qu.: 323800   1st Qu.: 3.000   1st Qu.:1.750   1st Qu.: 1430  
@@ -148,7 +148,7 @@ names(train)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##  [1] "price"         "bedrooms"      "bathrooms"     "sqft_living"  
 ##  [5] "sqft_lot"      "floors"        "waterfront"    "view"         
 ##  [9] "condition"     "grade"         "sqft_above"    "sqft_basement"
@@ -165,7 +165,7 @@ unique(train$bedrooms)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##  [1]  3  6  2  4  5  8  1  0  7 33  9 10
 {% endhighlight %}
 
@@ -177,7 +177,7 @@ unique(train$bathrooms)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##  [1] 1.50 2.75 1.75 1.00 2.00 2.50 2.25 3.00 3.50 3.75 4.50 3.25 4.00 4.25
 ## [15] 5.00 4.75 1.25 0.75 6.00 5.50 5.75 8.00 7.50 0.50 0.00 5.25 6.50 7.75
 ## [29] 6.75
@@ -191,7 +191,7 @@ unique(train$floors)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] 2.0 1.0 1.5 3.0 2.5 3.5
 {% endhighlight %}
 
@@ -203,7 +203,7 @@ unique(train$waterfront)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] 0 1
 {% endhighlight %}
 
@@ -215,7 +215,7 @@ unique(train$view)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] 0 1 2 3 4
 {% endhighlight %}
 
@@ -227,7 +227,7 @@ unique(train$condition)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] 3 4 5 2 1
 {% endhighlight %}
 
@@ -239,7 +239,7 @@ unique(train$grade)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##  [1]  7  8  9  6 11 10  5  4 12 13  3
 {% endhighlight %}
 
@@ -251,7 +251,7 @@ unique(train$yr_built)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##   [1] 2014 1967 1969 2008 2012 1953 1979 1975 1907 1970 1922 1973 1964 2004
 ##  [15] 1999 1956 2010 2006 1960 1986 1974 2001 1978 1963 1959 1954 1965 1905
 ##  [29] 1991 1968 1949 1958 2005 1913 1966 1994 1972 1900 1943 1977 1997 1928
@@ -271,7 +271,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ##  [1]    0 1997 2000 1971 2005 2008 2003 1998 2011 2013 1983 1984 1995 2002
 ## [15] 1940 1989 2001 1991 2006 1993 1992 2014 2009 1999 1985 1979 2007 1994
 ## [29] 1996 1986 1978 1988 1968 1981 1953 1987 2004 1990 1980 1965 1964 1982
@@ -287,7 +287,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] "unique(train$sqft_basement)"
 {% endhighlight %}
 
@@ -299,7 +299,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] "unique(train$sqft_above)"
 {% endhighlight %}
 
@@ -311,7 +311,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] "unique(train$sqft_lot)"
 {% endhighlight %}
 
@@ -323,7 +323,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] "unique(train$sqft_living)"
 {% endhighlight %}
 
@@ -705,7 +705,7 @@ summary(house_model)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## 
 ## Call:
 ## lm(formula = log(price) ~ ., data = train)
@@ -838,6 +838,6 @@ rmsle(predict_price, test$price)
 
 
 
-{% highlight text %}
+{% highlight r %}
 ## [1] 0.1800942
 {% endhighlight %}
