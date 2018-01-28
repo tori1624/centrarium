@@ -1,0 +1,355 @@
+---
+layout: post
+title: "King County House Price"
+author: "Young Ho Lee"
+date: "2017.03.24"
+categories: Lecture
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Bacis Packages
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(gridExtra)
+```
+
+# 1. Data Import
+```{r}
+train <- read.csv("D:/Data/Machine_Learning/KC_House/train.csv")
+test <- read.csv("D:/Data/Machine_Learning/KC_House/test.csv")
+
+head(train)
+str(train)
+summary(train)
+```
+
+# 2. Data Exploration
+## 2-1) Colum Explanation
+```{r}
+names(train)
+unique(train$bedrooms)
+unique(train$bathrooms)
+unique(train$floors)
+unique(train$waterfront)
+unique(train$view)
+unique(train$condition)
+unique(train$grade)
+unique(train$yr_built)
+unique(train$yr_renovated)
+"unique(train$sqft_basement)"
+"unique(train$sqft_above)"
+"unique(train$sqft_lot)"
+"unique(train$sqft_living)"
+```
+
+## 2-2) Visualization
+### (1) bedrooms
+```{r}
+train %>%
+  ggplot(aes(x = factor(bedrooms), y = log(price), fill = factor(bedrooms))) + 
+  geom_boxplot() + 
+  xlab("bedrooms") + 
+  scale_fill_discrete(name = "bedrooms")
+
+train %>%
+  group_by(bedrooms) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(bedrooms), y = avg_price, fill = factor(bedrooms))) + 
+  geom_col() +
+  xlab("bedrooms") + 
+  scale_fill_discrete(name = "bedrooms")
+```
+
+### (2) bathrooms
+```{r}
+train %>%
+  ggplot(aes(x = factor(bathrooms), y = log(price), fill = factor(bathrooms))) + 
+  geom_boxplot() + 
+  xlab("bathrooms") + 
+  scale_fill_discrete(name = "bathrooms") +
+  theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
+
+train %>%
+  group_by(bathrooms) %>%
+  summarise(avg_price = mean(log(price))) %>%
+  ggplot(aes(x = factor(bathrooms), y = avg_price, fill = factor(bathrooms))) +
+  geom_col() +
+  xlab("bathrooms") +
+  scale_fill_discrete(name = "bathrooms") +
+  theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
+```
+
+### (3) floors
+```{r}
+train %>%
+  ggplot(aes(x = factor(floors), y = log(price), fill = factor(floors))) +
+  geom_boxplot() +
+  xlab("floors") +
+  scale_fill_discrete(name = "floors")
+
+train %>%
+  group_by(floors) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(floors), y = avg_price, fill = factor(floors))) +
+  geom_col() +
+  xlab("floors") +
+  scale_fill_discrete(name = "floors")
+```
+
+### (4) Water Front & View
+```{r}
+train %>%
+  ggplot(aes(x = factor(waterfront), y = log(price), fill = factor(waterfront))) +
+  geom_boxplot() + 
+  xlab("waterfront") +
+  scale_fill_discrete(name = "waterfront")
+
+train %>%
+  ggplot(aes(x = factor(view), y = log(price), fill = factor(view))) +
+  geom_boxplot() + 
+  xlab("view") +
+  scale_fill_discrete(name = "view")
+
+train %>%
+  group_by(waterfront, view) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(view), y = avg_price, fill = factor(waterfront))) +
+  geom_col(position = "dodge") +
+  xlab("view") +
+  scale_fill_discrete("waterfront")
+```
+
+### (5) Condition & Grade
+```{r}
+train %>%
+  ggplot(aes(x = factor(condition), y = log(price), fill = factor(condition))) +
+  geom_boxplot() +
+  xlab("condition") +
+  scale_fill_discrete("condition")
+
+train %>%
+  ggplot(aes(x = factor(grade), y = log(price), fill = factor(grade))) +
+  geom_boxplot() +
+  xlab("grade") +
+  scale_fill_discrete("grade")
+
+train %>%
+  group_by(condition, grade) %>%
+  summarise(avg_price = mean(log(price))) %>%
+  ggplot(aes(x = factor(condition), y = avg_price, fill = factor(grade))) +
+  geom_col(position = "dodge") +
+  xlab("condition") +
+  scale_fill_discrete(name = "grade")
+```
+
+### (6) Built Year
+```{r}
+train %>%
+  mutate(yr_built = cut(yr_built, breaks = seq(1899, 2020, by = 10),
+                        labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
+  ggplot(aes(x = factor(yr_built), y = log(price), fill = factor(yr_built))) +
+  geom_boxplot() +
+  xlab("yr_built") +
+  scale_fill_discrete(name = "yr_built")
+
+train %>%
+  mutate(yr_built = cut(yr_built, breaks = seq(1899, 2020, by = 10),
+                        labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
+  group_by(yr_built) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(yr_built), y = avg_price, fill = factor(yr_built))) +
+  geom_col() +
+  xlab("yr_built") +
+  scale_fill_discrete(name = "yr_built")
+```
+
+### (7) Renovated Year
+```{r}
+train %>%
+  filter(yr_renovated != 0) %>%
+  mutate(yr_renovated = cut(yr_built, seq(1899, 2020, by = 10),
+                            labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
+  ggplot(aes(x = factor(yr_renovated), y = log(price), fill = factor(yr_renovated))) +
+  geom_boxplot() +
+  xlab("yr_renovated") +
+  scale_fill_discrete(name = "yr_renovted")
+
+train %>%
+  filter(yr_renovated != 0) %>%
+  mutate(yr_renovated = cut(yr_built, seq(1899, 2020, by = 10),
+                            labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
+  group_by(yr_renovated) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(yr_renovated), y = avg_price, fill = factor(yr_renovated))) +
+  geom_col() +
+  xlab("yr_renovated") +
+  scale_fill_discrete(name = "yr_renovted")
+
+train %>%
+  mutate(renovated = ifelse(yr_renovated > 0, 1, 0)) %>%
+  ggplot(aes(x = factor(renovated), y = log(price), fill = factor(renovated))) +
+  geom_boxplot() +
+  xlab("renovated") +
+  scale_fill_discrete(name = "renovated")
+```
+
+### (8) Sale Year / Month
+```{r}
+train %>%
+  ggplot(aes(x = factor(sale_year), y = log(price), fill = factor(sale_year))) +
+  geom_boxplot() + 
+  xlab("sale_year") +
+  scale_fill_discrete(name = "sale_year")
+
+train %>%
+  ggplot(aes(x = factor(sale_month), y = log(price), fill = factor(sale_month))) +
+  geom_boxplot() + 
+  xlab("sale_month") +
+  scale_fill_discrete(name = "sale_month")
+
+train %>%
+  group_by(sale_year, sale_month) %>%
+  summarise(avg_price = mean(price)) %>%
+  ggplot(aes(x = factor(sale_month), y = avg_price, fill = factor(sale_year))) +
+  geom_col(position = "dodge") +
+  xlab("sale_month") + scale_fill_discrete(name = "sale_year")
+```
+
+### (9) Lat / Long
+```{r}
+train %>%
+  ggplot(aes(x = lat, y = log(price), color = lat)) +
+  geom_point(shape = 21) + 
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink")
+
+train %>%
+  ggplot(aes(x = long, y = log(price), color = long)) +
+  geom_point(shape = 21) + 
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink")
+```
+
+### (10) Zipcode
+```{r}
+train %>%
+  ggplot(aes(x = factor(zipcode), y = log(price), fill = factor(zipcode))) +
+  geom_boxplot() +
+  theme(legend.position="none") +
+  xlab("zipcode")
+```
+
+### (11) Sqft
+```{r}
+train %>%
+  ggplot(aes(x = sqft_living, y = log(price), color = sqft_living)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  ggtitle("sqft_living") +
+  theme(plot.title = element_text(hjust = 0.5)) -> g1
+
+train %>%
+  ggplot(aes(x = sqft_lot, y = log(price), color = sqft_lot)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  ggtitle("sqft_lot") +
+  theme(plot.title = element_text(hjust = 0.5))-> g2
+
+train %>%
+  ggplot(aes(x = sqft_living15, y = log(price), color = sqft_living15)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  ggtitle("sqft_living15") +
+  theme(plot.title = element_text(hjust = 0.5))-> g3
+
+train %>%
+  ggplot(aes(x = sqft_lot15, y = log(price), color = sqft_lot15)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  ggtitle("sqft_lot15") +
+  theme(plot.title = element_text(hjust = 0.5))-> g4
+
+grid.arrange(g1, g2, g3, g4, nrow = 2)
+
+train %>%
+  ggplot(aes(x = sqft_above, y = log(price), color = sqft_above)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  ggtitle("sqft_above") +
+  theme(plot.title = element_text(hjust = 0.5))-> m1
+
+train %>%
+  filter(sqft_basement != 0) %>%
+  ggplot(aes(x = sqft_basement, y = log(price), color = sqft_basement)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink") +
+  ggtitle("sqft_basement") +
+  theme(plot.title = element_text(hjust = 0.5))-> m2
+
+grid.arrange(m1, m2)
+```
+
+# 3. Feature Engineering
+```{r}
+FeatureEngineering <- function(data){
+  data %>%
+    # NA
+    select(-sqft_basement) %>%
+    
+    # Renovated or not
+    mutate(renovated = ifelse(yr_renovated > 0, 1, 0))
+}
+
+#Apply FeatureEngineering
+train <- FeatureEngineering(train)
+test <- FeatureEngineering(test)
+
+train$renovated <- as.factor(train$renovated)
+test$renovated <- as.factor(test$renovated)
+
+train$zipcode <- as.factor(train$zipcode)
+test$zipcode <- as.factor(test$zipcode)
+
+train$waterfront <- as.factor(train$waterfront)
+test$waterfront <- as.factor(test$waterfront)
+```
+
+# 4. Modeling
+```{r}
+house_model <- lm(log(price) ~ ., data = train)
+summary(house_model)
+```
+
+# 5. Model Evaluation
+```{r}
+rmsle <- function(pred, act) {
+    if(length(pred) != length(act))
+        stop("The length of two vectors are different")
+    
+    len <- length(pred)
+    pred <- log(pred + 1)
+    act <- log(act + 1)
+    
+    msle <- mean((pred - act)^2)
+    
+    return(sqrt(msle))
+}
+
+predict_price <- predict(house_model, test)
+predict_price <- exp(predict_price)
+predict_price <- ifelse(predict_price < 0, 0, predict_price)
+
+rmsle(predict_price, test$price)
+```
