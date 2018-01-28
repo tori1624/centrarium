@@ -4,6 +4,7 @@ title: "King County House Price"
 author: "Young Ho Lee"
 date: "2017.03.24"
 categories: Lecture
+cover: "assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
 ---
 
 
