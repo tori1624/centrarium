@@ -1,0 +1,306 @@
+---
+layout: post
+title: "2017-03-30-Churn_Prediction"
+author: "Young Ho Lee"
+date: "2017.03.30"
+categories: Lecture
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Bacis Packages
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(xgboost)
+library(gridExtra)
+```
+
+# 1. Data Import
+```{r}
+train <- read.csv("D:/Data/Machine_Learning/Churn/train.csv")
+test <- read.csv("D:/Data/Machine_Learning/Churn/test.csv")
+
+head(train)
+str(train)
+summary(train)
+
+train$churn <- as.factor(train$churn)
+```
+
+# 2. Data Exploration
+## 2-1) Colum Explanation
+```{r}
+names(train)
+unique(train$state)
+unique(train$account_length)
+unique(train$area_code)
+unique(train$international_plan)
+unique(train$voice_mail_plan)
+unique(train$number_vmail_messages)
+unique(train$number_customer_service_calls)
+```
+
+## 2-2) Visulization
+### 1) State
+```{r}
+train %>%
+  group_by(state, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = reorder(state, rate), y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low="beige", high="coral1") +
+  theme(axis.text.x = element_text(angle = 90, face = "italic", vjust = 1, hjust = 1)) +
+  xlab("state")
+```
+
+### 2) Account Length
+```{r}
+train %>%
+  ggplot(aes(x = churn, y = account_length, fill = churn)) +
+  geom_boxplot()
+
+train %>%
+  group_by(account_length, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = account_length, y = rate, color = account_length)) +
+  geom_point(shape = 21) +
+  geom_line() +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink")
+```
+
+### 3) Area Code
+```{r}
+train %>%
+  group_by(area_code, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count/sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = factor(area_code), y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
+  xlab("Area Code")
+```
+
+### 4) International / Voice Mail Plan
+```{r}
+train %>%
+  group_by(international_plan, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = international_plan, y = rate, fill = rate)) +
+  geom_col() +
+  theme(legend.position="none")+
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> g1
+
+train %>%
+  group_by(voice_mail_plan, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = voice_mail_plan, y = rate, fill = rate)) +
+  geom_col() +
+  theme(legend.position="none")+
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> g2
+
+grid.arrange(g1, g2, ncol = 2)
+```
+
+### 5) Number Vmail Message
+```{r}
+train %>%
+  ggplot(aes(x = churn, y = number_vmail_messages, fill = churn)) +
+  geom_boxplot()
+
+train %>%
+  mutate(number_vmail_messages_category = factor(round(number_vmail_messages, -1))) %>%
+  group_by(number_vmail_messages_category, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = number_vmail_messages_category, y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low = "deepskyblue", high = "indianred1")
+```
+
+### 6) Number Customer Service Calls
+```{r}
+train %>%
+  ggplot(aes(x = churn, y = number_customer_service_calls, fill = churn)) +
+  geom_boxplot()
+
+train %>%
+  group_by(number_customer_service_calls, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = number_customer_service_calls, y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
+
+train %>%
+  mutate(customer_service_calls = ifelse(number_customer_service_calls > 0, 1, 0)) %>%
+  group_by(customer_service_calls, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = factor(customer_service_calls), y = rate, fill = rate)) +
+  geom_col() + xlab("customer_service_calls") +
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
+```
+
+### 7) Total Calls
+```{r}
+train %>%
+  mutate(total_domestic_calls = total_day_calls + total_eve_calls + total_night_calls) %>%
+  group_by(total_domestic_calls, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_domestic_calls, y = rate, color = rate)) +
+  geom_point(shape = 21) + geom_line() +
+  scale_color_gradient(low = "deepskyblue1", high = "indianred1") -> g1
+
+train %>%
+  group_by(total_intl_calls, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_intl_calls, y = rate, color = rate)) +
+  geom_point(shape = 21) + geom_line() +
+  scale_color_gradient(low = "deepskyblue1", high = "indianred1") -> g2
+
+grid.arrange(g1, g2, nrow = 2)
+```
+
+### 8) Total Minutes
+```{r}
+train %>%
+  mutate(total_domestic_minutes = total_day_minutes + total_eve_minutes + total_night_minutes) %>%
+  mutate(total_domestic_minutes_category = ifelse(total_domestic_minutes <= 335, "0~335",
+                                                  ifelse(total_domestic_minutes > 335 & total_domestic_minutes <= 395, "336~395",
+                                                  ifelse(total_domestic_minutes > 395 & total_domestic_minutes <= 455, "396~455",
+                                                  ifelse(total_domestic_minutes > 455 & total_domestic_minutes <= 515, "456~515",
+                                                  ifelse(total_domestic_minutes > 515 & total_domestic_minutes <= 575, "516~575",
+                                                  ifelse(total_domestic_minutes > 575 & total_domestic_minutes <= 635, "576~635",
+                                                  ifelse(total_domestic_minutes > 635 & total_domestic_minutes <= 695, "636~695",
+                                                  ifelse(total_domestic_minutes > 695 & total_domestic_minutes <= 755, "696~755",
+                                                  ifelse(total_domestic_minutes > 755 & total_domestic_minutes <= 815, "756~815",
+                                                  ifelse(total_domestic_minutes > 815, "816~", NA))))))))))) %>%
+  select(-total_domestic_minutes) %>%
+  group_by(total_domestic_minutes_category, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_domestic_minutes_category, y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
+
+train %>%
+  group_by(total_intl_minutes, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_intl_minutes, y = rate, color = rate)) +
+  geom_point(shape = 21) + geom_line() +
+  scale_color_gradient(low = "deepskyblue1", high = "indianred1")
+```
+
+### 9) Total Charges
+```{r}
+train %>%
+  mutate(total_domestic_charge = total_day_charge + total_eve_charge + total_night_charge) %>%
+  mutate(total_domestic_charge_category = factor(round(total_domestic_charge, -1))) %>%
+  group_by(total_domestic_charge_category, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_domestic_charge_category, y = rate, fill = rate)) +
+  geom_col() +
+  scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
+
+train %>%
+  group_by(total_intl_charge, churn) %>%
+  summarise(count = n()) %>%
+  mutate(rate = count / sum(count)) %>%
+  filter(churn == 1) %>%
+  ggplot(aes(x = total_intl_charge, y = rate, color = rate)) +
+  geom_point(shape = 21) + geom_line() +
+  scale_color_gradient(low = "deepskyblue1", high = "indianred1")
+```
+
+# 3. Feature Engineering
+```{r}
+FeatureEngineering <- function(data){
+  data %>%
+    # Domestic
+    mutate(total_domestic_calls = total_day_calls + total_eve_calls + total_night_calls) %>%
+    mutate(total_domestic_minutes = total_day_minutes + total_eve_minutes + total_night_minutes) %>%
+    mutate(total_domestic_charge = total_day_charge + total_eve_charge + total_night_charge) %>%
+    
+    # Category
+    mutate(total_domestic_charge_category = factor(round(total_domestic_charge, -1))) %>%
+    mutate(total_domestic_minutes_category = ifelse(total_domestic_minutes <= 335, "0~335",
+                                             ifelse(total_domestic_minutes > 335 & total_domestic_minutes <= 395, "336~395",
+                                             ifelse(total_domestic_minutes > 395 & total_domestic_minutes <= 455, "396~455",
+                                             ifelse(total_domestic_minutes > 455 & total_domestic_minutes <= 515, "456~515",
+                                             ifelse(total_domestic_minutes > 515 & total_domestic_minutes <= 575, "516~575",
+                                             ifelse(total_domestic_minutes > 575 & total_domestic_minutes <= 635, "576~635",
+                                             ifelse(total_domestic_minutes > 635 & total_domestic_minutes <= 695, "636~695",
+                                             ifelse(total_domestic_minutes > 695 & total_domestic_minutes <= 755, "696~755",
+                                             ifelse(total_domestic_minutes > 755 & total_domestic_minutes <= 815, "756~815",
+                                             ifelse(total_domestic_minutes > 815, "816~", NA))))))))))) %>%
+    mutate(number_vmail_messages_category = factor(round(number_vmail_messages, -1))) %>%
+    
+    # Customer Service Calls
+    mutate(customer_service_calls = ifelse(number_customer_service_calls > 0, 1, 0)) %>%
+    
+    # Delete Unnecessory Colums
+    dplyr::select(-(total_day_minutes:total_night_charge))
+    
+    
+}
+
+# Apply FeatureEngineering
+train <- FeatureEngineering(train)
+test <- FeatureEngineering(test)
+
+train$area_code <- as.factor(train$area_code)
+test$area_code <- as.factor(test$area_code)
+
+train$total_domestic_minutes_category <- as.factor(train$total_domestic_minutes_category)
+test$total_domestic_minutes_category <- as.factor(test$total_domestic_minutes_category)
+
+train$customer_service_calls <- as.factor(train$customer_service_calls)
+test$customer_service_calls <- as.factor(test$customer_service_calls)
+```
+
+# 4. Modeling
+```{r}
+churn_model <- glm(churn ~ ., data = train, family = "binomial")
+summary(churn_model)
+```
+
+# 5. Model Evaluation
+```{r}
+MultiLogLoss <- function(act, pred) {
+    if(length(pred) != length(act))
+        stop("The length of two vectors are different")
+    
+    eps <- 1e-15
+    pred <- pmin(pmax(pred, eps), 1 - eps)
+    sum(act * log(pred) + (1 - act) * log(1 - pred)) * -1/NROW(act)
+}
+churn_pred <- predict(churn_model, test, type = "response")
+
+MultiLogLoss(test$churn, churn_pred)
+```
+
