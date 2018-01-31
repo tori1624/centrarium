@@ -338,7 +338,7 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png" title = "plot1" alt = "plot1" width = "1008" height = "792" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 train %>%
