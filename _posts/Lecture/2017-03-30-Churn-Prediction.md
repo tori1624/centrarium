@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "2017-03-30-Churn_Prediction"
+title: "Churn Prediction"
 author: "Young Ho Lee"
 date: "2017.03.30"
 categories: Lecture
