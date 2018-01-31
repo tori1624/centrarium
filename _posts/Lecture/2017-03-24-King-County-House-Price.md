@@ -7,7 +7,7 @@ categories: Lecture
 cover: "/assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
 ---
 
-
+이번 포스팅은 2017년 1월에 경희대학교 소셜네트워크과학과의 재윤님이 진행하셨던 R을 이용한 머신러닝 특강의 자료를 활용한 것이다. 당시에는 R을 배운지 얼마되지 않았었기 때문에, 강의 시간에 배운 코드들을 위주로 분석을 진행하였다. 자료는 2014년 5월부터 2015년 5월까지 매매된 King Conunty의 집값을 포함하고 있으며, 이 자료를 활용하여 King Conunty의 집값을 예측하고자 하였다.
 
 
 {% highlight javascript %}
