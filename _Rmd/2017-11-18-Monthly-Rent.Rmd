@@ -1,0 +1,382 @@
+---
+layout: post
+title: 'Development prediction model of monthly rent using multiple regression analysis - focused on seoul'
+author: "Young Ho Lee"
+date: "2017.11.18"
+categories: Contest
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Basic Packages
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(stringr)
+library(gridExtra)
+library(openxlsx)
+```
+
+# 1. Data Import
+```{r}
+seoul2016 <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016.xlsx")
+
+split_gu <- function(x){
+  strsplit(x, split = ',')[[1]][2]
+}
+
+split_dong <- function(x){
+  strsplit(x, split = ',')[[1]][3]
+}
+```
+
+```{r}
+seoul2016$gu <- sapply(seoul2016$sigungu, split_gu)
+seoul2016$dong <- sapply(seoul2016$sigungu, split_dong)
+
+seoul2016$sale_day <- as.factor(seoul2016$sale_day)
+seoul2016$buliding_type <- as.factor(seoul2016$buliding_type)
+seoul2016$gu <- as.factor(seoul2016$gu)
+seoul2016$dong <- as.factor(seoul2016$dong)
+
+seoul2016 <- seoul2016 %>%
+  select(-sigungu)
+
+str(seoul2016)
+summary(seoul2016)
+```
+
+# 2. Data Exploration
+## 1) Visualization
+### 1-1) Exclusive Area
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = seoul2016$exclusive_area, y = log(seoul2016$monthly_rent), 
+             color = seoul2016$exclusive_area)) +
+  geom_point(shape = 21) + geom_line() +
+  xlab("Exclusive Area") + ylab("log(Monthly Rent)") + 
+  scale_color_gradient(low = "deepskyblue", high = "hotpink",
+                       name = "Exclusive Area") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-2) Sale Month
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = factor(seoul2016$sale_month), y = log(seoul2016$monthly_rent), 
+             fill = factor(seoul2016$sale_month))) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("Sale Month") + ylab("log(Monthly Rent)") +
+  scale_fill_discrete(name = "Sale Month") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-3) Sale Day
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$sale_day, y = log(seoul2016$monthly_rent), 
+             fill = seoul2016$sale_day)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("Sale day") + ylab("log(Monthly Rent)") +
+  scale_fill_discrete(name = "Sale Day") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-4) Deposit
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = log(seoul2016$deposit), y = log(seoul2016$monthly_rent), 
+             color = log(seoul2016$deposit))) +
+  geom_point(shape = 21) + geom_line() +
+  xlab("Deposit") + ylab("log(Monthly Rent)") +
+  scale_color_gradient(low = "deepskyblue", high = "hotpink",
+                       name = "Deposit") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-5) Floors
+```{r}
+seoul2016 %>%  
+  ggplot(aes(x = factor(seoul2016$floors), y = log(seoul2016$monthly_rent), 
+             fill = factor(seoul2016$floors))) +
+  geom_boxplot() +
+  xlab("Floors") + ylab("log(Monthly Rent)") +
+  scale_fill_discrete(name = "Floors") + theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-6) Built year
+```{r}
+seoul2016 %>%
+  mutate(built_year = cut(seoul2016$yr_built, seq(1960, 2020, by = 10),
+                          labels = paste0(seq(1960, 2010, by = 10), "s"))) %>%
+  ggplot(aes(x = factor(built_year), y = log(seoul2016$monthly_rent),
+             fill = factor(built_year))) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("Built Year") + ylab("log(Monthly Rent)") +
+  scale_fill_discrete(name = "Built Year")  +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-7) Building Type
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$buliding_type, y = log(seoul2016$monthly_rent), 
+             fill = seoul2016$buliding_type)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("Building Type") + ylab("log(Monthly Rent)") +
+  scale_fill_discrete(name = "Building Type") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 1-8) Gu
+```{r}
+seoul2016 %>%
+  ggplot(aes(x = seoul2016$gu, y = log(seoul2016$monthly_rent), 
+             fill = seoul2016$gu)) +
+  geom_jitter(color = 'grey', alpha = .2) +
+  geom_violin(alpha = .7) + xlab("Gu") + ylab("log(Monthly Rent)") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16)) + 
+  theme(legend.position = "none")
+```
+
+### 1-9) Monthly Rent
+```{r}
+library(rgdal)
+library(RColorBrewer)
+library(classInt)
+```
+
+```{r}
+seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
+seoul.wgs <- spTransform(seoul.sp, CRS("+proj=longlat +datum=WGS84 
+                                       +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+```
+
+```{r}
+orrd <- brewer.pal(5, "OrRd")
+montlyclass <- classIntervals(seoul2016$monthly_rent, n = 5)
+```
+
+```{r}
+ggplot() + 
+  geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group), 
+               fill = 'white', color = 'Grey 50') +
+  geom_point(data = seoul2016, aes(x = x, y = y, alpha = .075,
+                                      color = factor(findCols(montlyclass)))) +
+  scale_color_brewer(palette = "OrRd", name = "Montly rent",
+                     labels = c("Less than 30", "30 - 45", "46 - 57", 
+                                "58 - 80", "81 - 900")) +
+  guides(alpha = "none")
+```
+
+# 3. Modeling
+```{r}
+seoul2016$monthly_rent <- ifelse(seoul2016$monthly_rent == 0, 1, seoul2016$monthly_rent)
+
+set.seed(1234)
+trainIndex <- sample(x = 1:nrow(seoul2016), size = 0.7 * nrow(seoul2016))
+train <- seoul2016[trainIndex, ]
+test <- seoul2016[-trainIndex, ]
+```
+
+## 1) Raw Model
+```{r}
+monthlyRent_model <- lm(monthly_rent ~ ., data = train[, -12])
+summary(monthlyRent_model)
+```
+
+## 2) Log model
+```{r}
+log_model <- lm(log(monthly_rent) ~ ., data = train[, -12])
+summary(log_model)
+```
+
+# 4. Model Evaluation
+## 1) Raw model
+```{r}
+rmse <- function(actual, predict){
+  if(length(actual) != length(predict))
+      stop("The length of two vectors are different")
+
+  length <- length(actual)
+  errorSum <- sum((actual - predict)^2)
+  
+  return(sqrt(errorSum / length))
+}
+```
+
+```{r}
+predict_price <- predict(monthlyRent_model, test)
+
+plot(predict_price)
+```
+
+```{r}
+rmse(test$monthly_rent, predict_price)
+```
+
+## 2) Log model
+```{r}
+rmsle <- function(pred, act) {
+    if(length(pred) != length(act))
+        stop("The length of two vectors are different")
+    
+    len <- length(pred)
+    pred <- log(pred + 1)
+    act <- log(act + 1)
+    
+    msle <- mean((pred - act)^2)
+    
+    return(sqrt(msle))
+}
+```
+
+```{r}
+log_pred <- predict(log_model, test)
+log_pred <- exp(log_pred)
+
+plot(log_pred)
+```
+
+```{r}
+rmsle(log_pred, test$monthly_rent)
+```
+
+# 5. Model Improvement
+## 1) Data Import
+```{r}
+final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016_final.xlsx")
+```
+
+## 2) Data Handling
+```{r}
+# delete unnecessary columns
+final <- final[, -c(1, 13:18)]
+
+# categorize distance columns
+final <- final %>%
+  dplyr::mutate(theater_c = ifelse(theater_dist < 300, 5, 
+                            ifelse(theater_dist > 300 & theater_dist < 600, 4,
+                            ifelse(theater_dist > 600 & theater_dist < 900, 3, 
+                            ifelse(theater_dist > 900 & theater_dist < 1200, 2,
+                            ifelse(theater_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(subway_c = ifelse(subway_dist < 300, 5, 
+                           ifelse(subway_dist > 300 & subway_dist < 600, 4,
+                           ifelse(subway_dist > 600 & subway_dist < 900, 3, 
+                           ifelse(subway_dist > 900 & subway_dist < 1200, 2,
+                           ifelse(subway_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(univ_c = ifelse(univ_dist < 300, 5, 
+                         ifelse(univ_dist > 300 & univ_dist < 600, 4,
+                         ifelse(univ_dist > 600 & univ_dist < 900, 3, 
+                         ifelse(univ_dist > 900 & univ_dist < 1200, 2,
+                         ifelse(univ_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(host_c = ifelse(host_dist < 300, 5, 
+                         ifelse(host_dist > 300 & host_dist < 600, 4,
+                         ifelse(host_dist > 600 & host_dist < 900, 3, 
+                         ifelse(host_dist > 900 & host_dist < 1200, 2,
+                         ifelse(host_dist > 1200, 1, NA)))))) %>%
+  dplyr::mutate(police_c = ifelse(police_dist < 300, 5, 
+                           ifelse(police_dist > 300 & police_dist < 600, 4,
+                           ifelse(police_dist > 600 & police_dist < 900, 3, 
+                           ifelse(police_dist > 900 & police_dist < 1200, 2,
+                           ifelse(police_dist > 1200, 1, NA)))))) %>%
+  select(-c(theater_dist, subway_dist, univ_dist, host_dist, police_dist))
+
+# one-hot encoding
+final$sale_day <- as.factor(final$sale_day)
+final$gu <- as.factor(final$gu)
+final$buliding_type <- as.factor(final$buliding_type)
+```
+
+## 3) Visualization
+### 3-1) Theater
+```{r}
+final %>%
+  ggplot(aes(x = factor(theater_c), y = log(monthly_rent), 
+             color = factor(theater_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("Distance from Theater(Weight)") + scale_color_discrete(name = "Weight") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-2) Subway Station
+```{r}
+final %>%
+  ggplot(aes(x = factor(subway_c), y = log(monthly_rent), 
+             color = factor(subway_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("Distance from Subway Station(Weight)") + scale_color_discrete(name = "Weight") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-3) University
+```{r}
+final %>%
+  ggplot(aes(x = factor(univ_c), y = log(monthly_rent), 
+             color = factor(univ_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("Distance from University(Weight)") + scale_color_discrete(name = "Weight") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-4) General Hospital
+```{r}
+final %>%
+  ggplot(aes(x = factor(host_c), y = log(monthly_rent), 
+             color = factor(host_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("Distance from General Hospital(Weight)") + scale_color_discrete(name = "Weight") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+### 3-5) Police Office
+```{r}
+final %>%
+  ggplot(aes(x = factor(police_c), y = log(monthly_rent), 
+             color = factor(police_c))) +
+  geom_point(position = "jitter", alpha = 0.1) +
+  xlab("Distance from Police Office(Weight)") + scale_color_discrete(name = "Weight") +
+  theme(axis.title.x = element_text(size = 16),
+        axis.title.y = element_text(size = 16))
+```
+
+## 4) Final model
+```{r}
+final$monthly_rent <- ifelse(final$monthly_rent == 0, 1, final$monthly_rent)
+
+tr.final <- final[trainIndex, ]
+te.final <- final[-trainIndex, ]
+```
+
+```{r}
+final.model <- lm(log(monthly_rent) ~ ., data = tr.final)
+summary(final.model)
+```
+
+```{r}
+final.pred <- predict(final.model, te.final)
+final.pred <- exp(final.pred)
+plot(final.pred)
+```
+
+```{r}
+rmsle(final.pred, te.final$monthly_rent)
+```
