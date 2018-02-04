@@ -7,7 +7,7 @@ categories: Contest
 cover: "/assets/contest/2017-11-18-Monthly-Rent/monthly.jpg"
 ---
 
-요약: 사회적으로 20~30대의 1인 가구들이 상대적으로 경제적 어려움을 겪는 상황에서 주택의 기본적인 정보와 주변 주요 시설물에 따라 월세의 경향성을 파악할 수 있다면, 그들의 주거지 선택에 긍정적인 영향을 끼칠 것으로 예상하였다. 따라서 이 연구에서는 월세 경향성을 파악할 수 있는 예측모델을 구축하고자 하였다. 초기 예측모델은 주택의 기본적인 정보만을 활용하여 구축되었다. 이후 주택 주변 주요 시설물들과의 거리를 고려한 독립변수들을 추가하여 새로운 예측모델을 구축하였고, 두 모델을 RMSLE를 통해 검증, 비교하였다.
+이번 포스팅은 2017 지리학대회, 2사용한 데이터는 2016년 부동산 실거래가 자료이며, 이 데이터에서 월세에 해당하는 자료만을 추출하여 분석을 진행하였다. 이 분석은 사회적으로 20~30대의 1인 가구들이 상대적으로 경제적 어려움을 겪는 상황에서 주택의 기본적인 정보와 주변 주요 시설물에 따라 월세의 경향성을 파악할 수 있다면, 그들의 주거지 선택에 긍정적인 영향을 끼칠 것으로 예상을 하고 진행하였다. 우선 주택의 기본적인 정보만을 활용하여 초기 예측모델을 구축하였고, 이후 주택 주변 주요 시설물들과의 거리를 고려한 독립변수들을 추가하여 새로운 예측모델을 구축하였다. 분석의 진행과정은 다음과 같다.
 
 {% highlight javascript %}
 # Basic Packages
@@ -23,7 +23,9 @@ library(openxlsx)
 
 {% highlight javascript %}
 seoul2016 <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016.xlsx")
+{% endhighlight %}
 
+{% highlight javascript %}
 split_gu <- function(x){
   strsplit(x, split = ',')[[1]][2]
 }
@@ -33,19 +35,24 @@ split_dong <- function(x){
 }
 {% endhighlight %}
 
+부동산 실거래가 자료의 원본에는 시군구가 쉼표로 구분되어있기 때문에, 구와 동을 추출할 수 있는 함수를 따로 만들었다.
 
 {% highlight javascript %}
 seoul2016$gu <- sapply(seoul2016$sigungu, split_gu)
 seoul2016$dong <- sapply(seoul2016$sigungu, split_dong)
 
+seoul2016 <- seoul2016 %>%
+  select(-sigungu)
+{% endhighlight %}
+
+{% highlight javascript %}
 seoul2016$sale_day <- as.factor(seoul2016$sale_day)
 seoul2016$buliding_type <- as.factor(seoul2016$buliding_type)
 seoul2016$gu <- as.factor(seoul2016$gu)
 seoul2016$dong <- as.factor(seoul2016$dong)
+{% endhighlight %}
 
-seoul2016 <- seoul2016 %>%
-  select(-sigungu)
-
+{% highlight javascript %}
 str(seoul2016)
 {% endhighlight %}
 
