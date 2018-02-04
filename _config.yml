@@ -10,7 +10,7 @@ exclude:
 
 # Site settings
 title: Tori
-subtitle: "My place for studying R"
+subtitle: "Machine Learning & Spatial Data in R"
 email: emfo0124@gmail.com
 name: Youngho Lee
 description: >
@@ -53,6 +53,9 @@ descriptions:
 
   - cat: Spatial-data
     desc: "Sptial data in R"
+    
+  - cat: Lecture
+    desc: "Machine learing lecture"
 
 # Social icons and sharing options
 #
