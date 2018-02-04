@@ -134,7 +134,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-5-1.png" title = "plot2" alt = "plot2" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-5-1.png" title = "plot2" alt = "plot2" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-3) Sale Day
 
