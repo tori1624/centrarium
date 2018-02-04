@@ -7,7 +7,7 @@ categories: Lecture
 cover: "/assets/Lecture/2017-03-30-Churn-Prediction/churn.jpg"
 ---
 
-
+이번 포스팅은 저번 포스팅과 마찬가지로 2017년 1월에 경희대학교 소셜네트워크과학과의 재윤님이 진행하셨던 R을 이용한 머신러닝 특강의 자료를 활용한 것이다. 자료는 churn인 고객과 churn이 아닌 고객에 대한 정보를 가지고 있다. churn이란 통신회사 마케팅 등에서 쓰이는 용어로, 단기간 동안 요금 등의 이유로 사업자를 자주 바꾸는 고객을 의미한다. churn은 통신회사에서는 심각한 문제이므로, 머신러닝의 방법 중 하나인 로지스틱 회귀분석을 활용하여 churn을 예측하고자 하였다.
 
 
 {% highlight javascript %}
