@@ -48,7 +48,7 @@ jekyll-archives:
 
 # Category descriptions (for archive pages)
 descriptions:
-  - cat: jekyll
+  - cat: Jekyll
     desc: "Posts describing Jekyll setup techniques."
 
   - cat: Spatial-data
@@ -56,6 +56,9 @@ descriptions:
     
   - cat: Lecture
     desc: "Machine learing lecture"
+    
+  - cat: Contest
+    desc: "Results from some contests"
 
 # Social icons and sharing options
 #
