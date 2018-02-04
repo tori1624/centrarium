@@ -4,6 +4,7 @@ title: "Development prediction model of monthly rent using multiple regression a
 author: "Young Ho Lee"
 date: "2017.11.18"
 categories: Contest
+cover: "/assets/contest/2017-11-18-Monthly-Rent/monthly.jpg"
 ---
 
 
