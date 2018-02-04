@@ -10,7 +10,7 @@ cover: "/assets/contest/2017-11-18-Monthly-Rent/monthly.jpg"
 
 
 
-{% highlight r %}
+{% highlight javascript %}
 # Basic Packages
 library(dplyr)
 library(ggplot2)
@@ -22,7 +22,7 @@ library(openxlsx)
 
 # 1. Data Import
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016.xlsx")
 
 split_gu <- function(x){
@@ -35,7 +35,7 @@ split_dong <- function(x){
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016$gu <- sapply(seoul2016$sigungu, split_gu)
 seoul2016$dong <- sapply(seoul2016$sigungu, split_dong)
 
@@ -52,7 +52,7 @@ str(seoul2016)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## 'data.frame':	99510 obs. of  12 variables:
 ##  $ exclusive_area: num  72.8 60 39.5 60 39.5 ...
 ##  $ sale_month    : num  12 4 1 2 2 2 2 3 3 3 ...
@@ -70,13 +70,13 @@ str(seoul2016)
 
 
 
-{% highlight r %}
+{% highlight javascript %}
 summary(seoul2016)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##  exclusive_area     sale_month      sale_day        deposit      
 ##  Min.   :  0.00   Min.   : 1.000   1~10 :30917   Min.   :     0  
 ##  1st Qu.: 29.41   1st Qu.: 3.000   11~20:33325   1st Qu.:  2000  
@@ -107,7 +107,7 @@ summary(seoul2016)
 ## 1) Visualization
 ### 1-1) Exclusive Area
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%  
   ggplot(aes(x = seoul2016$exclusive_area, y = log(seoul2016$monthly_rent), 
              color = seoul2016$exclusive_area)) +
@@ -123,7 +123,7 @@ seoul2016 %>%
 
 ### 1-2) Sale Month
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%
   ggplot(aes(x = factor(seoul2016$sale_month), y = log(seoul2016$monthly_rent), 
              fill = factor(seoul2016$sale_month))) +
@@ -138,7 +138,7 @@ seoul2016 %>%
 
 ### 1-3) Sale Day
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$sale_day, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$sale_day)) +
@@ -153,7 +153,7 @@ seoul2016 %>%
 
 ### 1-4) Deposit
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%  
   ggplot(aes(x = log(seoul2016$deposit), y = log(seoul2016$monthly_rent), 
              color = log(seoul2016$deposit))) +
@@ -169,7 +169,7 @@ seoul2016 %>%
 
 ### 1-5) Floors
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%  
   ggplot(aes(x = factor(seoul2016$floors), y = log(seoul2016$monthly_rent), 
              fill = factor(seoul2016$floors))) +
@@ -185,7 +185,7 @@ seoul2016 %>%
 
 ### 1-6) Built year
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%
   mutate(built_year = cut(seoul2016$yr_built, seq(1960, 2020, by = 10),
                           labels = paste0(seq(1960, 2010, by = 10), "s"))) %>%
@@ -202,7 +202,7 @@ seoul2016 %>%
 
 ### 1-7) Building Type
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$buliding_type, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$buliding_type)) +
@@ -217,7 +217,7 @@ seoul2016 %>%
 
 ### 1-8) Gu
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$gu, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$gu)) +
@@ -233,20 +233,20 @@ seoul2016 %>%
 
 ### 1-9) Monthly Rent
 
-{% highlight r %}
+{% highlight javascript %}
 library(rgdal)
 library(RColorBrewer)
 library(classInt)
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## OGR data source with driver: ESRI Shapefile 
 ## Source: "D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp", layer: "Seoul_dong"
 ## with 423 features
@@ -255,19 +255,19 @@ seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 
 
 
-{% highlight r %}
+{% highlight javascript %}
 seoul.wgs <- spTransform(seoul.sp, CRS("+proj=longlat +datum=WGS84 
                                        +no_defs +ellps=WGS84 +towgs84=0,0,0"))
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 orrd <- brewer.pal(5, "OrRd")
 montlyclass <- classIntervals(seoul2016$monthly_rent, n = 5)
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 ggplot() + 
   geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group), 
                fill = 'white', color = 'Grey 50') +
@@ -283,7 +283,7 @@ ggplot() +
 
 # 3. Modeling
 
-{% highlight r %}
+{% highlight javascript %}
 seoul2016$monthly_rent <- ifelse(seoul2016$monthly_rent == 0, 1, seoul2016$monthly_rent)
 
 set.seed(1234)
@@ -294,14 +294,14 @@ test <- seoul2016[-trainIndex, ]
 
 ## 1) Raw Model
 
-{% highlight r %}
+{% highlight javascript %}
 monthlyRent_model <- lm(monthly_rent ~ ., data = train[, -12])
 summary(monthlyRent_model)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## 
 ## Call:
 ## lm(formula = monthly_rent ~ ., data = train[, -12])
@@ -358,14 +358,14 @@ summary(monthlyRent_model)
 
 ## 2) Log model
 
-{% highlight r %}
+{% highlight javascript %}
 log_model <- lm(log(monthly_rent) ~ ., data = train[, -12])
 summary(log_model)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## 
 ## Call:
 ## lm(formula = log(monthly_rent) ~ ., data = train[, -12])
@@ -423,7 +423,7 @@ summary(log_model)
 # 4. Model Evaluation
 ## 1) Raw model
 
-{% highlight r %}
+{% highlight javascript %}
 rmse <- function(actual, predict){
   if(length(actual) != length(predict))
       stop("The length of two vectors are different")
@@ -436,7 +436,7 @@ rmse <- function(actual, predict){
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 predict_price <- predict(monthlyRent_model, test)
 
 plot(predict_price)
@@ -445,19 +445,19 @@ plot(predict_price)
 ![plot of chunk unnamed-chunk-20](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-20-1.png)
 
 
-{% highlight r %}
+{% highlight javascript %}
 rmse(test$monthly_rent, predict_price)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## [1] 32.13349
 {% endhighlight %}
 
 ## 2) Log model
 
-{% highlight r %}
+{% highlight javascript %}
 rmsle <- function(pred, act) {
     if(length(pred) != length(act))
         stop("The length of two vectors are different")
@@ -473,7 +473,7 @@ rmsle <- function(pred, act) {
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 log_pred <- predict(log_model, test)
 log_pred <- exp(log_pred)
 
@@ -483,26 +483,26 @@ plot(log_pred)
 ![plot of chunk unnamed-chunk-23](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-23-1.png)
 
 
-{% highlight r %}
+{% highlight javascript %}
 rmsle(log_pred, test$monthly_rent)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## [1] 0.4986278
 {% endhighlight %}
 
 # 5. Model Improvement
 ## 1) Data Import
 
-{% highlight r %}
+{% highlight javascript %}
 final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016_final.xlsx")
 {% endhighlight %}
 
 ## 2) Data Handling
 
-{% highlight r %}
+{% highlight javascript %}
 # delete unnecessary columns
 final <- final[, -c(1, 13:18)]
 
@@ -544,7 +544,7 @@ final$buliding_type <- as.factor(final$buliding_type)
 ## 3) Visualization
 ### 3-1) Theater
 
-{% highlight r %}
+{% highlight javascript %}
 final %>%
   ggplot(aes(x = factor(theater_c), y = log(monthly_rent), 
              color = factor(theater_c))) +
@@ -558,7 +558,7 @@ final %>%
 
 ### 3-2) Subway Station
 
-{% highlight r %}
+{% highlight javascript %}
 final %>%
   ggplot(aes(x = factor(subway_c), y = log(monthly_rent), 
              color = factor(subway_c))) +
@@ -572,7 +572,7 @@ final %>%
 
 ### 3-3) University
 
-{% highlight r %}
+{% highlight javascript %}
 final %>%
   ggplot(aes(x = factor(univ_c), y = log(monthly_rent), 
              color = factor(univ_c))) +
@@ -586,7 +586,7 @@ final %>%
 
 ### 3-4) General Hospital
 
-{% highlight r %}
+{% highlight javascript %}
 final %>%
   ggplot(aes(x = factor(host_c), y = log(monthly_rent), 
              color = factor(host_c))) +
@@ -600,7 +600,7 @@ final %>%
 
 ### 3-5) Police Office
 
-{% highlight r %}
+{% highlight javascript %}
 final %>%
   ggplot(aes(x = factor(police_c), y = log(monthly_rent), 
              color = factor(police_c))) +
@@ -614,7 +614,7 @@ final %>%
 
 ## 4) Final model
 
-{% highlight r %}
+{% highlight javascript %}
 final$monthly_rent <- ifelse(final$monthly_rent == 0, 1, final$monthly_rent)
 
 tr.final <- final[trainIndex, ]
@@ -622,14 +622,14 @@ te.final <- final[-trainIndex, ]
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 final.model <- lm(log(monthly_rent) ~ ., data = tr.final)
 summary(final.model)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## 
 ## Call:
 ## lm(formula = log(monthly_rent) ~ ., data = tr.final)
@@ -690,7 +690,7 @@ summary(final.model)
 {% endhighlight %}
 
 
-{% highlight r %}
+{% highlight javascript %}
 final.pred <- predict(final.model, te.final)
 final.pred <- exp(final.pred)
 plot(final.pred)
@@ -699,12 +699,12 @@ plot(final.pred)
 ![plot of chunk unnamed-chunk-34](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png)
 
 
-{% highlight r %}
+{% highlight javascript %}
 rmsle(final.pred, te.final$monthly_rent)
 {% endhighlight %}
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## [1] 0.4880586
 {% endhighlight %}
