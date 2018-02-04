@@ -119,7 +119,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-4-1.png" title = "plot1" alt = "plot1" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-4-1.png" title = "plot1" alt = "plot1" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-2) Sale Month
 
@@ -149,7 +149,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-6-1.png" title = "plot3" alt = "plot3" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-6-1.png" title = "plot3" alt = "plot3" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-4) Deposit
 
@@ -165,7 +165,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-7-1.png" title = "plot4" alt = "plot4" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-7-1.png" title = "plot4" alt = "plot4" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-5) Floors
 
@@ -181,7 +181,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-8-1.png" title = "plot5" alt = "plot5" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-8-1.png" title = "plot5" alt = "plot5" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-6) Built year
 
@@ -198,7 +198,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-9-1.png" title = "plot6" alt = "plot6" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-9-1.png" title = "plot6" alt = "plot6" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-7) Building Type
 
@@ -213,7 +213,7 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-10-1.png" title = "plot7" alt = "plot7" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-10-1.png" title = "plot7" alt = "plot7" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-8) Gu
 
@@ -229,7 +229,7 @@ seoul2016 %>%
   theme(legend.position = "none")
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-11-1.png" title = "plot8" alt = "plot8" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-11-1.png" title = "plot8" alt = "plot8" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 1-9) Monthly Rent
 
@@ -279,7 +279,7 @@ ggplot() +
   guides(alpha = "none")
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png" title = "plot9" alt = "plot9" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png" title = "plot9" alt = "plot9" width = "1008" height = "400" style = "display: block; margin: auto;" />
 
 # 3. Modeling
 
@@ -442,7 +442,7 @@ predict_price <- predict(monthlyRent_model, test)
 plot(predict_price)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-20-1.png" title = "plot10" alt = "plot10" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-20-1.png" title = "plot10" alt = "plot10" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 
 {% highlight javascript %}
@@ -480,7 +480,7 @@ log_pred <- exp(log_pred)
 plot(log_pred)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-23-1.png" title = "plot11" alt = "plot11" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-23-1.png" title = "plot11" alt = "plot11" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 rmsle(log_pred, test$monthly_rent)
@@ -553,7 +553,7 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-27-1.png" title = "plot12" alt = "plot12" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-27-1.png" title = "plot12" alt = "plot12" width = "1008" height = "600" style = "display: block; margin: auto;" />
 ### 3-2) Subway Station
 
 {% highlight javascript %}
@@ -566,7 +566,7 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-28-1.png" title = "plot13" alt = "plot13" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-28-1.png" title = "plot13" alt = "plot13" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 3-3) University
 
@@ -580,7 +580,7 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-29-1.png" title = "plot14" alt = "plot14" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-29-1.png" title = "plot14" alt = "plot14" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ### 3-4) General Hospital
 
@@ -594,7 +594,7 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-30-1.png" title = "plot15" alt = "plot15" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-30-1.png" title = "plot15" alt = "plot15" width = "1008" height = "600" style = "display: block; margin: auto;" />
 ### 3-5) Police Office
 
 {% highlight javascript %}
@@ -607,7 +607,7 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-31-1.png" title = "plot16" alt = "plot16" width = "1008" height = "500" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-31-1.png" title = "plot16" alt = "plot16" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 ## 4) Final model
 
@@ -693,9 +693,7 @@ final.pred <- exp(final.pred)
 plot(final.pred)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png" title = "plot17" alt = "plot17" width = "1008" height = "500" style = "display: block; margin: auto;" />
-![plot of chunk unnamed-chunk-34](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png)
-
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png" title = "plot17" alt = "plot17" width = "1008" height = "600" style = "display: block; margin: auto;" />
 
 {% highlight javascript %}
 rmsle(final.pred, te.final$monthly_rent)
