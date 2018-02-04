@@ -9,7 +9,7 @@ cover:  "/assets/spatialdata/2017-12-31-spatialdata/spatial.jpg"
 
 ## 1. 공간 데이터의 시각화 (polygon 데이터)
 
-이전에는 point 데이터의 시각화에 대해 설명했다면, 이번에는 polygon 데이터의 시각화에 대해 설명하고자 한다. 우선 시각화를 위한 기본적인 패키지들을 호출한다. 
+이전에는 point 데이터의 시각화에 대해 설명했다면, 이번에는 polygon 데이터의 시각화에 대해 설명하고자 한다. 우선 시각화를 위한 기본적인 패키지들을 호출한다.
 
 {% highlight javascript %}
 library(rgdal)
