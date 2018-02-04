@@ -279,7 +279,7 @@ ggplot() +
   guides(alpha = "none")
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png" title = "plot9" alt = "plot9" width = "1008" height = "400" style = "display: block; margin: auto;" />
+<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png" title = "plot9" alt = "plot9" width = "1008" height = "450" style = "display: block; margin: auto;" />
 
 # 3. Modeling
 
