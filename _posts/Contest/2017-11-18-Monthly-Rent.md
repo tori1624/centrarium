@@ -7,7 +7,7 @@ categories: Contest
 cover: "/assets/contest/2017-11-18-Monthly-Rent/monthly.jpg"
 ---
 
-이번 포스팅은 2017 지리학대회, 2사용한 데이터는 2016년 부동산 실거래가 자료이며, 이 데이터에서 월세에 해당하는 자료만을 추출하여 분석을 진행하였다. 이 분석은 사회적으로 20~30대의 1인 가구들이 상대적으로 경제적 어려움을 겪는 상황에서 주택의 기본적인 정보와 주변 주요 시설물에 따라 월세의 경향성을 파악할 수 있다면, 그들의 주거지 선택에 긍정적인 영향을 끼칠 것으로 예상을 하고 진행하였다. 우선 주택의 기본적인 정보만을 활용하여 초기 예측모델을 구축하였고, 이후 주택 주변 주요 시설물들과의 거리를 고려한 독립변수들을 추가하여 새로운 예측모델을 구축하였다. 분석의 진행과정은 다음과 같다.
+이번 포스팅은 2017 지리학대회, 2017 경희대학교 지리학과 학술제, 2017 시공간 빅데이터 논문 공모전에 제출했던 '다중회귀분석을 이용한 예측모델 구축-서울시를 사례로-'에 관한 글이다. 사용한 데이터는 2016년 부동산 실거래가 자료이며, 이 데이터에서 월세에 해당하는 자료만을 추출하여 분석을 진행하였다. 이 분석은 사회적으로 20~30대의 1인 가구들이 상대적으로 경제적 어려움을 겪는 상황에서 주택의 기본적인 정보와 주변 주요 시설물에 따라 월세의 경향성을 파악할 수 있다면, 그들의 주거지 선택에 긍정적인 영향을 끼칠 것으로 예상을 하고 진행하였다. 우선 주택의 기본적인 정보만을 활용하여 초기 예측모델을 구축하였고, 이후 주택 주변 주요 시설물들과의 거리를 고려한 독립변수들을 추가하여 새로운 예측모델을 구축하였다. 분석의 진행과정은 다음과 같다.
 
 {% highlight javascript %}
 # Basic Packages
@@ -45,7 +45,10 @@ seoul2016 <- seoul2016 %>%
   select(-sigungu)
 {% endhighlight %}
 
+시군구 변수에 구와 동을 추출하는 함수를 적용하고, 이제 시군구 변수는 필요가 없으므로 삭제하였다.
+
 {% highlight javascript %}
+# One-hot encoding
 seoul2016$sale_day <- as.factor(seoul2016$sale_day)
 seoul2016$buliding_type <- as.factor(seoul2016$buliding_type)
 seoul2016$gu <- as.factor(seoul2016$gu)
@@ -111,6 +114,9 @@ summary(seoul2016)
 
 # 2. Data Exploration
 ## 1) Visualization
+
+이번에는 시각화를 통해 탐색적 데이터 분석을 진행하고자 하였다. 월세는 값들 간의 편차가 크기 때문에, 시각화가 제대로 이루어지지 않아 상용로그를 취하고 시각화를 하였다.
+
 ### 1-1) Exclusive Area
 
 {% highlight javascript %}
@@ -298,6 +304,8 @@ train <- seoul2016[trainIndex, ]
 test <- seoul2016[-trainIndex, ]
 {% endhighlight %}
 
+예측모델을 구축하기 위해, 우선 월세가 0인 것들을 1로 바꿔주었고, 데이터를 무작위로 훈련데이터 70%, 검증데이터 30%로 구분하였다. benchmark 모델 구축 부분에서는 아직 모델을 구축하기 이전이므로, 월세 값에 상용로그를 취하지 않은 모델과 상용로그를 취한 모델을 모두 구축하여 결과를 비교하고자 하였다.
+
 ## 1) Raw Model
 
 {% highlight javascript %}
@@ -427,6 +435,9 @@ summary(log_model)
 {% endhighlight %}
 
 # 4. Model Evaluation
+
+상용로그를 취하지 않은 모델은 RMSE로 검증하였고, 상용로그를 취한 모델은 RMSLE로 검증을 진행하였다.
+
 ## 1) Raw model
 
 {% highlight javascript %}
@@ -498,12 +509,19 @@ rmsle(log_pred, test$monthly_rent)
 ## [1] 0.4986278
 {% endhighlight %}
 
+결과는 상용로그를 취한 모델이 훨씬 우수하였다.
+
 # 5. Model Improvement
+
+모델 개선 부분에서는 주요 시설물로 선정한 극장, 지하철역, 대학, 종합병원, 경찰서와의 거리를 새로운 변수로 추가하였다. 주요 시설물과의 거리는 ArcMap10.3을 활용하여 계산하였다.
+
 ## 1) Data Import
 
 {% highlight javascript %}
 final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016_final.xlsx")
 {% endhighlight %}
+
+새로운 변수를 추가한 파일을 새롭게 불러온다.
 
 ## 2) Data Handling
 
@@ -546,7 +564,12 @@ final$gu <- as.factor(final$gu)
 final$buliding_type <- as.factor(final$buliding_type)
 {% endhighlight %}
 
+불필요한 변수들은 삭제하고, 주요 시설물과의 거리 변수들은 5개의 단계로 구분하는 과정을 진행하였으며, 범주형 변수들에는 one-hot encoding을 실시하였다.
+
 ## 3) Visualization
+
+새롭게 추가한 변수들에 대해서도 탐색적 데이터 분석을 진행하였다.
+
 ### 3-1) Theater
 
 {% highlight javascript %}
@@ -710,3 +733,5 @@ rmsle(final.pred, te.final$monthly_rent)
 {% highlight javascript %}
 ## [1] 0.4880586
 {% endhighlight %}
+
+최종 결과는 benchmark 모델과 비교했을 때, 0.01이 감소한 것을 볼 수 있다. 비록 매우 적은 값이 감소하였지만, 주요 시설물과의 거리가 월세의 경향성을 파악하는데 긍정적인 영향을 미치는 것을 알 수 있다.
