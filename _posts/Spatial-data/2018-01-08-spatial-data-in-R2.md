@@ -7,7 +7,7 @@ categories: Spatial-Data
 cover:  "/assets/spatialdata/2017-12-31-spatialdata/spatial.jpg"
 ---
 
-## 1. 공간 데이터의 시각화 (polygon 데이터)
+## 4. 공간 데이터의 시각화 (polygon 데이터)
 
 이전에는 point 데이터의 시각화에 대해 설명했다면, 이번에는 polygon 데이터의 시각화에 대해 설명하고자 한다. 우선 시각화를 위한 기본적인 패키지들을 호출한다.
 
@@ -78,7 +78,7 @@ par(par.origin)
 
 <img src = "/assets/spatialdata/2018-01-08-spatialdata/rplot2.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
-## 공간 데이터의 시각화 (point density)
+## 5. 공간 데이터의 시각화 (point density)
 
 다음은 point density의 시각화에 대해 설명하고자 한다. point density 시각화 부분에서 사용하고자 하는 데이터는 서울시 wifi 위치 정보를 가지고 있는 데이터이다. 이 부분에서는 이전처럼 공간 데이터 시각화의 기본적인 요소들로 시각화를 하는 방법을 아직 찾지 못했기 때문에, `ggplot2` 패키지의 함수들을 활용하고자 한다. 우선 `ggplot2` 패키지를 호출하고 필요한 데이터들을 불러온다. 
 
