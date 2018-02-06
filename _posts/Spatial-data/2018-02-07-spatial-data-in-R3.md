@@ -110,23 +110,6 @@ round(dist(data.frame(ll.sp2), method = "euclidean"), 3)
 {% endhighlight %}
 
 {% highlight javascript %}
-SpatialPoints:
-      longtitude latitude
- [1,]   848.2264 4159.019
- [2,]   849.4463 4155.256
- [3,]   856.5956 4156.182
- [4,]   857.5852 4159.200
- [5,]   863.0025 4159.847
- [6,]   853.1214 4164.941
- [7,]   852.6408 4161.438
- [8,]   856.5891 4165.047
- [9,]   860.7347 4162.463
-[10,]   864.4115 4161.612
-Coordinate Reference System (CRS) arguments: +proj=utm +zone=51 +ellps=WGS84
-+units=km
-{% endhighlight %}
-
-{% highlight javascript %}
         1      2      3      4      5      6      7      8      9
 2   3.955                                                        
 3   8.837  7.209                                                 
