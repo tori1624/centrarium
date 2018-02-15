@@ -4,13 +4,12 @@ title: "King County House Price"
 author: "Young Ho Lee"
 date: "2017.03.24"
 categories: Lecture
-cover: "/assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
 ---
 
-이번 포스팅은 2017년 1월에 경희대학교 소셜네트워크과학과의 재윤님이 진행하셨던 R을 이용한 머신러닝 특강의 자료를 활용한 것이다. 당시에는 R을 배운지 얼마되지 않았었기 때문에, 강의 시간에 배운 코드들을 위주로 분석을 진행하였다. 자료는 2014년 5월부터 2015년 5월까지 매매된 King Conunty의 주택 매매가를 포함하고 있으며, 머신러닝의 방법 중 하나인 다중회귀분석을 활용하여 King Conunty의 주택 매매가를 예측하고자 하였다.
 
 
-{% highlight javascript %}
+
+{% highlight r %}
 # Bacis Packages
 library(ggplot2)
 library(readr)
@@ -20,7 +19,7 @@ library(gridExtra)
 
 # 1. Data Import
 
-{% highlight javascript %}
+{% highlight r %}
 train <- read.csv("D:/Data/Machine_Learning/KC_House/train.csv")
 test <- read.csv("D:/Data/Machine_Learning/KC_House/test.csv")
 
@@ -29,7 +28,7 @@ head(train)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##     price bedrooms bathrooms sqft_living sqft_lot floors waterfront view
 ## 1  175003        3      1.50        1390     1882      2          0    0
 ## 2  705000        6      2.75        2830    10579      1          0    0
@@ -55,13 +54,13 @@ head(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 str(train)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## 'data.frame':	15129 obs. of  21 variables:
 ##  $ price        : num  175003 705000 800000 300000 467000 ...
 ##  $ bedrooms     : int  3 6 3 2 3 3 3 4 2 3 ...
@@ -88,13 +87,13 @@ str(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 summary(train)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##      price            bedrooms        bathrooms      sqft_living   
 ##  Min.   :  80000   Min.   : 0.000   Min.   :0.000   Min.   :  370  
 ##  1st Qu.: 323800   1st Qu.: 3.000   1st Qu.:1.750   1st Qu.: 1430  
@@ -142,13 +141,13 @@ summary(train)
 # 2. Data Exploration
 ## 2-1) Colum Explanation
 
-{% highlight javascript %}
+{% highlight r %}
 names(train)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1] "price"         "bedrooms"      "bathrooms"     "sqft_living"  
 ##  [5] "sqft_lot"      "floors"        "waterfront"    "view"         
 ##  [9] "condition"     "grade"         "sqft_above"    "sqft_basement"
@@ -159,25 +158,25 @@ names(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$bedrooms)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]  3  6  2  4  5  8  1  0  7 33  9 10
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$bathrooms)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1] 1.50 2.75 1.75 1.00 2.00 2.50 2.25 3.00 3.50 3.75 4.50 3.25 4.00 4.25
 ## [15] 5.00 4.75 1.25 0.75 6.00 5.50 5.75 8.00 7.50 0.50 0.00 5.25 6.50 7.75
 ## [29] 6.75
@@ -185,73 +184,73 @@ unique(train$bathrooms)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$floors)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 2.0 1.0 1.5 3.0 2.5 3.5
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$waterfront)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0 1
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$view)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0 1 2 3 4
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$condition)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 3 4 5 2 1
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$grade)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]  7  8  9  6 11 10  5  4 12 13  3
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$yr_built)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##   [1] 2014 1967 1969 2008 2012 1953 1979 1975 1907 1970 1922 1973 1964 2004
 ##  [15] 1999 1956 2010 2006 1960 1986 1974 2001 1978 1963 1959 1954 1965 1905
 ##  [29] 1991 1968 1949 1958 2005 1913 1966 1994 1972 1900 1943 1977 1997 1928
@@ -265,13 +264,13 @@ unique(train$yr_built)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$yr_renovated)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]    0 1997 2000 1971 2005 2008 2003 1998 2011 2013 1983 1984 1995 2002
 ## [15] 1940 1989 2001 1991 2006 1993 1992 2014 2009 1999 1985 1979 2007 1994
 ## [29] 1996 1986 1978 1988 1968 1981 1953 1987 2004 1990 1980 1965 1964 1982
@@ -281,56 +280,56 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 "unique(train$sqft_basement)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_basement)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 "unique(train$sqft_above)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_above)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 "unique(train$sqft_lot)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_lot)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 "unique(train$sqft_living)"
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_living)"
 {% endhighlight %}
 
 ## 2-2) Visualization
 ### (1) bedrooms
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(bedrooms), y = log(price), fill = factor(bedrooms))) + 
   geom_boxplot() + 
@@ -338,9 +337,9 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png" title = "plot1" alt = "plot1" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-4](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-4-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(bedrooms) %>%
   summarise(avg_price = mean(price)) %>%
@@ -350,11 +349,11 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png" title = "plot2" alt = "plot2" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-4](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-4-2.png)
 
 ### (2) bathrooms
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(bathrooms), y = log(price), fill = factor(bathrooms))) + 
   geom_boxplot() + 
@@ -363,9 +362,9 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png" title = "plot3" alt = "plot3" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-5](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-5-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(bathrooms) %>%
   summarise(avg_price = mean(log(price))) %>%
@@ -376,11 +375,11 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png" title = "plot4" alt = "plot4" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-5](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-5-2.png)
 
 ### (3) floors
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(floors), y = log(price), fill = factor(floors))) +
   geom_boxplot() +
@@ -388,9 +387,9 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png" title = "plot5" alt = "plot5" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-6](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-6-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(floors) %>%
   summarise(avg_price = mean(price)) %>%
@@ -400,11 +399,11 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png" title = "plot6" alt = "plot6" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-6](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-6-2.png)
 
 ### (4) Water Front & View
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(waterfront), y = log(price), fill = factor(waterfront))) +
   geom_boxplot() + 
@@ -412,9 +411,9 @@ train %>%
   scale_fill_discrete(name = "waterfront")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png" title = "plot7" alt = "plot7" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(view), y = log(price), fill = factor(view))) +
   geom_boxplot() + 
@@ -422,9 +421,9 @@ train %>%
   scale_fill_discrete(name = "view")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png" title = "plot8" alt = "plot8" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(waterfront, view) %>%
   summarise(avg_price = mean(price)) %>%
@@ -434,11 +433,11 @@ train %>%
   scale_fill_discrete("waterfront")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png" title = "plot9" alt = "plot9" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-3.png)
 
 ### (5) Condition & Grade
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(condition), y = log(price), fill = factor(condition))) +
   geom_boxplot() +
@@ -446,9 +445,9 @@ train %>%
   scale_fill_discrete("condition")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png" title = "plot10" alt = "plot10" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(grade), y = log(price), fill = factor(grade))) +
   geom_boxplot() +
@@ -456,8 +455,9 @@ train %>%
   scale_fill_discrete("grade")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png" title = "plot11" alt = "plot11" width = "1008"  height = "500" style = "display: block; margin: auto;" />
-{% highlight javascript %}
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png)
+
+{% highlight r %}
 train %>%
   group_by(condition, grade) %>%
   summarise(avg_price = mean(log(price))) %>%
@@ -467,11 +467,11 @@ train %>%
   scale_fill_discrete(name = "grade")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png" title = "plot12" alt = "plot12" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-3.png)
 
 ### (6) Built Year
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(yr_built = cut(yr_built, breaks = seq(1899, 2020, by = 10),
                         labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
@@ -481,9 +481,9 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png" title = "plot13" alt = "plot13" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(yr_built = cut(yr_built, breaks = seq(1899, 2020, by = 10),
                         labels = paste0(seq(1900, 2010, by = 10), "s"))) %>%
@@ -495,11 +495,11 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png" title = "plot14" alt = "plot14" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png)
 
 ### (7) Renovated Year
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   filter(yr_renovated != 0) %>%
   mutate(yr_renovated = cut(yr_built, seq(1899, 2020, by = 10),
@@ -510,9 +510,9 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png" title = "plot15" alt = "plot15" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   filter(yr_renovated != 0) %>%
   mutate(yr_renovated = cut(yr_built, seq(1899, 2020, by = 10),
@@ -525,9 +525,9 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-2.png" title = "plot16" alt = "plot16" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(renovated = ifelse(yr_renovated > 0, 1, 0)) %>%
   ggplot(aes(x = factor(renovated), y = log(price), fill = factor(renovated))) +
@@ -536,11 +536,11 @@ train %>%
   scale_fill_discrete(name = "renovated")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-3.png" title = "plot17" alt = "plot17" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png)
 
 ### (8) Sale Year / Month
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(sale_year), y = log(price), fill = factor(sale_year))) +
   geom_boxplot() + 
@@ -548,9 +548,9 @@ train %>%
   scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png" title = "plot18" alt = "plot18" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(sale_month), y = log(price), fill = factor(sale_month))) +
   geom_boxplot() + 
@@ -558,9 +558,9 @@ train %>%
   scale_fill_discrete(name = "sale_month")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png" title = "plot19" alt = "plot19" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(sale_year, sale_month) %>%
   summarise(avg_price = mean(price)) %>%
@@ -569,11 +569,11 @@ train %>%
   xlab("sale_month") + scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-3.png" title = "plot20" alt = "plot20" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png)
 
 ### (9) Lat / Long
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = lat, y = log(price), color = lat)) +
   geom_point(shape = 21) + 
@@ -581,9 +581,9 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-1.png" title = "plot21" alt = "plot21" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = long, y = log(price), color = long)) +
   geom_point(shape = 21) + 
@@ -591,11 +591,11 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-2.png" title = "plot22" alt = "plot22" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png)
 
 ### (10) Zipcode
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = factor(zipcode), y = log(price), fill = factor(zipcode))) +
   geom_boxplot() +
@@ -603,11 +603,11 @@ train %>%
   xlab("zipcode")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-16-1.png" title = "plot23" alt = "plot23" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png)
 
 ### (11) Sqft
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = sqft_living, y = log(price), color = sqft_living)) +
   geom_point(shape = 21) +
@@ -644,9 +644,9 @@ train %>%
 grid.arrange(g1, g2, g3, g4, nrow = 2)
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-1.png" title = "plot24" alt = "plot24" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = sqft_above, y = log(price), color = sqft_above)) +
   geom_point(shape = 21) +
@@ -667,11 +667,11 @@ train %>%
 grid.arrange(m1, m2)
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-2.png" title = "plot25" alt = "plot25" width = "1008"  height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png)
 
 # 3. Feature Engineering
 
-{% highlight javascript %}
+{% highlight r %}
 FeatureEngineering <- function(data){
   data %>%
     # NA
@@ -697,14 +697,14 @@ test$waterfront <- as.factor(test$waterfront)
 
 # 4. Modeling
 
-{% highlight javascript %}
+{% highlight r %}
 house_model <- lm(log(price) ~ ., data = train)
 summary(house_model)
 {% endhighlight %}
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## 
 ## Call:
 ## lm(formula = log(price) ~ ., data = train)
@@ -814,7 +814,7 @@ summary(house_model)
 
 # 5. Model Evaluation
 
-{% highlight javascript %}
+{% highlight r %}
 rmsle <- function(pred, act) {
     if(length(pred) != length(act))
         stop("The length of two vectors are different")
@@ -837,6 +837,6 @@ rmsle(predict_price, test$price)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0.1800942
 {% endhighlight %}
