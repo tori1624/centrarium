@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Churn Prediction"
+title: "2017-03-30-Churn_Prediction"
 author: "Young Ho Lee"
 date: "2017.03.30"
 categories: Lecture
@@ -10,7 +10,7 @@ cover: "/assets/Lecture/2017-03-30-Churn-Prediction/churn.jpg"
 이번 포스팅은 저번 포스팅과 마찬가지로 2017년 1월에 경희대학교 소셜네트워크과학과의 재윤님이 진행하셨던 R을 이용한 머신러닝 특강의 자료를 활용한 것이다. 자료는 churn인 고객과 churn이 아닌 고객에 대한 정보를 가지고 있다. churn이란 통신회사 마케팅 등에서 쓰이는 용어로, 단기간 동안 요금 등의 이유로 사업자를 자주 바꾸는 고객을 의미한다. churn은 통신회사에서는 심각한 문제이므로, 머신러닝의 방법 중 하나인 로지스틱 회귀분석을 활용하여 churn을 예측하고자 하였다.
 
 
-{% highlight javascript %}
+{% highlight r %}
 # Bacis Packages
 library(ggplot2)
 library(readr)
@@ -21,7 +21,7 @@ library(gridExtra)
 
 # 1. Data Import
 
-{% highlight javascript %}
+{% highlight r %}
 train <- read.csv("D:/Data/Machine_Learning/Churn/train.csv")
 test <- read.csv("D:/Data/Machine_Learning/Churn/test.csv")
 
@@ -70,7 +70,7 @@ head(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 str(train)
 {% endhighlight %}
 
@@ -102,7 +102,7 @@ str(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 summary(train)
 {% endhighlight %}
 
@@ -161,14 +161,14 @@ summary(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 train$churn <- as.factor(train$churn)
 {% endhighlight %}
 
 # 2. Data Exploration
 ## 2-1) Colum Explanation
 
-{% highlight javascript %}
+{% highlight r %}
 names(train)
 {% endhighlight %}
 
@@ -189,7 +189,7 @@ names(train)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$state)
 {% endhighlight %}
 
@@ -204,7 +204,7 @@ unique(train$state)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$account_length)
 {% endhighlight %}
 
@@ -228,7 +228,7 @@ unique(train$account_length)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$area_code)
 {% endhighlight %}
 
@@ -240,7 +240,7 @@ unique(train$area_code)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$international_plan)
 {% endhighlight %}
 
@@ -253,7 +253,7 @@ unique(train$international_plan)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$voice_mail_plan)
 {% endhighlight %}
 
@@ -266,7 +266,7 @@ unique(train$voice_mail_plan)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$number_vmail_messages)
 {% endhighlight %}
 
@@ -279,7 +279,7 @@ unique(train$number_vmail_messages)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 unique(train$number_customer_service_calls)
 {% endhighlight %}
 
@@ -292,7 +292,7 @@ unique(train$number_customer_service_calls)
 ## 2-2) Visulization
 ### 1) State
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(state, churn) %>%
   summarise(count = n()) %>%
@@ -305,19 +305,19 @@ train %>%
   xlab("state")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-4-1.png" title = "plot1" alt = "plot1" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-6](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-6-1.png)
 
 ### 2) Account Length
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = churn, y = account_length, fill = churn)) +
   geom_boxplot()
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-5-1.png" title = "plot2" alt = "plot2" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-7-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(account_length, churn) %>%
   summarise(count = n()) %>%
@@ -329,11 +329,11 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-5-2.png" title = "plot3" alt = "plot3" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-7-2.png)
 
 ### 3) Area Code
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(area_code, churn) %>%
   summarise(count = n()) %>%
@@ -345,11 +345,11 @@ train %>%
   xlab("Area Code")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-6-1.png" title = "plot4" alt = "plot4" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-8-1.png)
 
 ### 4) International / Voice Mail Plan
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(international_plan, churn) %>%
   summarise(count = n()) %>%
@@ -373,19 +373,19 @@ train %>%
 grid.arrange(g1, g2, ncol = 2)
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-7-1.png" title = "plot5" alt = "plot5" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-9-1.png)
 
 ### 5) Number Vmail Message
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = churn, y = number_vmail_messages, fill = churn)) +
   geom_boxplot()
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-8-1.png" title = "plot6" alt = "plot6" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-10-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(number_vmail_messages_category = factor(round(number_vmail_messages, -1))) %>%
   group_by(number_vmail_messages_category, churn) %>%
@@ -397,19 +397,19 @@ train %>%
   scale_fill_gradient(low = "deepskyblue", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-8-2.png" title = "plot7" alt = "plot7" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-10-2.png)
 
 ### 6) Number Customer Service Calls
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   ggplot(aes(x = churn, y = number_customer_service_calls, fill = churn)) +
   geom_boxplot()
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-9-1.png" title = "plot8" alt = "plot8" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-11-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(number_customer_service_calls, churn) %>%
   summarise(count = n()) %>%
@@ -420,9 +420,9 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-9-2.png" title = "plot9" alt = "plot9" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-11-2.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(customer_service_calls = ifelse(number_customer_service_calls > 0, 1, 0)) %>%
   group_by(customer_service_calls, churn) %>%
@@ -434,10 +434,11 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-9-3.png" title = "plot10" alt = "plot10" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-11-3.png)
+
 ### 7) Total Calls
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(total_domestic_calls = total_day_calls + total_eve_calls + total_night_calls) %>%
   group_by(total_domestic_calls, churn) %>%
@@ -460,11 +461,11 @@ train %>%
 grid.arrange(g1, g2, nrow = 2)
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-10-1.png" title = "plot11" alt = "plot11" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-12-1.png)
 
 ### 8) Total Minutes
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(total_domestic_minutes = total_day_minutes + total_eve_minutes + total_night_minutes) %>%
   mutate(total_domestic_minutes_category = ifelse(total_domestic_minutes <= 335, "0~335",
@@ -487,8 +488,9 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-11-1.png" title = "plot12" alt = "plot12" width = "1008" height = "500" style = "display: block; margin: auto;" />
-{% highlight javascript %}
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-13-1.png)
+
+{% highlight r %}
 train %>%
   group_by(total_intl_minutes, churn) %>%
   summarise(count = n()) %>%
@@ -499,11 +501,11 @@ train %>%
   scale_color_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-11-2.png" title = "plot13" alt = "plot13" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-13-2.png)
 
 ### 9) Total Charges
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   mutate(total_domestic_charge = total_day_charge + total_eve_charge + total_night_charge) %>%
   mutate(total_domestic_charge_category = factor(round(total_domestic_charge, -1))) %>%
@@ -516,9 +518,9 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-12-1.png" title = "plot14" alt = "plot14" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-14-1.png)
 
-{% highlight javascript %}
+{% highlight r %}
 train %>%
   group_by(total_intl_charge, churn) %>%
   summarise(count = n()) %>%
@@ -529,11 +531,11 @@ train %>%
   scale_color_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-<img src = "/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-12-2.png" title = "plot1" alt = "plot1" width = "1008" height = "500" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-30-Churn-Prediction/unnamed-chunk-14-2.png)
 
 # 3. Feature Engineering
 
-{% highlight javascript %}
+{% highlight r %}
 FeatureEngineering <- function(data){
   data %>%
     # Domestic
@@ -580,7 +582,7 @@ test$customer_service_calls <- as.factor(test$customer_service_calls)
 
 # 4. Modeling
 
-{% highlight javascript %}
+{% highlight r %}
 churn_model <- glm(churn ~ ., data = train, family = "binomial")
 summary(churn_model)
 {% endhighlight %}
@@ -785,7 +787,7 @@ summary(churn_model)
 
 # 5. Model Evaluation
 
-{% highlight javascript %}
+{% highlight r %}
 MultiLogLoss <- function(act, pred) {
     if(length(pred) != length(act))
         stop("The length of two vectors are different")
