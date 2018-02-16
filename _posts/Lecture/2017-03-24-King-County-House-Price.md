@@ -4,11 +4,9 @@ title: "King County House Price"
 author: "Young Ho Lee"
 date: "2017.03.24"
 categories: Lecture
-cover: "/assets/Lecture/2017-03-24-King-County-House-Price/kingcounty.jpg"
 ---
 
 
-이번 포스팅은 2017년 1월에 경희대학교 소셜네트워크과학과의 재윤님이 진행하셨던 R을 이용한 머신러닝 특강의 자료를 활용한 것이다. 당시에는 R을 배운지 얼마되지 않았었기 때문에, 강의 시간에 배운 코드들을 위주로 분석을 진행하였다. 자료는 2014년 5월부터 2015년 5월까지 매매된 King Conunty의 주택 매매가를 포함하고 있으며, 머신러닝의 방법 중 하나인 다중회귀분석을 활용하여 King Conunty의 주택 매매가를 예측하고자 하였다.
 
 
 {% highlight r %}
@@ -30,7 +28,7 @@ head(train)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##     price bedrooms bathrooms sqft_living sqft_lot floors waterfront view
 ## 1  175003        3      1.50        1390     1882      2          0    0
 ## 2  705000        6      2.75        2830    10579      1          0    0
@@ -62,7 +60,7 @@ str(train)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## 'data.frame':	15129 obs. of  21 variables:
 ##  $ price        : num  175003 705000 800000 300000 467000 ...
 ##  $ bedrooms     : int  3 6 3 2 3 3 3 4 2 3 ...
@@ -95,7 +93,7 @@ summary(train)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##      price            bedrooms        bathrooms      sqft_living   
 ##  Min.   :  80000   Min.   : 0.000   Min.   :0.000   Min.   :  370  
 ##  1st Qu.: 323800   1st Qu.: 3.000   1st Qu.:1.750   1st Qu.: 1430  
@@ -149,7 +147,7 @@ names(train)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1] "price"         "bedrooms"      "bathrooms"     "sqft_living"  
 ##  [5] "sqft_lot"      "floors"        "waterfront"    "view"         
 ##  [9] "condition"     "grade"         "sqft_above"    "sqft_basement"
@@ -166,7 +164,7 @@ unique(train$bedrooms)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]  3  6  2  4  5  8  1  0  7 33  9 10
 {% endhighlight %}
 
@@ -178,7 +176,7 @@ unique(train$bathrooms)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1] 1.50 2.75 1.75 1.00 2.00 2.50 2.25 3.00 3.50 3.75 4.50 3.25 4.00 4.25
 ## [15] 5.00 4.75 1.25 0.75 6.00 5.50 5.75 8.00 7.50 0.50 0.00 5.25 6.50 7.75
 ## [29] 6.75
@@ -192,7 +190,7 @@ unique(train$floors)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 2.0 1.0 1.5 3.0 2.5 3.5
 {% endhighlight %}
 
@@ -204,7 +202,7 @@ unique(train$waterfront)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0 1
 {% endhighlight %}
 
@@ -216,7 +214,7 @@ unique(train$view)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0 1 2 3 4
 {% endhighlight %}
 
@@ -228,7 +226,7 @@ unique(train$condition)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 3 4 5 2 1
 {% endhighlight %}
 
@@ -240,7 +238,7 @@ unique(train$grade)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]  7  8  9  6 11 10  5  4 12 13  3
 {% endhighlight %}
 
@@ -252,7 +250,7 @@ unique(train$yr_built)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##   [1] 2014 1967 1969 2008 2012 1953 1979 1975 1907 1970 1922 1973 1964 2004
 ##  [15] 1999 1956 2010 2006 1960 1986 1974 2001 1978 1963 1959 1954 1965 1905
 ##  [29] 1991 1968 1949 1958 2005 1913 1966 1994 1972 1900 1943 1977 1997 1928
@@ -272,7 +270,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ##  [1]    0 1997 2000 1971 2005 2008 2003 1998 2011 2013 1983 1984 1995 2002
 ## [15] 1940 1989 2001 1991 2006 1993 1992 2014 2009 1999 1985 1979 2007 1994
 ## [29] 1996 1986 1978 1988 1968 1981 1953 1987 2004 1990 1980 1965 1964 1982
@@ -288,7 +286,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_basement)"
 {% endhighlight %}
 
@@ -300,7 +298,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_above)"
 {% endhighlight %}
 
@@ -312,7 +310,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_lot)"
 {% endhighlight %}
 
@@ -324,7 +322,7 @@ unique(train$yr_renovated)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] "unique(train$sqft_living)"
 {% endhighlight %}
 
@@ -339,7 +337,7 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-4](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-4-1.png)
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png)
 
 {% highlight r %}
 train %>%
@@ -351,7 +349,7 @@ train %>%
   scale_fill_discrete(name = "bedrooms")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-4](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-4-2.png)
+![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png)
 
 ### (2) bathrooms
 
@@ -364,7 +362,7 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-5](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png)
 
 {% highlight r %}
 train %>%
@@ -377,7 +375,7 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-5](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-5-2.png)
+![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png)
 
 ### (3) floors
 
@@ -389,7 +387,7 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-6](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png)
 
 {% highlight r %}
 train %>%
@@ -401,7 +399,7 @@ train %>%
   scale_fill_discrete(name = "floors")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-6](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-6-2.png)
+![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png)
 
 ### (4) Water Front & View
 
@@ -413,7 +411,7 @@ train %>%
   scale_fill_discrete(name = "waterfront")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-1.png)
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png)
 
 {% highlight r %}
 train %>%
@@ -423,7 +421,7 @@ train %>%
   scale_fill_discrete(name = "view")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-2.png)
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png)
 
 {% highlight r %}
 train %>%
@@ -435,7 +433,7 @@ train %>%
   scale_fill_discrete("waterfront")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-7](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-7-3.png)
+![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png)
 
 ### (5) Condition & Grade
 
@@ -447,7 +445,7 @@ train %>%
   scale_fill_discrete("condition")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png)
 
 {% highlight r %}
 train %>%
@@ -457,7 +455,7 @@ train %>%
   scale_fill_discrete("grade")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-2.png)
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png)
 
 {% highlight r %}
 train %>%
@@ -469,7 +467,7 @@ train %>%
   scale_fill_discrete(name = "grade")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-8](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-8-3.png)
+![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png)
 
 ### (6) Built Year
 
@@ -483,7 +481,7 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png)
 
 {% highlight r %}
 train %>%
@@ -497,7 +495,7 @@ train %>%
   scale_fill_discrete(name = "yr_built")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-9](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-9-2.png)
+![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png)
 
 ### (7) Renovated Year
 
@@ -512,7 +510,7 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-1.png)
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png)
 
 {% highlight r %}
 train %>%
@@ -527,7 +525,7 @@ train %>%
   scale_fill_discrete(name = "yr_renovted")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-2.png)
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-2.png)
 
 {% highlight r %}
 train %>%
@@ -538,7 +536,7 @@ train %>%
   scale_fill_discrete(name = "renovated")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-10](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-10-3.png)
+![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-3.png)
 
 ### (8) Sale Year / Month
 
@@ -550,7 +548,7 @@ train %>%
   scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-1.png)
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png)
 
 {% highlight r %}
 train %>%
@@ -560,7 +558,7 @@ train %>%
   scale_fill_discrete(name = "sale_month")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-2.png)
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png)
 
 {% highlight r %}
 train %>%
@@ -571,7 +569,7 @@ train %>%
   xlab("sale_month") + scale_fill_discrete(name = "sale_year")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-11](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-11-3.png)
+![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-3.png)
 
 ### (9) Lat / Long
 
@@ -583,7 +581,7 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-15](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-1.png)
 
 {% highlight r %}
 train %>%
@@ -593,7 +591,7 @@ train %>%
   scale_color_gradient(low = "deepskyblue", high = "hotpink")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-12](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-12-2.png)
+![plot of chunk unnamed-chunk-15](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-15-2.png)
 
 ### (10) Zipcode
 
@@ -605,7 +603,7 @@ train %>%
   xlab("zipcode")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-13](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-16](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-16-1.png)
 
 ### (11) Sqft
 
@@ -646,7 +644,7 @@ train %>%
 grid.arrange(g1, g2, g3, g4, nrow = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-1.png)
+![plot of chunk unnamed-chunk-17](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-1.png)
 
 {% highlight r %}
 train %>%
@@ -669,7 +667,7 @@ train %>%
 grid.arrange(m1, m2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-14](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-14-2.png)
+![plot of chunk unnamed-chunk-17](/assets/Lecture/2017-03-24-King-County-House-Price/unnamed-chunk-17-2.png)
 
 # 3. Feature Engineering
 
@@ -706,7 +704,7 @@ summary(house_model)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## 
 ## Call:
 ## lm(formula = log(price) ~ ., data = train)
@@ -839,6 +837,6 @@ rmsle(predict_price, test$price)
 
 
 
-{% highlight javascript %}
+{% highlight text %}
 ## [1] 0.1800942
 {% endhighlight %}
