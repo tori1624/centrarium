@@ -1,15 +1,17 @@
 ---
 layout: post
-title: "Development prediction model of monthly rent using multiple regression analysis - focused on seoul"
+title: 'Development prediction model of monthly rent using multiple regression analysis - focused on seoul'
 author: "Young Ho Lee"
 date: "2017.11.18"
 categories: Contest
 cover: "/assets/contest/2017-11-18-Monthly-Rent/monthly.jpg"
 ---
 
+
 이번 포스팅은 2017 지리학대회, 2017 경희대학교 지리학과 학술제, 2017 시공간 빅데이터 논문 공모전에 제출했던 '다중회귀분석을 이용한 예측모델 구축-서울시를 사례로-'에 관한 글이다. 사용한 데이터는 2016년 부동산 실거래가 자료이며, 이 데이터에서 월세에 해당하는 자료만을 추출하여 분석을 진행하였다. 이 분석은 사회적으로 20~30대의 1인 가구들이 상대적으로 경제적 어려움을 겪는 상황에서 주택의 기본적인 정보와 주변 주요 시설물에 따라 월세의 경향성을 파악할 수 있다면, 그들의 주거지 선택에 긍정적인 영향을 끼칠 것으로 예상을 하고 진행하였다. 우선 주택의 기본적인 정보만을 활용하여 초기 예측모델을 구축하였고, 이후 주택 주변 주요 시설물들과의 거리를 고려한 독립변수들을 추가하여 새로운 예측모델을 구축하였다. 분석의 진행과정은 다음과 같다.
 
-{% highlight javascript %}
+
+{% highlight r %}
 # Basic Packages
 library(dplyr)
 library(ggplot2)
@@ -21,11 +23,9 @@ library(openxlsx)
 
 # 1. Data Import
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016.xlsx")
-{% endhighlight %}
 
-{% highlight javascript %}
 split_gu <- function(x){
   strsplit(x, split = ',')[[1]][2]
 }
@@ -37,7 +37,7 @@ split_dong <- function(x){
 
 부동산 실거래가 자료의 원본에는 시군구가 쉼표로 구분되어있기 때문에, 구와 동을 추출할 수 있는 함수를 따로 만들었다.
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016$gu <- sapply(seoul2016$sigungu, split_gu)
 seoul2016$dong <- sapply(seoul2016$sigungu, split_dong)
 
@@ -47,7 +47,7 @@ seoul2016 <- seoul2016 %>%
 
 시군구 변수에 구와 동을 추출하는 함수를 적용하고, 이제 시군구 변수는 필요가 없으므로 삭제하였다.
 
-{% highlight javascript %}
+{% highlight r %}
 # One-hot encoding
 seoul2016$sale_day <- as.factor(seoul2016$sale_day)
 seoul2016$buliding_type <- as.factor(seoul2016$buliding_type)
@@ -55,7 +55,7 @@ seoul2016$gu <- as.factor(seoul2016$gu)
 seoul2016$dong <- as.factor(seoul2016$dong)
 {% endhighlight %}
 
-{% highlight javascript %}
+{% highlight r %}
 str(seoul2016)
 {% endhighlight %}
 
@@ -79,7 +79,7 @@ str(seoul2016)
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 summary(seoul2016)
 {% endhighlight %}
 
@@ -119,7 +119,7 @@ summary(seoul2016)
 
 ### 1-1) Exclusive Area
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%  
   ggplot(aes(x = seoul2016$exclusive_area, y = log(seoul2016$monthly_rent), 
              color = seoul2016$exclusive_area)) +
@@ -131,11 +131,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-4-1.png" title = "plot1" alt = "plot1" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-4](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-4-1.png)
 
 ### 1-2) Sale Month
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%
   ggplot(aes(x = factor(seoul2016$sale_month), y = log(seoul2016$monthly_rent), 
              fill = factor(seoul2016$sale_month))) +
@@ -146,11 +146,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-5-1.png" title = "plot2" alt = "plot2" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-5](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-5-1.png)
 
 ### 1-3) Sale Day
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$sale_day, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$sale_day)) +
@@ -161,11 +161,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-6-1.png" title = "plot3" alt = "plot3" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-6](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-6-1.png)
 
 ### 1-4) Deposit
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%  
   ggplot(aes(x = log(seoul2016$deposit), y = log(seoul2016$monthly_rent), 
              color = log(seoul2016$deposit))) +
@@ -177,11 +177,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-7-1.png" title = "plot4" alt = "plot4" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-7](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-7-1.png)
 
 ### 1-5) Floors
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%  
   ggplot(aes(x = factor(seoul2016$floors), y = log(seoul2016$monthly_rent), 
              fill = factor(seoul2016$floors))) +
@@ -193,11 +193,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-8-1.png" title = "plot5" alt = "plot5" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-8](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-8-1.png)
 
 ### 1-6) Built year
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%
   mutate(built_year = cut(seoul2016$yr_built, seq(1960, 2020, by = 10),
                           labels = paste0(seq(1960, 2010, by = 10), "s"))) %>%
@@ -210,11 +210,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-9-1.png" title = "plot6" alt = "plot6" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-9](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-9-1.png)
 
 ### 1-7) Building Type
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$buliding_type, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$buliding_type)) +
@@ -225,11 +225,11 @@ seoul2016 %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-10-1.png" title = "plot7" alt = "plot7" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-10](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-10-1.png)
 
 ### 1-8) Gu
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016 %>%
   ggplot(aes(x = seoul2016$gu, y = log(seoul2016$monthly_rent), 
              fill = seoul2016$gu)) +
@@ -241,18 +241,18 @@ seoul2016 %>%
   theme(legend.position = "none")
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-11-1.png" title = "plot8" alt = "plot8" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-11](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-11-1.png)
 
 ### 1-9) Monthly Rent
 
-{% highlight javascript %}
+{% highlight r %}
 library(rgdal)
 library(RColorBrewer)
 library(classInt)
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 {% endhighlight %}
 
@@ -267,19 +267,19 @@ seoul.sp <- readOGR("D:/Study/spatial_data_R/data/seoul/Seoul_dong.shp")
 
 
 
-{% highlight javascript %}
+{% highlight r %}
 seoul.wgs <- spTransform(seoul.sp, CRS("+proj=longlat +datum=WGS84 
                                        +no_defs +ellps=WGS84 +towgs84=0,0,0"))
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 orrd <- brewer.pal(5, "OrRd")
 montlyclass <- classIntervals(seoul2016$monthly_rent, n = 5)
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 ggplot() + 
   geom_polygon(data = seoul.wgs, aes(x = long, y = lat, group = group), 
                fill = 'white', color = 'Grey 50') +
@@ -291,11 +291,11 @@ ggplot() +
   guides(alpha = "none")
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png" title = "plot9" alt = "plot9" width = "1008" height = "450" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-15](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-15-1.png)
 
 # 3. Modeling
 
-{% highlight javascript %}
+{% highlight r %}
 seoul2016$monthly_rent <- ifelse(seoul2016$monthly_rent == 0, 1, seoul2016$monthly_rent)
 
 set.seed(1234)
@@ -308,7 +308,7 @@ test <- seoul2016[-trainIndex, ]
 
 ## 1) Raw Model
 
-{% highlight javascript %}
+{% highlight r %}
 monthlyRent_model <- lm(monthly_rent ~ ., data = train[, -12])
 summary(monthlyRent_model)
 {% endhighlight %}
@@ -372,7 +372,7 @@ summary(monthlyRent_model)
 
 ## 2) Log model
 
-{% highlight javascript %}
+{% highlight r %}
 log_model <- lm(log(monthly_rent) ~ ., data = train[, -12])
 summary(log_model)
 {% endhighlight %}
@@ -440,7 +440,7 @@ summary(log_model)
 
 ## 1) Raw model
 
-{% highlight javascript %}
+{% highlight r %}
 rmse <- function(actual, predict){
   if(length(actual) != length(predict))
       stop("The length of two vectors are different")
@@ -453,16 +453,16 @@ rmse <- function(actual, predict){
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 predict_price <- predict(monthlyRent_model, test)
 
 plot(predict_price)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-20-1.png" title = "plot10" alt = "plot10" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-20](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-20-1.png)
 
 
-{% highlight javascript %}
+{% highlight r %}
 rmse(test$monthly_rent, predict_price)
 {% endhighlight %}
 
@@ -474,7 +474,7 @@ rmse(test$monthly_rent, predict_price)
 
 ## 2) Log model
 
-{% highlight javascript %}
+{% highlight r %}
 rmsle <- function(pred, act) {
     if(length(pred) != length(act))
         stop("The length of two vectors are different")
@@ -490,16 +490,17 @@ rmsle <- function(pred, act) {
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 log_pred <- predict(log_model, test)
 log_pred <- exp(log_pred)
 
 plot(log_pred)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-23-1.png" title = "plot11" alt = "plot11" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-23](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-23-1.png)
 
-{% highlight javascript %}
+
+{% highlight r %}
 rmsle(log_pred, test$monthly_rent)
 {% endhighlight %}
 
@@ -517,7 +518,7 @@ rmsle(log_pred, test$monthly_rent)
 
 ## 1) Data Import
 
-{% highlight javascript %}
+{% highlight r %}
 final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/seoul2016_final.xlsx")
 {% endhighlight %}
 
@@ -525,7 +526,7 @@ final <- read.xlsx("D:/Data/Public_data/real_transaction_price_2017/2016/github/
 
 ## 2) Data Handling
 
-{% highlight javascript %}
+{% highlight r %}
 # delete unnecessary columns
 final <- final[, -c(1, 13:18)]
 
@@ -572,7 +573,7 @@ final$buliding_type <- as.factor(final$buliding_type)
 
 ### 3-1) Theater
 
-{% highlight javascript %}
+{% highlight r %}
 final %>%
   ggplot(aes(x = factor(theater_c), y = log(monthly_rent), 
              color = factor(theater_c))) +
@@ -582,10 +583,11 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-27-1.png" title = "plot12" alt = "plot12" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-27](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-27-1.png)
+
 ### 3-2) Subway Station
 
-{% highlight javascript %}
+{% highlight r %}
 final %>%
   ggplot(aes(x = factor(subway_c), y = log(monthly_rent), 
              color = factor(subway_c))) +
@@ -595,11 +597,11 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-28-1.png" title = "plot13" alt = "plot13" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-28](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-28-1.png)
 
 ### 3-3) University
 
-{% highlight javascript %}
+{% highlight r %}
 final %>%
   ggplot(aes(x = factor(univ_c), y = log(monthly_rent), 
              color = factor(univ_c))) +
@@ -609,11 +611,11 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-29-1.png" title = "plot14" alt = "plot14" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-29](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-29-1.png)
 
 ### 3-4) General Hospital
 
-{% highlight javascript %}
+{% highlight r %}
 final %>%
   ggplot(aes(x = factor(host_c), y = log(monthly_rent), 
              color = factor(host_c))) +
@@ -623,10 +625,11 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-30-1.png" title = "plot15" alt = "plot15" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-30](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-30-1.png)
+
 ### 3-5) Police Office
 
-{% highlight javascript %}
+{% highlight r %}
 final %>%
   ggplot(aes(x = factor(police_c), y = log(monthly_rent), 
              color = factor(police_c))) +
@@ -636,11 +639,11 @@ final %>%
         axis.title.y = element_text(size = 16))
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-31-1.png" title = "plot16" alt = "plot16" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-31](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-31-1.png)
 
 ## 4) Final model
 
-{% highlight javascript %}
+{% highlight r %}
 final$monthly_rent <- ifelse(final$monthly_rent == 0, 1, final$monthly_rent)
 
 tr.final <- final[trainIndex, ]
@@ -648,7 +651,7 @@ te.final <- final[-trainIndex, ]
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 final.model <- lm(log(monthly_rent) ~ ., data = tr.final)
 summary(final.model)
 {% endhighlight %}
@@ -716,15 +719,16 @@ summary(final.model)
 {% endhighlight %}
 
 
-{% highlight javascript %}
+{% highlight r %}
 final.pred <- predict(final.model, te.final)
 final.pred <- exp(final.pred)
 plot(final.pred)
 {% endhighlight %}
 
-<img src = "/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png" title = "plot17" alt = "plot17" width = "1008" height = "600" style = "display: block; margin: auto;" />
+![plot of chunk unnamed-chunk-34](/assets/contest/2017-11-18-Monthly-Rent/unnamed-chunk-34-1.png)
 
-{% highlight javascript %}
+
+{% highlight r %}
 rmsle(final.pred, te.final$monthly_rent)
 {% endhighlight %}
 
