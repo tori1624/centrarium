@@ -6,11 +6,10 @@ date: "2017.05.10"
 categories: Contest
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-```{r}
+
+
+{% highlight r %}
 # Basic Packages
 library(ggplot2)
 library(dplyr)
@@ -19,72 +18,30 @@ library(gridExtra)
 library(caret)
 library(e1071)
 library(data.table)
-```
+{% endhighlight %}
 
 # 1. Data Handling 1
 ## 1) Data Import
-```{r}
-# specify the path
-data.path1 <- "D:/Data/Public_data/KNTS/Database/Original/Individual/"
 
-# file name
-file.list1 <- list.files(path = data.path1)
-file.name1 <- substr(file.list1, 1, nchar(file.list1)-4)
-
-# data import
-for(i in 1:length(file.name1)) {
-  tmp.csv <- fread(paste0(data.path1, file.list1)[i])
-  assign(file.name1[i], tmp.csv)
-  message(file.name1[i], "has completed")
-}
-```
 
 ## 2) Extracting Necessary Question
-```{r}
-# data2011_1 <- data2011 %>%
-#   select(PID_11, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
-#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1,
-#          q12_8.1, q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1,
-#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
 
-# data2012_1 <- data2012 %>%
-#   select(PID_12, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
-#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, 
-#          q12_8.1, q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1,
-#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
-
-# data2013_1 <- data2013 %>%
-#   select(PID_13, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
-#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1,
-#          q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1, 
-#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
-
-# data2014_1 <- data2014 %>%
-#   select(PID_14, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
-#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1,
-#          q12_9.1, q12_10.1, q12_11.1, q12_12.1, q6_1.1, q6_1_1.1, q6_2_a.1, 
-#          q6_3.1, q6_6.1, q6_7.1, q6_8.1)
-
-# data2015_1 <- data2015 %>%
-#   select(PID_15, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
-#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1, 
-#          q12_9.1, q12_10.1, q12_11.1, q12_12.1, q6_1.1.1, q6_1_1.1.1, q6_2_a.1.1,
-#          q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
-```
 
 ## 3) Saving Data
-```{r}
+
+{% highlight r %}
 # file.name_1 <- paste0(file.name1, "_1")
 #
 # for(i in 1:5) {
 #   write.csv(get(file.name_1[i]), paste0(file.name_1[i], ".csv"), 
 #             row.names = FALSE)
 # }
-```
+{% endhighlight %}
 
 # 2. Data Handling 2
 ## 1) Data Import1
-```{r}
+
+{% highlight r %}
 # specify the path
 data.path2 <- "D:/Data/Public_data/KNTS/Database/Refined/Individual_1/"
 
@@ -98,10 +55,11 @@ for(i in 1:length(file.name2)) {
   assign(file.name2[i], tmp.csv)
   message(file.name2[i], "has completed")
 }
-```
+{% endhighlight %}
 
 ## 2) Data Import2
-```{r}
+
+{% highlight r %}
 # specify the path
 data.path3 <- "D:/Data/Public_data/KNTS/Database/Refined/Individual_Cht/"
 
@@ -115,10 +73,11 @@ for(i in 1:length(file.name3)) {
   assign(file.name3[i], tmp.csv)
   message(file.name3[i], "has completed")
 }
-```
+{% endhighlight %}
 
 ## 3) Extracting Domestic Tourism
-```{r}
+
+{% highlight r %}
 RowExtract <- function(data){
   data %>%
     # Domestic Tourism
@@ -130,10 +89,17 @@ for(i in 1:5) {
   re.tmp <- RowExtract(tmp.csv)
   assign(paste0(file.name1[i], "_2"), re.tmp)
 }
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in paste0(file.name1[i], "_2"): object 'file.name1' not found
+{% endhighlight %}
 
 ## 4) Dependent Variable
-```{r}
+
+{% highlight r %}
 Depend1 <- function(data){
   data %>%
     mutate(q6_7 = ifelse(q6_7.1.1 > 3, 1,
@@ -153,39 +119,269 @@ Depend2 <- function(data){
 }
 
 data2011_3 <- Depend1(data2011_2)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'data2011_2' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 data2012_3 <- Depend1(data2012_2)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'data2012_2' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 data2013_3 <- Depend1(data2013_2)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'data2013_2' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 data2014_3 <- Depend2(data2014_2)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'data2014_2' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 data2015_3 <- Depend1(data2015_2)
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'data2015_2' not found
+{% endhighlight %}
 
 ## 5) Changing Rownames for Rbind
-```{r}
+
+{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_1_1.1"] <- c("q6_1_1.1.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2014_3)[names(data2014_3) == "q6_1_1.1"] <- c("q6_1_1.1.1"): object 'data2014_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_1.1"] <- c("q6_1.1.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2014_3)[names(data2014_3) == "q6_1.1"] <- c("q6_1.1.1"): object 'data2014_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_2_a.1"] <- c("q6_2_a.1.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2014_3)[names(data2014_3) == "q6_2_a.1"] <- c("q6_2_a.1.1"): object 'data2014_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_3.1"] <- c("q6_3.1.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2014_3)[names(data2014_3) == "q6_3.1"] <- c("q6_3.1.1"): object 'data2014_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_6.1"] <- c("q6_6.1.1")
+{% endhighlight %}
 
+
+
+{% highlight text %}
+## Error in names(data2014_3)[names(data2014_3) == "q6_6.1"] <- c("q6_6.1.1"): object 'data2014_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2011_3)[16] <- c("q12_9.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2011_3)[16] <- c("q12_9.1"): object 'data2011_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2012_3)[16] <- c("q12_9.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2012_3)[16] <- c("q12_9.1"): object 'data2012_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2013_3)[16] <- c("q12_9.1")
+{% endhighlight %}
 
+
+
+{% highlight text %}
+## Error in names(data2013_3)[16] <- c("q12_9.1"): object 'data2013_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2011_3)[17] <- c("q12_10.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2011_3)[17] <- c("q12_10.1"): object 'data2011_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2012_3)[17] <- c("q12_10.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2012_3)[17] <- c("q12_10.1"): object 'data2012_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2013_3)[17] <- c("q12_10.1")
+{% endhighlight %}
 
+
+
+{% highlight text %}
+## Error in names(data2013_3)[17] <- c("q12_10.1"): object 'data2013_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2011_3)[18] <- c("q12_11.1")
-names(data2012_3)[18] <- c("q12_11.1")
-names(data2013_3)[18] <- c("q12_11.1")
+{% endhighlight %}
 
+
+
+{% highlight text %}
+## Error in names(data2011_3)[18] <- c("q12_11.1"): object 'data2011_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+names(data2012_3)[18] <- c("q12_11.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2012_3)[18] <- c("q12_11.1"): object 'data2012_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+names(data2013_3)[18] <- c("q12_11.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2013_3)[18] <- c("q12_11.1"): object 'data2013_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2011_3)[19] <- c("q12_12.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2011_3)[19] <- c("q12_12.1"): object 'data2011_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2012_3)[19] <- c("q12_12.1")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2012_3)[19] <- c("q12_12.1"): object 'data2012_3' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 names(data2013_3)[19] <- c("q12_12.1")
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in names(data2013_3)[19] <- c("q12_12.1"): object 'data2013_3' not found
+{% endhighlight %}
 
 ## 6) Merging Ind & Cht
-```{r}
+
+{% highlight r %}
 for(i in 1:5) {
   cha.csv <- get(file.name3[i])
   data3.csv <- get(paste0(file.name1[i], "_3"))
@@ -193,20 +389,49 @@ for(i in 1:5) {
                    by.y = c(paste0("PID_1", i)))
   assign(paste0(file.name1[i], "_4"), tmp.csv)
 }
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in paste0(file.name1[i], "_3"): object 'file.name1' not found
+{% endhighlight %}
 
 ## 7) Rbind the Data & Saving Data
-```{r}
-train <- rbind(data2011_4, data2012_4, data2013_4, data2014_4)
-test <- data2015_4
 
+{% highlight r %}
+train <- rbind(data2011_4, data2012_4, data2013_4, data2014_4)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in rbind(data2011_4, data2012_4, data2013_4, data2014_4): object 'data2011_4' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+test <- data2015_4
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(expr, envir, enclos): object 'data2015_4' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
 # write.csv(train, "train.csv", row.names = FALSE)
 # write.csv(test, "test.csv", row.names = FALSE)
-```
+{% endhighlight %}
 
 # 3. Exploration Data Analysis
 ## 1) Data Import
-```{r}
+
+{% highlight r %}
 train <- read.csv("D:/Data/Public_data/KNTS/Database/Refined/individual_2/train.csv")
 test <- read.csv("D:/Data/Public_data/KNTS/Database/Refined/individual_2/test.csv")
 
@@ -219,11 +444,12 @@ test <- test %>%
   select(PID, sido, ara_size, sex, age, income2, month.1, q1.1, q3.1, q4_a.1, 
          q7_c.1, q10.1, q6_1.1.1, q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7) %>%
   filter(q6_1.1.1 != 929)
-```
+{% endhighlight %}
 
 ## 2) Visualization
 ### 1) Sido
-```{r}
+
+{% highlight r %}
 train$sido <- as.factor(train$sido)
 levels(train$sido) <- c("Seoul", "Busan", "Daegu", "Incheon", "Gwangju", 
                         "Daejeon", "Ulsan", "Gyeonggi", "Gangwon", "Chungbuk", 
@@ -234,9 +460,10 @@ levels(test$sido) <- c("Seoul", "Busan", "Daegu", "Incheon", "Gwangju",
                        "Daejeon", "Ulsan", "Gyeonggi", "Gangwon", "Chungbuk",
                        "Chungnam", "Jeonbuk", "Jeonnam", "Gyeonbuk", 
                        "Gyeongnam", "Jeju")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(sido) %>%
   summarise(count = n()) %>%
@@ -245,9 +472,12 @@ train %>%
   scale_fill_discrete(name = "Sido") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, 
                                    hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-12](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-12-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(sido, q6_7) %>%
   summarise(count = n()) %>%
@@ -258,10 +488,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, 
                                    hjust = 1))
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-13](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-13-1.png)
 
 ### 2) Area Size / Sex
-```{r}
+
+{% highlight r %}
 train$ara_size <- as.factor(train$ara_size)
 levels(train$ara_size) <- c("B_City", "M&S_City", "Village")
 test$ara_size <- as.factor(test$ara_size)
@@ -271,9 +504,10 @@ train$sex <- as.factor(train$sex)
 levels(train$sex) <- c("Male", "Female")
 test$sex <- as.factor(test$sex)
 levels(test$sex) <- c("Male", "Female")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(ara_size) %>%
   summarise(count = n()) %>%
@@ -288,9 +522,12 @@ train %>%
   geom_col() -> g2
 
 grid.arrange(g1, g2, ncol = 2)
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-15](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-15-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(ara_size, q6_7) %>%
   summarise(count = n()) %>%
@@ -310,10 +547,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> g4
 
 grid.arrange(g3, g4, ncol = 2)
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-16](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-16-1.png)
 
 ### 3) Age
-```{r}
+
+{% highlight r %}
 train %>%
   mutate(age_category = factor(round(age, -1))) %>%
   group_by(age_category, q6_7) %>%
@@ -321,9 +561,12 @@ train %>%
   ggplot(aes(x = age_category, y = count, fill = age_category)) +
   geom_col() + xlab("Age") +
   scale_fill_discrete(name = "Age")
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-17](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-17-1.png)
+
+
+{% highlight r %}
 train %>%
   mutate(age_category = factor(round(age, -1))) %>%
   group_by(age_category, q6_7) %>%
@@ -333,19 +576,25 @@ train %>%
   ggplot(aes(x = age_category, y = rate, fill = rate)) +
   geom_col() + xlab("Age") +
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-18](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-18-1.png)
 
 ### 4) Month
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(month.1) %>%
   summarise(count = n()) %>%
   ggplot(aes(x = factor(month.1), y = count, fill = factor(month.1))) +
   geom_col() + xlab("Month") +
   scale_fill_discrete(name = "Month")
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-19](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-19-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(month.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -354,10 +603,13 @@ train %>%
   ggplot(aes(x = factor(month.1), y = rate, fill = rate)) +
   geom_col() + xlab("Month") +
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-20](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-20-1.png)
 
 ### 5) A Day Trip or Overnight / Purpose of Travel
-```{r}
+
+{% highlight r %}
 train$q1.1 <- as.factor(train$q1.1)
 levels(train$q1.1) <- c("A Day", "Overnight")
 test$q1.1 <- as.factor(test$q1.1)
@@ -367,9 +619,10 @@ train$q3.1 <- as.factor(train$q3.1)
 levels(train$q3.1) <- c("L_R_V", "Treatment", "Religion")
 test$q3.1 <- as.factor(test$q3.1)
 levels(test$q3.1) <- c("L_R_V", "Treatment", "Religion")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q1.1) %>%
   summarise(count = n()) %>%
@@ -386,9 +639,12 @@ train %>%
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, hjust = 1)) -> a2
 
 grid.arrange(a1, a2, ncol = 2)
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-22](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-22-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(q1.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -408,10 +664,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> a4
 
 grid.arrange(a3, a4, ncol = 2)
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-23](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-23-1.png)
 
 ### 6) Information about Travel
-```{r}
+
+{% highlight r %}
 train$q4_a.1 <- as.factor(train$q4_a.1)
 levels(train$q4_a.1) <- c("Travel Agency", "Family", "Friend", "Internet", 
                           "Book", "News or TV Program", "Advertising", 
@@ -420,9 +679,10 @@ test$q4_a.1 <- as.factor(test$q4_a.1)
 levels(test$q4_a.1) <- c("Travel Agency", "Family", "Friend", "Internet", 
                          "Book", "News or TV Program", "Advertising", 
                          "Experience", "App", "the others")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q4_a.1) %>%
   summarise(count = n()) %>%
@@ -431,9 +691,12 @@ train %>%
   scale_fill_discrete(name = "Information") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, 
                                    hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-25](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-25-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(q4_a.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -444,17 +707,21 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", vjust = 1, 
                                    hjust = 1))
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-26](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-26-1.png)
 
 ### 7) Package Travel
-```{r}
+
+{% highlight r %}
 train$q10.1 <- as.factor(train$q10.1)
 levels(train$q10.1) <- c("Yes", "No")
 test$q10.1 <- as.factor(test$q10.1)
 levels(test$q10.1) <- c("Yes", "No")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q10.1) %>%
   summarise(count = n()) %>%
@@ -472,10 +739,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> b2
 
 grid.arrange(b1, b2, ncol = 2)
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-28](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-28-1.png)
 
 ### 8) Destination(Sido)
-```{r}
+
+{% highlight r %}
 train$q6_1.1.1 <- as.factor(train$q6_1.1.1)
 levels(train$q6_1.1.1) <- c("Seoul", "Busan", "Daegu", "Incheon", "Gwangju", 
                             "Daejeon", "Ulsan", "Gyeonggi", "Gangwon", 
@@ -486,9 +756,10 @@ levels(test$q6_1.1.1) <- c("Seoul", "Busan", "Daegu", "Incheon", "Gwangju",
                            "Daejeon", "Ulsan", "Gyeonggi", "Gangwon", 
                            "Chungbuk", "Chungnam", "Jeonbuk", "Jeonnam", 
                            "Gyeonbuk", "Gyeongnam", "Jeju")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q6_1.1.1) %>%
   summarise(count = n()) %>%
@@ -497,9 +768,12 @@ train %>%
   scale_fill_discrete(name = "Destinaion") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-30](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-30-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(q6_1.1.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -510,10 +784,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-31](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-31-1.png)
 
 ### 9) Reason for Selection
-```{r}
+
+{% highlight r %}
 train$q6_2_a.1.1 <- as.factor(train$q6_2_a.1.1)
 levels(train$q6_2_a.1.1) <- c("Awareness", "Attraction", "Cheap Cost", 
                               "Distance", "Limited Time", "Accommodation", 
@@ -528,9 +805,10 @@ levels(test$q6_2_a.1.1) <- c("Awareness", "Attraction", "Cheap Cost",
                              "Transportation", "Experience Program", 
                              "Recommendation", "Convenient Facilitiy", 
                              "Education", "the others")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q6_2_a.1.1) %>%
   summarise(count = n()) %>%
@@ -539,9 +817,12 @@ train %>%
   scale_fill_discrete(name = "Reason") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-33](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-33-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(q6_2_a.1.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -552,10 +833,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-34](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-34-1.png)
 
 ### 10) Transportaion
-```{r}
+
+{% highlight r %}
 train$q6_3.1.1 <- as.factor(train$q6_3.1.1)
 levels(train$q6_3.1.1) <- c("Car", "Train", "Flight", "Ship", "Subway", 
                             "Regular Bus", "Irregular Bus", "Rent", "Bicycle", 
@@ -564,9 +848,10 @@ test$q6_3.1.1 <- as.factor(test$q6_3.1.1)
 levels(test$q6_3.1.1) <- c("Car", "Train", "Flight", "Ship", "Subway", 
                            "Regular Bus", "Irregular Bus", "Rent", "Bicycle", 
                            "the others")
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q6_3.1.1) %>%
   summarise(count = n()) %>%
@@ -575,9 +860,12 @@ train %>%
   scale_fill_discrete(name = "Transportation") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+![plot of chunk unnamed-chunk-36](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-36-1.png)
+
+
+{% highlight r %}
 train %>%
   group_by(q6_3.1.1, q6_7) %>%
   summarise(count = n()) %>%
@@ -588,10 +876,13 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") +
   theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                    vjust = 1, hjust = 1))
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-37](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-37-1.png)
 
 ### 11) Satisfaction
-```{r}
+
+{% highlight r %}
 train %>%
   group_by(q6_6.1.1) %>%
   summarise(count = n()) %>%
@@ -609,11 +900,14 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1") -> c2
 
 grid.arrange(c1, c2, ncol = 2)
-```
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-38](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-38-1.png)
 
 # 3 Global Model
 ## 1) Modeling
-```{r}
+
+{% highlight r %}
 # deleting NA rows
 train <- na.omit(train)
 test <- na.omit(test)
@@ -622,10 +916,94 @@ logit.global <- glm(q6_7 ~ age + income2 + month.1 + q1.1 + q3.1 +
                     q4_a.1 + q7_c.1 + q6_1.1.1 + q6_2_a.1.1 + q6_3.1.1 
                     + q6_6.1.1, data = train, family = "binomial")
 summary(logit.global)
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## 
+## Call:
+## glm(formula = q6_7 ~ age + income2 + month.1 + q1.1 + q3.1 + 
+##     q4_a.1 + q7_c.1 + q6_1.1.1 + q6_2_a.1.1 + q6_3.1.1 + q6_6.1.1, 
+##     family = "binomial", data = train)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.2855   0.1118   0.4196   0.5514   4.1819  
+## 
+## Coefficients:
+##                                  Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)                    -9.169e+00  3.155e-01 -29.064  < 2e-16 ***
+## age                             2.454e-03  1.618e-03   1.517 0.129313    
+## income2                         1.035e-04  1.025e-04   1.009 0.312744    
+## month.1                         2.000e-02  8.683e-03   2.303 0.021269 *  
+## q1.1Overnight                   2.950e-01  6.102e-02   4.834 1.34e-06 ***
+## q3.1Treatment                   3.559e-01  2.451e-01   1.452 0.146458    
+## q3.1Religion                    6.258e-01  1.997e-01   3.134 0.001726 ** 
+## q4_a.1Family                    1.070e-01  1.562e-01   0.685 0.493163    
+## q4_a.1Friend                    4.948e-03  1.554e-01   0.032 0.974598    
+## q4_a.1Internet                 -6.542e-01  1.715e-01  -3.814 0.000137 ***
+## q4_a.1Book                     -1.696e-01  3.139e-01  -0.540 0.589015    
+## q4_a.1News or TV Program       -4.284e-01  2.017e-01  -2.124 0.033707 *  
+## q4_a.1Advertising              -2.708e-01  2.448e-01  -1.106 0.268744    
+## q4_a.1Experience                5.564e-01  1.658e-01   3.355 0.000793 ***
+## q4_a.1App                      -4.468e-01  3.809e-01  -1.173 0.240851    
+## q4_a.1the others                1.421e-01  2.293e-01   0.620 0.535293    
+## q7_c.1                         -3.257e-07  1.538e-07  -2.117 0.034236 *  
+## q6_1.1.1Busan                  -3.165e-01  1.822e-01  -1.737 0.082334 .  
+## q6_1.1.1Daegu                   1.356e-02  2.789e-01   0.049 0.961231    
+## q6_1.1.1Incheon                -8.677e-01  1.869e-01  -4.643 3.44e-06 ***
+## q6_1.1.1Gwangju                -2.998e-01  3.359e-01  -0.893 0.372094    
+## q6_1.1.1Daejeon                -3.686e-01  2.691e-01  -1.370 0.170769    
+## q6_1.1.1Ulsan                  -6.104e-01  2.487e-01  -2.454 0.014128 *  
+## q6_1.1.1Gyeonggi               -3.488e-01  1.566e-01  -2.228 0.025876 *  
+## q6_1.1.1Gangwon                -4.771e-01  1.595e-01  -2.992 0.002768 ** 
+## q6_1.1.1Chungbuk                3.061e-02  1.968e-01   0.156 0.876367    
+## q6_1.1.1Chungnam               -5.062e-01  1.660e-01  -3.049 0.002294 ** 
+## q6_1.1.1Jeonbuk                -2.695e-01  1.791e-01  -1.505 0.132302    
+## q6_1.1.1Jeonnam                -4.229e-01  1.630e-01  -2.595 0.009470 ** 
+## q6_1.1.1Gyeonbuk               -1.088e-01  1.684e-01  -0.646 0.518317    
+## q6_1.1.1Gyeongnam              -2.050e-01  1.634e-01  -1.255 0.209575    
+## q6_1.1.1Jeju                   -3.886e-01  2.562e-01  -1.517 0.129310    
+## q6_2_a.1.1Attraction           -3.794e-01  7.203e-02  -5.267 1.39e-07 ***
+## q6_2_a.1.1Cheap Cost           -3.601e-01  1.117e-01  -3.224 0.001263 ** 
+## q6_2_a.1.1Distance             -3.170e-01  9.776e-02  -3.242 0.001185 ** 
+## q6_2_a.1.1Limited Time         -8.683e-01  1.598e-01  -5.434 5.52e-08 ***
+## q6_2_a.1.1Accommodation        -1.266e+00  1.576e-01  -8.036 9.25e-16 ***
+## q6_2_a.1.1Companion Type       -7.958e-01  8.827e-02  -9.016  < 2e-16 ***
+## q6_2_a.1.1Shopping             -2.719e-01  4.315e-01  -0.630 0.528624    
+## q6_2_a.1.1Food                 -2.855e-01  1.480e-01  -1.929 0.053753 .  
+## q6_2_a.1.1Transportation       -1.031e+00  3.122e-01  -3.302 0.000960 ***
+## q6_2_a.1.1Experience Program   -4.790e-01  1.920e-01  -2.495 0.012603 *  
+## q6_2_a.1.1Recommendation       -6.638e-01  1.351e-01  -4.913 8.96e-07 ***
+## q6_2_a.1.1Convenient Facilitiy  8.517e-01  3.666e-01   2.323 0.020177 *  
+## q6_2_a.1.1Education            -4.985e-01  2.874e-01  -1.735 0.082806 .  
+## q6_2_a.1.1the others           -9.865e-01  1.964e-01  -5.022 5.12e-07 ***
+## q6_3.1.1Train                   4.606e-01  1.957e-01   2.354 0.018579 *  
+## q6_3.1.1Flight                  3.227e-01  2.443e-01   1.321 0.186494    
+## q6_3.1.1Ship                   -9.034e-01  2.528e-01  -3.573 0.000353 ***
+## q6_3.1.1Subway                  1.824e-01  1.980e-01   0.921 0.356817    
+## q6_3.1.1Regular Bus            -1.851e-01  1.299e-01  -1.425 0.154185    
+## q6_3.1.1Irregular Bus          -3.954e-01  8.859e-02  -4.463 8.07e-06 ***
+## q6_3.1.1Rent                   -4.321e-01  1.687e-01  -2.562 0.010421 *  
+## q6_3.1.1Bicycle                 1.095e+01  1.678e+02   0.065 0.947978    
+## q6_3.1.1the others             -1.759e-01  2.501e-01  -0.703 0.481796    
+## q6_6.1.1                        2.805e+00  5.685e-02  49.347  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 15656  on 15658  degrees of freedom
+## Residual deviance: 10701  on 15603  degrees of freedom
+## AIC: 10813
+## 
+## Number of Fisher Scoring iterations: 12
+{% endhighlight %}
 
 ## 2) Global Model Evaluation(Multi Logloss)
-```{r}
+
+{% highlight r %}
 MultiLogLoss <- function(act, pred) {
     if(length(pred) != length(act))
         stop("The length of two vectors are different")
@@ -634,33 +1012,81 @@ MultiLogLoss <- function(act, pred) {
     pred <- pmin(pmax(pred, eps), 1 - eps)
     sum(act * log(pred) + (1 - act) * log(1 - pred)) * -1/NROW(act)
 }
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 global.pred <- predict(logit.global, test, type = "response")
 
 MultiLogLoss(test$q6_7, global.pred)
-```
+{% endhighlight %}
 
-```{r}
+
+
+{% highlight text %}
+## [1] 0.2772779
+{% endhighlight %}
+
+
+{% highlight r %}
 MLL.global <- MultiLogLoss(test$q6_7, global.pred)
-```
+{% endhighlight %}
 
 ## 3) Global Model Evaluation(Accuracy)
-```{r}
+
+{% highlight r %}
 global.binary <- ifelse(global.pred > 0.5, 1, 0)
 
 confusionMatrix(global.binary, test$q6_7, positive = "1")
-```
+{% endhighlight %}
 
-```{r}
+
+
+{% highlight text %}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    0    1
+##          0  384   84
+##          1  326 4007
+##                                           
+##                Accuracy : 0.9146          
+##                  95% CI : (0.9063, 0.9224)
+##     No Information Rate : 0.8521          
+##     P-Value [Acc > NIR] : < 2.2e-16       
+##                                           
+##                   Kappa : 0.6056          
+##  Mcnemar's Test P-Value : < 2.2e-16       
+##                                           
+##             Sensitivity : 0.9795          
+##             Specificity : 0.5408          
+##          Pos Pred Value : 0.9248          
+##          Neg Pred Value : 0.8205          
+##              Prevalence : 0.8521          
+##          Detection Rate : 0.8346          
+##    Detection Prevalence : 0.9025          
+##       Balanced Accuracy : 0.7602          
+##                                           
+##        'Positive' Class : 1               
+## 
+{% endhighlight %}
+
+
+{% highlight r %}
 BA.global <- confusionMatrix(global.binary, test$q6_7, positive = "1")
-BA.global <- BA.global$byClass[[11]]
-```
+BA.global <- cfm$byClass[[11]]
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(expr, envir, enclos): object 'cfm' not found
+{% endhighlight %}
 
 # 4. Local Model
 ## 1) Feature Engineering
-```{r}
+
+{% highlight r %}
 x <- levels(train$q4_a.1)
 y <- levels(train$q6_2_a.1.1)
 z <- levels(train$q6_3.1.1)
@@ -703,10 +1129,11 @@ train_2$q6_2_a.1.1 <- as.factor(train_2$q6_2_a.1.1)
 test_2$q4_a.1 <- as.factor(test_2$q4_a.1)
 test_2$q6_3.1.1 <- as.factor(test_2$q6_3.1.1)
 test_2$q6_2_a.1.1 <- as.factor(test_2$q6_2_a.1.1)
-```
+{% endhighlight %}
 
 ## 2) Modeling
-```{r}
+
+{% highlight r %}
 destination <- unique(train$q6_1.1.1)
 
 for(i in 1:length(destination)) {
@@ -754,10 +1181,11 @@ for(i in 1:length(destination)) {
   
   message(destination[i], " has completed")
 }
-```
+{% endhighlight %}
 
 ## 3) Result Visualization
-```{r}
+
+{% highlight r %}
 result.df <- data.frame(Destination = factor(c("Korea ","Seoul", "Busan", 
                                                "Daegu", "Incheon", "Gwangju", 
                                                "Daejeon", "Ulsan", "Gyeonggi", 
@@ -778,9 +1206,16 @@ result.df <- data.frame(Destination = factor(c("Korea ","Seoul", "Busan",
                                              BA.Chungnam, BA.Jeonbuk, 
                                              BA.Jeonnam, BA.Gyeonbuk, 
                                              BA.Gyeongnam, BA.Jeju))
-```
+{% endhighlight %}
 
-```{r}
+
+
+{% highlight text %}
+## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 1, 4, 7, 11, 0
+{% endhighlight %}
+
+
+{% highlight r %}
 result.df %>%
   ggplot(aes(x = Destination, y = MultiLogLoss, color = Destination)) +
     geom_line(group = 1, color = "black", alpha = 0.5) +
@@ -789,9 +1224,16 @@ result.df %>%
     geom_vline(xintercept = 7, linetype = "dashed", alpha = 0.5 ) +
     theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                      vjust = 1 ,hjust = 1))
-```
+{% endhighlight %}
 
-```{r}
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'result.df' not found
+{% endhighlight %}
+
+
+{% highlight r %}
 result.df %>%
   ggplot(aes(x = Destination, y = BalancedAccuracy, color = Destination)) +
     geom_line(group = 1, color = "black", alpha = 0.5) +
@@ -800,26 +1242,72 @@ result.df %>%
     geom_vline(xintercept = 7, linetype = "dashed", alpha = 0.5 ) +
     theme(axis.text.x = element_text(angle = 45, face = "italic", 
                                      vjust = 1 ,hjust = 1))
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(lhs, parent, parent): object 'result.df' not found
+{% endhighlight %}
 
 ## 4) Local Model Evaluation(Multi Logloss)
-```{r}
+
+{% highlight r %}
 local.pred <- rbind(preddf.Seoul, preddf.Busan, preddf.Daegu, preddf.Incheon,
                     preddf.Gwangju, preddf.Daejeon, preddf.Ulsan, 
                     preddf.Gyeonggi, preddf.Gangwon, preddf.Chungbuk, 
                     preddf.Chungnam, preddf.Jeonbuk, preddf.Jeonnam,
                     preddf.Gyeonbuk, preddf.Gyeongnam, preddf.Jeju)
 local.pred <- arrange(local.pred, PID)
-```
+{% endhighlight %}
 
-```{r}
+
+{% highlight r %}
 MultiLogLoss(test$q6_7, local.pred$q6_7)
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] 0.3377981
+{% endhighlight %}
 
 ## 5) Local Model Evaluation(Accuracy)
-```{r}
+
+{% highlight r %}
 local.binary <- ifelse(local.pred$q6_7 > 0.5, 1, 0)
 
 confusionMatrix(local.binary, test$q6_7, positive = "1")
-```
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    0    1
+##          0  376   99
+##          1  334 3992
+##                                           
+##                Accuracy : 0.9098          
+##                  95% CI : (0.9014, 0.9178)
+##     No Information Rate : 0.8521          
+##     P-Value [Acc > NIR] : < 2.2e-16       
+##                                           
+##                   Kappa : 0.5855          
+##  Mcnemar's Test P-Value : < 2.2e-16       
+##                                           
+##             Sensitivity : 0.9758          
+##             Specificity : 0.5296          
+##          Pos Pred Value : 0.9228          
+##          Neg Pred Value : 0.7916          
+##              Prevalence : 0.8521          
+##          Detection Rate : 0.8315          
+##    Detection Prevalence : 0.9011          
+##       Balanced Accuracy : 0.7527          
+##                                           
+##        'Positive' Class : 1               
+## 
+{% endhighlight %}
 
