@@ -4,7 +4,7 @@ title: "Development prediction model of intention to revisit travel destination 
 author: "Young Ho Lee"
 date: "2017.05.10"
 categories: Contest
-cover: "/assets/contest/2017-05-10-Intention-Revisit/revisit/jpg"
+cover: "/assets/contest/2017-05-10-Intention-Revisit/revisit.jpg"
 ---
 
 이번 포스팅은 2017 경기 빅데이터 아이디어 공모전, 2017 시공간 빅데이터 논문 공모전에 제출했던 '로지스틱 회귀분석을 활용한 관광지 재방문 의사 예측모델 구축'에 관한 글이다. 사용한 데이터는 2011-2015년도의 국민여행실태조사의 설문 결과이며, 2011-2014년도의 데이터는 훈련 데이터로 사용하였고, 2015년도의 데이터는 검증 데이터로 사용하여 분석을 진행하였다. 이 분석에서는 전국 단위 모델과 시/도 단위 모델, 두 모델을 구축하였고, 이 두 모델의 결과를 비교하고자 하였다. 분석의 진행과정은 다음과 같다.
