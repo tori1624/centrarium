@@ -23,9 +23,66 @@ library(data.table)
 # 1. Data Handling 1
 ## 1) Data Import
 
+{% highlight r %}
+# specify the path
+data.path1 <- "D:/Data/Public_data/KNTS/Database/Original/Individual/"
+
+# file name
+file.list1 <- list.files(path = data.path1)
+file.name1 <- substr(file.list1, 1, nchar(file.list1)-4)
+
+# data import
+for(i in 1:length(file.name1)) {
+  tmp.csv <- fread(paste0(data.path1, file.list1)[i])
+  assign(file.name1[i], tmp.csv)
+  message(file.name1[i], "has completed")
+}
+{% endhighlight %}
+
+
+
+{% highlight javascript %}
+## 
+Read 0.0% of 5796 rows
+Read 5796 rows and 13408 (of 13408) columns from 0.145 GB file in 00:00:04
+## 
+Read 0.0% of 6534 rows
+Read 6534 rows and 145237 (of 145237) columns from 1.770 GB file in 00:00:24
+{% endhighlight %}
 
 ## 2) Extracting Necessary Question
 
+{% highlight r %}
+# data2011_1 <- data2011 %>%
+#   select(PID_11, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
+#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1,
+#          q12_8.1, q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1,
+#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
+
+# data2012_1 <- data2012 %>%
+#   select(PID_12, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
+#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, 
+#          q12_8.1, q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1,
+#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
+
+# data2013_1 <- data2013 %>%
+#   select(PID_13, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
+#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1,
+#          q12_10.1, q12_11.1, q12_12.1, q12_13.1, q6_1.1.1, q6_1_1.1.1, 
+#          q6_2_a.1.1, q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
+
+# data2014_1 <- data2014 %>%
+#   select(PID_14, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
+#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1,
+#          q12_9.1, q12_10.1, q12_11.1, q12_12.1, q6_1.1, q6_1_1.1, q6_2_a.1, 
+#          q6_3.1, q6_6.1, q6_7.1, q6_8.1)
+
+# data2015_1 <- data2015 %>%
+#   select(PID_15, type1.1, month.1, q1.1, q3.1, q4_a.1, q5.1, q7_c.1, q10.1, 
+#          q12_1.1, q12_2.1, q12_3.1, q12_4.1, q12_5.1, q12_6.1, q12_7.1, q12_8.1, 
+#          q12_9.1, q12_10.1, q12_11.1, q12_12.1, q6_1.1.1, q6_1_1.1.1, q6_2_a.1.1,
+#          q6_3.1.1, q6_6.1.1, q6_7.1.1, q6_8.1.1)
+{% endhighlight %}
 
 ## 3) Saving Data
 
@@ -91,12 +148,6 @@ for(i in 1:5) {
 }
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in paste0(file.name1[i], "_2"): object 'file.name1' not found
-{% endhighlight %}
-
 ## 4) Dependent Variable
 
 {% highlight r %}
@@ -119,264 +170,36 @@ Depend2 <- function(data){
 }
 
 data2011_3 <- Depend1(data2011_2)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'data2011_2' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 data2012_3 <- Depend1(data2012_2)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'data2012_2' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 data2013_3 <- Depend1(data2013_2)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'data2013_2' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 data2014_3 <- Depend2(data2014_2)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'data2014_2' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 data2015_3 <- Depend1(data2015_2)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'data2015_2' not found
 {% endhighlight %}
 
 ## 5) Changing Rownames for Rbind
 
 {% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_1_1.1"] <- c("q6_1_1.1.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2014_3)[names(data2014_3) == "q6_1_1.1"] <- c("q6_1_1.1.1"): object 'data2014_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_1.1"] <- c("q6_1.1.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2014_3)[names(data2014_3) == "q6_1.1"] <- c("q6_1.1.1"): object 'data2014_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_2_a.1"] <- c("q6_2_a.1.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2014_3)[names(data2014_3) == "q6_2_a.1"] <- c("q6_2_a.1.1"): object 'data2014_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_3.1"] <- c("q6_3.1.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2014_3)[names(data2014_3) == "q6_3.1"] <- c("q6_3.1.1"): object 'data2014_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2014_3)[names(data2014_3) == "q6_6.1"] <- c("q6_6.1.1")
-{% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in names(data2014_3)[names(data2014_3) == "q6_6.1"] <- c("q6_6.1.1"): object 'data2014_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2011_3)[16] <- c("q12_9.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2011_3)[16] <- c("q12_9.1"): object 'data2011_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2012_3)[16] <- c("q12_9.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2012_3)[16] <- c("q12_9.1"): object 'data2012_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2013_3)[16] <- c("q12_9.1")
-{% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in names(data2013_3)[16] <- c("q12_9.1"): object 'data2013_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2011_3)[17] <- c("q12_10.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2011_3)[17] <- c("q12_10.1"): object 'data2011_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2012_3)[17] <- c("q12_10.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2012_3)[17] <- c("q12_10.1"): object 'data2012_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2013_3)[17] <- c("q12_10.1")
-{% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in names(data2013_3)[17] <- c("q12_10.1"): object 'data2013_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2011_3)[18] <- c("q12_11.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2011_3)[18] <- c("q12_11.1"): object 'data2011_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2012_3)[18] <- c("q12_11.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2012_3)[18] <- c("q12_11.1"): object 'data2012_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2013_3)[18] <- c("q12_11.1")
-{% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in names(data2013_3)[18] <- c("q12_11.1"): object 'data2013_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2011_3)[19] <- c("q12_12.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2011_3)[19] <- c("q12_12.1"): object 'data2011_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2012_3)[19] <- c("q12_12.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2012_3)[19] <- c("q12_12.1"): object 'data2012_3' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 names(data2013_3)[19] <- c("q12_12.1")
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in names(data2013_3)[19] <- c("q12_12.1"): object 'data2013_3' not found
 {% endhighlight %}
 
 ## 6) Merging Ind & Cht
@@ -391,39 +214,12 @@ for(i in 1:5) {
 }
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in paste0(file.name1[i], "_3"): object 'file.name1' not found
-{% endhighlight %}
-
 ## 7) Rbind the Data & Saving Data
 
 {% highlight r %}
 train <- rbind(data2011_4, data2012_4, data2013_4, data2014_4)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in rbind(data2011_4, data2012_4, data2013_4, data2014_4): object 'data2011_4' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 test <- data2015_4
-{% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'data2015_4' not found
-{% endhighlight %}
-
-
-
-{% highlight r %}
 # write.csv(train, "train.csv", row.names = FALSE)
 # write.csv(test, "test.csv", row.names = FALSE)
 {% endhighlight %}
@@ -474,7 +270,7 @@ train %>%
                                    hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-12](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-14](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-14-1.png)
 
 
 {% highlight r %}
@@ -490,7 +286,7 @@ train %>%
                                    hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-13](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-15](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-15-1.png)
 
 ### 2) Area Size / Sex
 
@@ -524,7 +320,7 @@ train %>%
 grid.arrange(g1, g2, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-15](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-17](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-17-1.png)
 
 
 {% highlight r %}
@@ -549,7 +345,7 @@ train %>%
 grid.arrange(g3, g4, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-16](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-18](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-18-1.png)
 
 ### 3) Age
 
@@ -563,7 +359,7 @@ train %>%
   scale_fill_discrete(name = "Age")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-17](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-17-1.png)
+![plot of chunk unnamed-chunk-19](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-19-1.png)
 
 
 {% highlight r %}
@@ -578,7 +374,7 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-18](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-18-1.png)
+![plot of chunk unnamed-chunk-20](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-20-1.png)
 
 ### 4) Month
 
@@ -591,7 +387,7 @@ train %>%
   scale_fill_discrete(name = "Month")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-19](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-19-1.png)
+![plot of chunk unnamed-chunk-21](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-21-1.png)
 
 
 {% highlight r %}
@@ -605,7 +401,7 @@ train %>%
   scale_fill_gradient(low = "deepskyblue1", high = "indianred1")
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-20](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-22](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-22-1.png)
 
 ### 5) A Day Trip or Overnight / Purpose of Travel
 
@@ -641,7 +437,7 @@ train %>%
 grid.arrange(a1, a2, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-22](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-22-1.png)
+![plot of chunk unnamed-chunk-24](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-24-1.png)
 
 
 {% highlight r %}
@@ -666,7 +462,7 @@ train %>%
 grid.arrange(a3, a4, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-23](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-23-1.png)
+![plot of chunk unnamed-chunk-25](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-25-1.png)
 
 ### 6) Information about Travel
 
@@ -693,7 +489,7 @@ train %>%
                                    hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-25](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-25-1.png)
+![plot of chunk unnamed-chunk-27](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-27-1.png)
 
 
 {% highlight r %}
@@ -709,7 +505,7 @@ train %>%
                                    hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-26](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-26-1.png)
+![plot of chunk unnamed-chunk-28](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-28-1.png)
 
 ### 7) Package Travel
 
@@ -741,7 +537,7 @@ train %>%
 grid.arrange(b1, b2, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-28](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-28-1.png)
+![plot of chunk unnamed-chunk-30](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-30-1.png)
 
 ### 8) Destination(Sido)
 
@@ -770,7 +566,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-30](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-30-1.png)
+![plot of chunk unnamed-chunk-32](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-32-1.png)
 
 
 {% highlight r %}
@@ -786,7 +582,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-31](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-31-1.png)
+![plot of chunk unnamed-chunk-33](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-33-1.png)
 
 ### 9) Reason for Selection
 
@@ -819,7 +615,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-33](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-33-1.png)
+![plot of chunk unnamed-chunk-35](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-35-1.png)
 
 
 {% highlight r %}
@@ -835,7 +631,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-34](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-34-1.png)
+![plot of chunk unnamed-chunk-36](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-36-1.png)
 
 ### 10) Transportaion
 
@@ -862,7 +658,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-36](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-36-1.png)
+![plot of chunk unnamed-chunk-38](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-38-1.png)
 
 
 {% highlight r %}
@@ -878,7 +674,7 @@ train %>%
                                    vjust = 1, hjust = 1))
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-37](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-37-1.png)
+![plot of chunk unnamed-chunk-39](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-39-1.png)
 
 ### 11) Satisfaction
 
@@ -902,7 +698,7 @@ train %>%
 grid.arrange(c1, c2, ncol = 2)
 {% endhighlight %}
 
-![plot of chunk unnamed-chunk-38](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-38-1.png)
+![plot of chunk unnamed-chunk-40](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-40-1.png)
 
 # 3 Global Model
 ## 1) Modeling
@@ -920,7 +716,7 @@ summary(logit.global)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## 
 ## Call:
 ## glm(formula = q6_7 ~ age + income2 + month.1 + q1.1 + q3.1 + 
@@ -1023,7 +819,7 @@ MultiLogLoss(test$q6_7, global.pred)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## [1] 0.2772779
 {% endhighlight %}
 
@@ -1042,7 +838,7 @@ confusionMatrix(global.binary, test$q6_7, positive = "1")
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -1074,13 +870,7 @@ confusionMatrix(global.binary, test$q6_7, positive = "1")
 
 {% highlight r %}
 BA.global <- confusionMatrix(global.binary, test$q6_7, positive = "1")
-BA.global <- cfm$byClass[[11]]
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'cfm' not found
+BA.global <- BA.global$byClass[[11]]
 {% endhighlight %}
 
 # 4. Local Model
@@ -1209,12 +999,6 @@ result.df <- data.frame(Destination = factor(c("Korea ","Seoul", "Busan",
 {% endhighlight %}
 
 
-
-{% highlight text %}
-## Error in (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE, : arguments imply differing number of rows: 1, 4, 7, 11, 0
-{% endhighlight %}
-
-
 {% highlight r %}
 result.df %>%
   ggplot(aes(x = Destination, y = MultiLogLoss, color = Destination)) +
@@ -1226,11 +1010,7 @@ result.df %>%
                                      vjust = 1 ,hjust = 1))
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'result.df' not found
-{% endhighlight %}
+![plot of chunk unnamed-chunk-50](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-50-1.png)
 
 
 {% highlight r %}
@@ -1244,11 +1024,7 @@ result.df %>%
                                      vjust = 1 ,hjust = 1))
 {% endhighlight %}
 
-
-
-{% highlight text %}
-## Error in eval(lhs, parent, parent): object 'result.df' not found
-{% endhighlight %}
+![plot of chunk unnamed-chunk-51](/assets/contest/2017-05-10-Intention-Revisit/unnamed-chunk-51-1.png)
 
 ## 4) Local Model Evaluation(Multi Logloss)
 
@@ -1268,7 +1044,7 @@ MultiLogLoss(test$q6_7, local.pred$q6_7)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## [1] 0.3377981
 {% endhighlight %}
 
@@ -1282,7 +1058,7 @@ confusionMatrix(local.binary, test$q6_7, positive = "1")
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
