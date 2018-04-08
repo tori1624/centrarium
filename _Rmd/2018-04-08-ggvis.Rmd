@@ -19,9 +19,11 @@ library(dplyr)
 
 # 1. Introduction
 ```{r}
-mtcars %>%
+ggvisObject <- mtcars %>%
   ggvis(x = ~wt, y = ~mpg) %>%
   layer_points()
+
+knit_print.ggvis(ggvisObject)
 ```
 
 ```{r}
