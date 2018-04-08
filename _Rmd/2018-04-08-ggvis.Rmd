@@ -14,15 +14,18 @@ knitr::opts_chunk$set(echo = TRUE)
 # Basic packages
 library(ggvis)
 library(dplyr)
+
+# Define image sizes
+img.width <- 450
+img.height <- 300
 ```
 
 # 1. Introduction
 ```{r}
-ggvisObject <- mtcars %>%
+mtcars %>%
   ggvis(x = ~wt, y = ~mpg) %>%
-  layer_points()
-
-knit_print.ggvis(ggvisObject)
+  layer_points() %>%
+  set_options(width = img.width, height = img.height)
 ```
 
 ```{r}
