@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Development prediction model of monthly rent using multiple regression analysis - focused on seoul'
+title: 'Developing prediction model of monthly rent using multiple regression analysis - focused on seoul'
 author: "Young Ho Lee"
 date: "2017.11.18"
 categories: Contest

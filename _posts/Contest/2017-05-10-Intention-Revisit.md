@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Development prediction model of intention to revisit travel destination using logistic regression analysis"
+title: "Developing prediction model of intention to revisit travel destination using logistic regression analysis"
 author: "Young Ho Lee"
 date: "2017.05.10"
 categories: Contest
