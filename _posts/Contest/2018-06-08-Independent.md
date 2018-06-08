@@ -16,9 +16,11 @@ def FindRoute():
    from arcpy import env
    n = int(str(arcpy.GetCount_management("Converted_Graphics")))
    intermd = list()
+{% endhighlight %}
 
+{% highlight javascrpit %}
    for i in range(1, n):
-   		env.workspace = "~/network.gdb"
+        env.workspace = "~/network.gdb"
         arcpy.Select_analysis("Converted_Graphics", "stop", "OID = %s OR OID =%s" % (i, i+1))
         env.overwriteOutput = True
         inNetworkDataset = "~/network.gdb/network_dataset/sidewalk"
