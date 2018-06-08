@@ -9,16 +9,11 @@ cover: "/assets/contest/independent.bmp"
 
 {% highlight javascrpit %}
 def FindRoute():
-   import arcpy
-
-   # Check out any necessary licenses
    arcpy.CheckOutExtension("Network")
    from arcpy import env
    n = int(str(arcpy.GetCount_management("Converted_Graphics")))
    intermd = list()
-{% endhighlight %}
 
-{% highlight javascrpit %}
    for i in range(1, n):
         env.workspace = "~/network.gdb"
         arcpy.Select_analysis("Converted_Graphics", "stop", "OID = %s OR OID =%s" % (i, i+1))
