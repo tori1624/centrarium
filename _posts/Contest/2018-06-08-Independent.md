@@ -7,7 +7,7 @@ categories: Contest
 cover: "/assets/contest/independent.bmp"
 ---
 
-{% highlight javascript %}
+{% highlight r %}
 def FindRoute():
     import arcpy
 
