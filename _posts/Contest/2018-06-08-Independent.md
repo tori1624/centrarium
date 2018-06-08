@@ -77,20 +77,4 @@ cover: "/assets/contest/independent.bmp"
 # 
 #     #결과
 #     arcpy.Merge_management(intermd, "Final_ROUTE")
-# 
-#     # 불필요 레이어 삭제
-#     arcpy.Delete_management("Directions")
-#     arcpy.Delete_management("RouteEdges")
-#     arcpy.Delete_management("Routes")
-#     arcpy.Delete_management("stop")
-#     arcpy.Delete_management("Stops")
-#     arcpy.Delete_management("select1")
-#     arcpy.Delete_management("select2")
-#     arcpy.Delete_management("Route1_min")
-#     arcpy.Delete_management("Route2_min")
-#     arcpy.Delete_management("Sidewalk")
-#     arcpy.Delete_management("Bus_route")
-#     arcpy.Delete_management("Rail_road")
-#     arcpy.Delete_management("Routes_merge")
-
 {% endhighlight %}
