@@ -4,10 +4,10 @@ title: "An analysis of household travel diary survey for exploring spatial segre
 author: "Young Ho Lee"
 date: "2018.06.02"
 categories: Contest
+cover: "/assets/contest/2017-06-02-Segregation-Place/place.jpg"
 ---
 
-
-
+이번 포스팅은 2018 교통분야 빅데이터 및 마이크로 데이터를 활용한 정책논문 및 아이디어 공모전에 제출했던 '수도권 가구통행실태조사를 활용한 장소별 소득계층의 분리 양상 탐색'에 관한 글로 데이터 가공과 데이터 분석 부분에 해당하는 코드를 포함하고 있다. 사용한 데이터는 2016 서울시 가구통행실태조사이며 이 데이터를 활용하여 거주지, 직장, 학교에서의 소득계층별 인구 수를 추출하고자 하였다. 분리를 측정하기 위한 지수로는 노출 지수와 상이 지수를 사용하였고, 데이터 가공 과정과 분석의 진행 과정은 다음과 같다.
 
 {% highlight r %}
 # basic pacakges
@@ -250,7 +250,7 @@ korea.sp <- readOGR("D:/Data/map/shp/nsdi/kostat/dong/Z_SOP_BND_ADM_DONG_PG.shp"
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ## OGR data source with driver: ESRI Shapefile 
 ## Source: "D:/Data/map/shp/nsdi/kostat/dong/Z_SOP_BND_ADM_DONG_PG.shp", layer: "Z_SOP_BND_ADM_DONG_PG"
 ## with 3502 features
@@ -528,7 +528,7 @@ round(apply(residence.df1[, 5:7], 2, sum) / sum(residence.df1[, 5:7]), 3) * 100
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##    low middle   high 
 ##   17.5   57.9   24.6
 {% endhighlight %}
@@ -557,7 +557,7 @@ round(residence.mat1, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.7008 0.4488
 ## middle 0.2115 0.0000 0.2610
@@ -593,7 +593,7 @@ round(residence.mat2, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##       low middle   high
 ## ab 0.7559 0.3894 0.6610
 ## ba 0.1601 0.5359 0.2157
@@ -608,7 +608,7 @@ round(apply(work.df1[, 5:7], 2, sum) / sum(work.df1[, 5:7]), 3) * 100
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##    low middle   high 
 ##   10.6   61.7   27.7
 {% endhighlight %}
@@ -637,7 +637,7 @@ round(work.mat1, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.8267 0.6454
 ## middle 0.1422 0.0000 0.3000
@@ -673,7 +673,7 @@ round(work.mat2, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##       low middle   high
 ## ab 0.8671 0.3768 0.6967
 ## ba 0.1029 0.6059 0.2674
@@ -688,7 +688,7 @@ round(apply(school.df1[, 5:7], 2, sum) / sum(school.df1[, 5:7]), 3) * 100
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##    low middle   high 
 ##    6.7   61.4   31.9
 {% endhighlight %}
@@ -717,7 +717,7 @@ round(school.mat, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.7966 0.6750
 ## middle 0.0874 0.0000 0.2967
@@ -754,7 +754,7 @@ round(school.mat2, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##       low middle   high
 ## ab 0.8586 0.3383 0.5972
 ## ba 0.0620 0.5376 0.2796
@@ -791,7 +791,7 @@ round(residence.mat3, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.2766 0.4154
 ## middle 0.2766 0.0000 0.2995
@@ -824,7 +824,7 @@ round(residence.mat4, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##         low middle   high
 ## [1,] 0.2955   0.21 0.3121
 {% endhighlight %}
@@ -859,7 +859,7 @@ round(work.mat3, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.1959 0.2964
 ## middle 0.1959 0.0000 0.1591
@@ -892,7 +892,7 @@ round(work.mat4, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##         low middle  high
 ## [1,] 0.2189 0.1069 0.172
 {% endhighlight %}
@@ -927,7 +927,7 @@ round(school.mat3, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##           low middle   high
 ## low    0.0000 0.4464 0.4329
 ## middle 0.4464 0.0000 0.3023
@@ -960,7 +960,7 @@ round(school.mat4, 4)
 
 
 
-{% highlight text %}
+{% highlight javascript %}
 ##         low middle   high
 ## [1,] 0.4286 0.2936 0.2885
 {% endhighlight %}
