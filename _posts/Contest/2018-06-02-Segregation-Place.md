@@ -4,7 +4,7 @@ title: "An analysis of household travel diary survey for exploring spatial segre
 author: "Young Ho Lee"
 date: "2018.06.02"
 categories: Contest
-cover: "/assets/contest/2017-06-02-Segregation-Place/place.jpg"
+cover: "/assets/contest/2018-06-02-Segregation-Place/place.jpg"
 ---
 
 이번 포스팅은 2018 교통분야 빅데이터 및 마이크로 데이터를 활용한 정책논문 및 아이디어 공모전에 제출했던 '수도권 가구통행실태조사를 활용한 장소별 소득계층의 분리 양상 탐색'에 관한 글로 데이터 가공과 데이터 분석 부분에 해당하는 코드를 포함하고 있다. 사용한 데이터는 2016 서울시 가구통행실태조사이며 이 데이터를 활용하여 거주지, 직장, 학교에서의 소득계층별 인구 수를 추출하고자 하였다. 분리를 측정하기 위한 지수로는 노출 지수와 상이 지수를 사용하였고, 데이터 가공 과정과 분석의 진행 과정은 다음과 같다.
