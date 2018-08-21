@@ -1,0 +1,903 @@
+---
+layout: post
+title: "Public Waste Ocurr & Disposal"
+author: "Young Ho Lee"
+date: "2018.07.21"
+categories: Contest
+---
+
+
+
+
+{% highlight r %}
+# basic packages
+library(dplyr)
+library(stringr)
+library(rgdal)
+library(classInt)
+library(RColorBrewer)
+library(reshape2)
+library(ggplot2)
+library(ggmap)
+
+options(scipen = 10)
+{% endhighlight %}
+
+# 1. Data Import
+
+{% highlight r %}
+path <- "D:/Data/contest/waste/"
+
+# occurrence
+occurrence.houseLife <- read.csv(paste0(path, "2_houseLife.csv"))
+occurrence.industrialLife <- read.csv(paste0(path, "2_industrialLife.csv"))
+occurrence.life <- read.csv(paste0(path, "2_life.csv"))
+occurrence.constructionWaste <- read.csv(paste0(path, "2_construction.csv"))
+
+# disposal
+disposal.houseLife <- read.csv(paste0(path, "3_houseLife.csv"))
+disposal.industrialLife <- read.csv(paste0(path, "3_industrialLife.csv"))
+disposal.industrialWaste <- read.csv(paste0(path, "3_life.csv"))
+disposal.constructionWaste <- read.csv(paste0(path, "3_construction.csv"))
+# disposal.local <- read.csv(paste0(path, "disposal_local.csv"))
+
+# collect
+collect.lifeBusiness <- read.csv(paste0(path, "8_collect_lifeBusiness.csv"))
+collect.construction <- read.csv(paste0(path, "8_collect_construction.csv"))
+
+# middle/final/overall
+middle.disposal <- read.csv(paste0(path, "8_middle_disposal.csv"))
+middle.recycle <- read.csv(paste0(path, "8_middle_recycle.csv"))
+middle.construction <- read.csv(paste0(path, "8_middle_construction.csv"))
+
+final.disposal <- read.csv(paste0(path, "8_final_disposal.csv"))
+final.recycle <- read.csv(paste0(path, "8_final_recycle.csv"))
+
+overall.recycle <- read.csv(paste0(path, "8_overall_recycle.csv"))
+{% endhighlight %}
+
+# 2. Data Handling
+## 1) Layout(Long -> Wide / Occurrence)
+
+{% highlight r %}
+occurrence.life <- occurrence.life[, -c(3:4, 34)]
+occurrence.life[, 19] <- as.numeric(as.character(occurrence.life[, 19]))
+
+# file names
+file.names <- c("occurrence.houseLife", "occurrence.industrialLife", 
+                "occurrence.life", "occurrence.constructionWaste")
+
+# data handling
+for (i in file.names) {
+  # data
+  tmp <- get(i)
+  
+  # rename
+  names(tmp)[1:3] <- c("sido", "sigungu", "type")
+  
+  # NA
+  for (j in 4:ncol(tmp)) {
+    tmp[is.na(tmp[, j]), j] <- 0
+  }
+  
+  # row sum
+  tmp$sum <- apply(tmp[, 4:ncol(tmp)], 1, sum)
+  
+  # feature selection
+  tmp <- tmp[, c(1:3, ncol(tmp))]
+  
+  # cast & variable names
+  if (i == "occurrence.life") {
+    tmp.df <- tmp %>%
+      group_by(sido, sigungu, type) %>%
+      summarise(newSum = sum(sum))
+    df <- dcast(tmp.df, sido + sigungu ~ type, value.var = "newSum")
+    names(df)[3:7] <- paste(substr(i, 12, nchar(i)), 
+                            c("landfill", "total", "incin", "recycle", "sea"),
+                            sep = ".")
+  } else {
+    df <- dcast(tmp, sido + sigungu ~ type, value.var = "sum")
+    names(df)[3:6] <- paste(substr(i, 12, nchar(i)), 
+                            c("landfill", "total", "incin", "recycle"),
+                            sep = ".")
+  }
+  
+  # join key
+  df$region <- paste(df$sido, df$sigungu, sep = "_")
+  
+  # assign data
+  assign(i, tmp)
+  assign(paste0(i, ".df"), df)
+}
+{% endhighlight %}
+
+## 2) Merge(Occurrence)
+
+{% highlight r %}
+occurrence.local <- Reduce(function(x, y) merge(x, y, all = TRUE), 
+                           list(occurrence.houseLife.df, 
+                                occurrence.industrialLife.df, 
+                                occurrence.life.df, 
+                                occurrence.constructionWaste.df))
+
+# NA
+for (i in 12:16) {
+  occurrence.local[is.na(occurrence.local[, i]), i] <- 0
+}
+{% endhighlight %}
+
+## 3) Disposal Data
+### 1) Feature Extract
+
+{% highlight r %}
+list.disposal.name <- c("disposal.houseLife",
+                        "disposal.industrialLife",
+                        "disposal.constructionWaste")
+
+for (i in c(list.disposal.name)) {
+  ## (0) bring the data
+  i %in% ls(envir = .GlobalEnv)
+  data <- get(i, envir = .GlobalEnv)
+            
+  ## (1) change the column names
+  names(data) <- c("sido","sigungu", "self.landfill", "self.incin",
+                   "self.recycle", "business.landfill", "business.incin", 
+                   "business.recycle", "own.landfill", "own.incin", 
+                   "own.recycle")
+        
+  ## (2) NA -> 0
+  data <- data %>%
+    mutate_all(funs(replace(., is.na(.), 0)))
+                
+  ## (3) Combine columns by disposision type
+  data <- data %>%
+    mutate(landfill = rowSums(select(., contains("landfill"))),
+           incin = rowSums(select(., contains("incin"))),
+           recycle = rowSums(select(., contains("recycle"))) )%>%
+    select(c(sido, sigungu, landfill, incin, recycle))
+        
+    ## (4) assign the orignal name to data
+  colnames(data)[3:5] <- paste(substr(i, 10, nchar(i)), colnames(data)[3:5], 
+                               sep = ".")
+    
+  assign(x = i, value = data)
+  print(paste0(i, " done"))
+}
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## [1] "disposal.houseLife done"
+## [1] "disposal.industrialLife done"
+## [1] "disposal.constructionWaste done"
+{% endhighlight %}
+
+
+{% highlight r %}
+# disposal.local.industrialWaste has 14 columns.
+# so manually handling this data only
+
+## (1)change the column names
+names(disposal.industrialWaste) <- c("sido", "sigungu","self.landfill",
+                                     "self.incin","self.recycle", "self.sea", 
+                                     "business.landfill", "business.incin",
+                                     "business.recycle", "business.sea", 
+                                     "own.landfill", "own.incin", "own.recycle",
+                                     "own.sea")
+
+## (2) NA -> 0
+disposal.industrialWaste <- disposal.industrialWaste %>%
+  mutate_all(funs(replace(., is.na(.), 0)))
+
+## (3) Combine columns by disposision type
+disposal.industrialWaste <- disposal.industrialWaste %>%
+  mutate(landfill = rowSums(select(., contains("landfill"))),
+         incin = rowSums(select(., contains("incin"))),
+         recycle = rowSums(select(., contains("recycle"))),
+         sea = rowSums(select(., contains("sea"))))%>%
+  select(c(sido, sigungu, landfill, incin, recycle, sea))
+
+## (4) make prefix to diviede each data
+tmp.name <- colnames(disposal.industrialWaste)[3:6]
+colnames(disposal.industrialWaste)[3:6] <- paste("life", tmp.name, sep = ".")
+{% endhighlight %}
+
+### 2) Merge
+
+{% highlight r %}
+disposal.local <- Reduce(function(x, y) merge(x, y, all = TRUE),
+                         list(disposal.houseLife,
+                              disposal.industrialLife,
+                              disposal.industrialWaste, 
+                              disposal.constructionWaste))
+{% endhighlight %}
+
+### 3) Calculation Total
+
+{% highlight r %}
+disposal.local <- disposal.local %>%
+  mutate(houseLife.total = houseLife.landfill + houseLife.incin + 
+                           houseLife.recycle,
+         industrialLife.total = industrialLife.landfill + industrialLife.incin +
+                                industrialLife.recycle, 
+         life.total = life.landfill + life.incin + life.recycle + life.sea,
+         constructionWaste.total = constructionWaste.landfill + 
+                                   constructionWaste.incin +
+                                   constructionWaste.recycle,
+         region = paste(sido, sigungu, sep = "_"))
+{% endhighlight %}
+
+## 4) Merge(Occurrence & Disposal)
+
+{% highlight r %}
+occurrence.re <- occurrence.local[, c(1:3, 5, 9, 13, 18)]
+names(occurrence.re)[4:7] <- paste("Oc", names(occurrence.re)[4:7], sep = ".")
+
+disposal.re <- disposal.local[, c(1:2, 20, 16:19)]
+names(disposal.re)[4:7] <- paste("Di", names(disposal.re)[4:7], sep = ".")
+
+waste.df <- cbind(occurrence.re, disposal.re[, 4:7])
+
+##
+options(scipen = 100)
+
+waste.df <- waste.df %>%
+  mutate(houseLife = round(Oc.houseLife.total - Di.houseLife.total, 2),
+         industrialLife = round(Oc.industrialLife.total - Di.industrialLife.total, 2),
+         industrialWaste = round(Oc.life.total - Di.life.total, 2),
+         constructionWaste = round(Oc.constructionWaste.total - Di.constructionWaste.total, 2))
+{% endhighlight %}
+
+## 5) Spatial Data
+
+{% highlight r %}
+# data import
+korea.sp <- readOGR("D:/Data/map/shp/nsdi/kostat/sigungu/sigungu.shp",
+                    p4s = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 
+                    +y_0=500000 +ellps=bessel +units=m +no_defs",
+                    encoding = "UTF8")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## OGR data source with driver: ESRI Shapefile 
+## Source: "D:/Data/map/shp/nsdi/kostat/sigungu/sigungu.shp", layer: "sigungu"
+## with 252 features
+## It has 6 fields
+{% endhighlight %}
+
+
+
+{% highlight r %}
+sido.code <- read.csv("D:/Data/map/shp/nsdi/kostat/sigungu/sido_code.csv")
+
+sido.sp <- readOGR("D:/Data/map/shp/nsdi/kostat/sido/sido.shp",
+                   p4s = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 
+                    +y_0=500000 +ellps=bessel +units=m +no_defs",
+                    encoding = "UTF8")
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## OGR data source with driver: ESRI Shapefile 
+## Source: "D:/Data/map/shp/nsdi/kostat/sido/sido.shp", layer: "sido"
+## with 17 features
+## It has 4 fields
+## Integer64 fields read as strings:  OBJECTID
+{% endhighlight %}
+
+
+
+{% highlight r %}
+# coordinate system
+wgs <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+korea.wgs <- spTransform(korea.sp, CRS(wgs))
+korea.df <- data.frame(korea.wgs)
+
+# merge
+korea.re <- korea.df %>%
+  mutate(sido.code = substr(SIGUNGU_CD, 1, 2))
+
+korea.re <- merge(korea.re, sido.code, by.x = "sido.code", by.y = "sido_code",
+                  all.x = TRUE)
+{% endhighlight %}
+
+## 6) Merge(Spatial Data & Occurrence / Disposal)
+
+{% highlight r %}
+# dissolve
+korea.re$SIGUNGU_NM <- as.character(korea.re$SIGUNGU_NM)
+dissolve.lnfo <- nchar(korea.re$SIGUNGU_NM) >= 5
+korea.re[dissolve.lnfo, 5] <- substr(korea.re[dissolve.lnfo, 5], 1, 3)
+
+# merge(occurrence)
+korea.re <- korea.re %>%
+  mutate(region = paste(sido_name, SIGUNGU_NM, sep = "_"))
+
+occurence.wgs <- merge(korea.re[, -c(6:7)], occurence.local[, 3:20], 
+                       by = "region", all.x = TRUE)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in merge(korea.re[, -c(6:7)], occurence.local[, 3:20], by = "region", : object 'occurence.local' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+disposal.wgs <- merge(korea.re[, -c(6:7)], disposal.local[, 3:20], 
+                      by = "region", all.x = TRUE)
+{% endhighlight %}
+
+## 7) Arrange
+
+{% highlight r %}
+id.order1 <- order(occurence.wgs$OBJECTID)
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in order(occurence.wgs$OBJECTID): object 'occurence.wgs' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+id.order2 <- order(disposal.wgs$OBJECTID)
+
+occurence.wgs <- occurence.wgs[id.order1, ]
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Error in eval(expr, envir, enclos): object 'occurence.wgs' not found
+{% endhighlight %}
+
+
+
+{% highlight r %}
+disposal.wgs <- disposal.wgs[id.order2, ]
+{% endhighlight %}
+
+## 8) Collect Data
+### 1) Feature Selection
+
+{% highlight r %}
+collect.lifeBusiness <- collect.lifeBusiness[c(1, 2, 4, 6, 7, 9, 10)]
+collect.construction <- collect.construction[c(1, 2, 3, 4, 5, 8)]
+
+# rename
+colnames(collect.lifeBusiness) <-  c("sido", "sigungu",
+                                     "company_name", "company_boss",
+                                     "location", "collect_15amount", "type")
+colnames(collect.construction) <- c("sido", "sigungu",
+                                    "company_name", "company_boss",
+                                    "location", "collect_15amount")
+
+# adding type column at collect.construction data 
+collect.construction$type <- NULL
+collect.construction <- collect.construction %>%
+    mutate(type = "건축")
+{% endhighlight %}
+
+## 9) Middle / Final / Overall
+### 1) Feature Selection
+
+{% highlight r %}
+middle.disposal <- middle.disposal[c(1, 2, 3, 4, 6, 7, 9, 10, 11, 12, 13, 14, 
+                                     18)] 
+middle.recycle <- middle.recycle[c(1, 2, 3, 5, 6, 8, 9, 13)] 
+middle.construction <- middle.construction[c(1, 2, 3, 4, 5, 7, 14, 18)]
+
+final.disposal <- final.disposal[c(1, 2, 3, 6, 7, 9, 10, 11, 12, 17)]
+final.recycle <- final.recycle[c(1, 2, 3, 5, 6, 8, 9, 13)]
+
+overall.recycle <- overall.recycle[c(1, 2, 3, 5, 6, 8, 9, 13)]
+{% endhighlight %}
+
+### 2) Rename
+
+{% highlight r %}
+# middle
+colnames(middle.disposal) <- c("sido", "sigungu", "category", "company_name", 
+                               "company_boss", "location", "ic", "md", "cd", 
+                               "bd","etcd", # merge disposal column : done
+                               "capacity", "disposal_15amount")
+colnames(middle.recycle) <- c("sido", "sigungu",
+                              "company_name" ,"company_boss", "location",
+                              "category", "capacity", "disposal_15amount")
+colnames(middle.construction) <- c("sido", "sigungu",
+                                   "company_name", "location", "company_boss",
+                                   "lf_area","capacity", "disposal_15amount")
+
+# final
+colnames(final.disposal) <- c("sido", "sigungu",
+                              "company_name", "company_boss", "location",
+                              "disposal_target",
+                              "lf_area", "lf_capacity", "lf_cumulate",
+                              "disposal_15amount") 
+colnames(final.recycle) <- c("sido", "sigungu",
+                             "company_name", "company_boss", "location",
+                             "category", "capacity", "disposal_15amount") 
+
+# overall
+colnames(overall.recycle) <- c("sido", "sigungu",
+                              "company_name", "company_boss", "location",
+                              "category", "capacity", "disposal_15amount") 
+{% endhighlight %}
+
+### 3) Data Handling
+
+{% highlight r %}
+# combine disposal columns to one 
+## change column class
+for (i in c("ic", "md", "cd", "bd", "etcd")) {
+  middle.disposal[, i] <- as.character(middle.disposal[, i])
+}
+
+## make blank to NA
+for (i in names(middle.disposal)[c(7:11)]) {
+  if(i == "bd"){
+    next()
+  } else {
+    middle.disposal[middle.disposal[, i] == "", i] <- NA
+  }
+}
+
+## combine disposal column
+middle.disposal$category <- dplyr::coalesce(middle.disposal$ic, 
+                                            middle.disposal$md, 
+                                            middle.disposal$cd, 
+                                            middle.disposal$bd,
+                                            middle.disposal$etcd)
+## featureSelection
+middle.disposal <- middle.disposal %>%
+  select(-c(ic, md, cd, bd, etcd))
+middle.disposal <- middle.disposal[, c(1, 2, 4:6, 3, 7, 8)]
+{% endhighlight %}
+
+## 10) Integrate : collect.occurrence
+
+{% highlight r %}
+# delete duplicated row and change type vlaue 
+collect.lifeBusiness <- collect.lifeBusiness[!duplicated(collect.lifeBusiness$company_name), ] 
+collect.lifeBusiness$type <- as.character(collect.lifeBusiness$type)
+collect.lifeBusiness[, "type"] <- "생활/사업/음식"
+
+# rbind
+collect.occurrence <- rbind(collect.lifeBusiness, collect.construction)
+
+# Data handling
+collect.occurrence <- collect.occurrence %>%
+  mutate(collect_15amount = as.numeric(round(collect_15amount, 2))) %>%
+  mutate(company = paste0(company_name, "_" ,company_boss)) %>% 
+  select(-c(company_name, company_boss)) %>%
+  arrange(sido, sigungu, company)
+
+collect.occurrence <- collect.occurrence[c(1, 2, 6, 3, 4, 5)]
+{% endhighlight %}
+
+## 11) Integrate : mfo.disposal
+
+{% highlight r %}
+# data handling
+for (i in c("middle.disposal", "middle.recycle", "middle.construction")) {
+  i %in% ls(envir = .GlobalEnv)
+  data <- get(i, envir = .GlobalEnv)
+  if (i == "middle.construction") {
+    data <- data %>%
+      mutate(disposal_15amount = as.numeric(gsub(",", "", disposal_15amount)),
+             capacity = as.numeric(str_split(capacity, 
+                                             pattern = " ")[[1]][1]),
+             category = "매립",
+             company = paste0(company_name, "_", company_boss))%>%
+             select(-c(company_boss, company_name))
+  } else {
+    data <- data %>%
+      mutate(company = paste0(company_name, "_", company_boss),
+             disposal_15amount = as.numeric(gsub(",", "",
+                                                 disposal_15amount))) %>%
+      select(-c(company_boss, company_name))
+  }
+
+  # list.wise deletion
+  data[is.na(data$disposal_15amount) == TRUE, "disposal_15amount"] <- 0
+  data <- data[data$sido != "",]
+  assign(x = i, value = data)
+}
+
+# reorder and selection the column
+middle.construction <- middle.construction[c(1, 2, 3, 7, 5, 6, 8)]
+{% endhighlight %}
+
+
+{% highlight r %}
+# merge 3 middle data 
+m.disposal <- do.call("rbind", list(middle.disposal, 
+                                    middle.recycle, 
+                                    middle.construction))
+m.disposal <- m.disposal %>%
+  arrange(sido, sigungu,company)
+{% endhighlight %}
+
+## 12) Final
+
+{% highlight r %}
+# final.disposal
+final.disposal <- final.disposal %>%
+  rename(capacity = lf_capacity) %>%
+  mutate(category = "매립",
+         company = paste0(company_name, "_", company_boss),
+         capacity = as.numeric(gsub(",", "", capacity)),
+         disposal_15amount = as.numeric(gsub(",", "", disposal_15amount))) %>%
+  select(-c(company_boss, company_name,
+         disposal_target, lf_area, lf_cumulate))
+
+final.disposal <- final.disposal[, c("sido", "sigungu", "location",
+                                     "category", "capacity",
+                                     "disposal_15amount", "company")]
+
+# final.recycle
+final.recycle <- final.recycle %>%
+  mutate(company = paste0(company_name, "_", company_boss),
+         capacity = as.numeric(gsub(",", "", capacity)),
+         disposal_15amount = as.numeric(gsub(",", "", disposal_15amount))) %>%
+  select(-c(company_boss, company_name))
+
+final.recycle <- final.recycle[, c("sido", "sigungu", "location",
+                                   "category", "capacity",
+                                   "disposal_15amount", "company")]
+{% endhighlight %}
+
+
+{% highlight r %}
+# merge 2 final data 
+f.disposal <- do.call("rbind", list(final.disposal, # merge
+                                    final.recycle))
+f.disposal <- f.disposal[f.disposal$sido != "",] # listwise deletion
+
+f.disposal <- f.disposal %>%
+  arrange(sido, sigungu, company) # column arrange 
+{% endhighlight %}
+
+## 13) Overall
+
+{% highlight r %}
+overall.recycle <- overall.recycle %>%
+  mutate(company = paste0(company_name, "_", company_boss),
+         capacity = as.numeric(gsub(",",  "", capacity)),
+         disposal_15amount = as.numeric(gsub(",", "", disposal_15amount))) %>%
+  select(-c(company_boss, company_name)) 
+
+overall.recycle <- overall.recycle[c("sido", "sigungu", "location",
+                                     "category", "capacity",
+                                     "disposal_15amount", "company")] 
+
+
+o.disposal <- overall.recycle[overall.recycle$sido != "",] # listwise deletion
+{% endhighlight %}
+
+## 14) Make : mfo.disposal
+
+{% highlight r %}
+mfo.disposal <- do.call("rbind", list(m.disposal, # merge
+                                      f.disposal,
+                                      o.disposal))
+{% endhighlight %}
+
+## 15) Address
+
+{% highlight r %}
+collect.occurrence <- collect.occurrence %>%
+  mutate(address = paste(sido, sigungu, location))
+mfo.disposal <- mfo.disposal %>%
+  mutate(address = paste(sido, sigungu, location))
+
+# write.csv(collect.occurrence, "collect_occurrence.csv", row.names = FALSE)
+# write.csv(mfo.disposal, "mfo_disposal.csv", row.names = FALSE)
+{% endhighlight %}
+
+# 3. Visualization
+## 1) Collect & Disposal
+### 1) Data Import
+
+{% highlight r %}
+path <- "D:/Data/contest/waste/"
+
+collect.occurrence <- read.csv(paste0(path, "collect_occurrence.csv"))
+mfo.disposal <- read.csv(paste0(path, "mfo_disposal.csv"))
+geocoding.collect <- read.csv(paste0(path, "geocoding_collect.csv"))
+geocoding.disposal <- read.csv(paste0(path, "geocoding_disposal.csv"))
+{% endhighlight %}
+
+### 2) Merge
+
+{% highlight r %}
+collect.final <- cbind(collect.occurrence, geocoding.collect[, -1])
+disposal.final <- cbind(mfo.disposal, geocoding.disposal[, -1])
+{% endhighlight %}
+
+### 3) Spatial Points
+
+{% highlight r %}
+collect.wgs <- SpatialPoints(collect.final[, 9:10], proj4string = CRS(wgs))
+disposal.wgs <- SpatialPoints(disposal.final[, 10:11], proj4string = CRS(wgs))
+{% endhighlight %}
+
+### 4) Merge(for ggmap)
+
+{% highlight r %}
+collect.m <- collect.final %>%
+  select(x, y) %>%
+  mutate(type = "collect")
+
+disposal.m <- disposal.final %>%
+  select(x, y) %>%
+  mutate(type = "disposal")
+
+ggmap.df <- rbind(collect.m, disposal.m)
+
+set.seed(1234)
+index <- sample(x = 1:nrow(ggmap.df))
+ggmap.df <- ggmap.df[index, ]
+{% endhighlight %}
+
+### 5) Plot(only location)
+
+{% highlight r %}
+# x, y axis
+x <- bbox(korea.wgs)
+
+plot(korea.wgs, border = "Grey 50")
+plot(disposal.wgs, pch = 19, cex = 0.8, add = TRUE, col = "indianred")
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-29](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-29-1.png)
+
+
+{% highlight r %}
+plot(korea.wgs, border = "Grey 50")
+plot(collect.wgs, pch = 19, cex = 0.8, add = TRUE, col = "skyblue")
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-30](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-30-1.png)
+
+
+{% highlight r %}
+basemap <- get_map(location = "south korea", source = "google", 
+                   maptype = "roadmap", zoom = 7)
+
+ggmap(basemap) +
+  geom_point(data = ggmap.df, aes(x = x, y = y, alpha = .01,
+                                  color = type)) +
+  guides(alpha = "none")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-31](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-31-1.png)
+
+# <2018.08.06>
+## 1) Data Handling
+### 1) Collect
+
+{% highlight r %}
+# 3. Visualization - 2) Collect & Disposal - 1) Data Import / 2) Merge
+collect.sigungu <- collect.final %>%
+  group_by(sido, sigungu) %>%
+  summarise(collect_count = n(), 
+            collect_15amount = sum(collect_15amount)) %>%
+  mutate(region = paste(sido, sigungu, sep = "_"))
+{% endhighlight %}
+
+### 2) Disposal
+
+{% highlight r %}
+disposal.sigungu <- disposal.final %>%
+  group_by(sido, sigungu) %>%
+  summarise(disposal_count = n(), 
+            disposal_15amount = sum(disposal_15amount),
+            capacity = sum(capacity)) %>%
+  mutate(region = paste(sido, sigungu, sep = "_"))
+{% endhighlight %}
+
+### 3) Merge
+
+{% highlight r %}
+# 2. Data Handling - 5) Spatial Data / 6) Merge(Sptial Data...)
+# collect.csv - seoul, junggu / busan, jingu / busan, haeundae
+# mfo_disposal.csv - capacity & disposal_15amount : NA -> 0
+korea.cd <- merge(korea.re[, -c(3, 6, 7)], collect.sigungu[, -c(1:2)], 
+                  by = "region", all.x = TRUE)
+korea.cd <- merge(korea.cd, disposal.sigungu[, -c(1:2)], by = "region",
+                  all.x = TRUE)
+{% endhighlight %}
+
+### 4) NA
+
+{% highlight r %}
+korea.cd <- korea.cd %>%
+  mutate_all(funs(replace(., is.na(.), 0)))
+{% endhighlight %}
+
+### 5) Arrange
+
+{% highlight r %}
+id.order <- order(korea.cd$OBJECTID); korea.cd <- korea.cd[id.order, ]
+{% endhighlight %}
+
+### 6) Index
+
+{% highlight r %}
+korea.cd <- korea.cd %>%
+  mutate(index = collect_15amount - disposal_15amount)
+{% endhighlight %}
+
+## 2) Visualization
+### 1) Count
+
+{% highlight r %}
+# Collect
+x <- bbox(korea.wgs) # x, y axis
+blues <- brewer.pal(5, "Blues") # color
+ccount.class <- classIntervals(korea.cd$collect_count, n = 5, 
+                               style = "quantile") # class
+a1 <- ccount.class[[2]]
+
+plot(korea.wgs, col = findColours(ccount.class, blues), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = blues,
+       legend = c(paste("Less than", a1[2]), paste(a1[2], "-", a1[3]), 
+                  paste(a1[3], "-", a1[4]), paste(a1[4], "-", a1[5]),
+                  paste("More than", a1[5])),
+       title = "Collect Count", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-38](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-38-1.png)
+
+
+{% highlight r %}
+# Disposal
+x <- bbox(korea.wgs) # x, y axis
+reds <- brewer.pal(5, "Reds") # color
+dcount.class <- classIntervals(korea.cd$disposal_count, n = 5, 
+                               style = "quantile") # class
+a2 <- dcount.class[[2]]
+
+plot(korea.wgs, col = findColours(dcount.class, reds), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = reds,
+       legend = c(paste("Less than", a2[2]), paste(a2[2], "-", a2[3]), 
+                  paste(a2[3], "-", a2[4]), paste(a2[4], "-", a2[5]),
+                  paste("More than", a2[5])),
+       title = "Disposal Count", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-39](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-39-1.png)
+
+### 2) Capacity
+
+{% highlight r %}
+x <- bbox(korea.wgs) # x, y axis
+purples <- brewer.pal(5, "Purples") # color
+pcount.class <- classIntervals(korea.cd$capacity, n = 5, 
+                               style = "quantile") # class
+a3 <- pcount.class[[2]]
+
+plot(korea.wgs, col = findColours(pcount.class, purples), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = purples,
+       legend = c(paste("Less than", a3[2]), paste(a3[2], "-", a3[3]), 
+                  paste(a3[3], "-", a3[4]), paste(a3[4], "-", a3[5]),
+                  paste("More than", a3[5])),
+       title = "Capacity", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-40](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-40-1.png)
+
+### 3) Amount
+
+{% highlight r %}
+x <- bbox(korea.wgs) # x, y axis
+ryb <- brewer.pal(9, "RdYlBu") # color
+acount.class <- classIntervals(korea.cd$index, n = 9, 
+                               style = "quantile") # class
+a4 <- round(acount.class[[2]], 2)
+
+plot(korea.wgs, col = findColours(acount.class, ryb), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = ryb,
+       legend = c(paste("Less than", a4[2]), paste(a4[2], "-", a4[3]), 
+                  paste(a4[3], "-", a4[4]), paste(a4[4], "-", a4[5]),
+                  paste(a4[5], "-", a4[6]), paste(a4[6], "-", a4[7]),
+                  paste(a4[7], "-", a4[8]), paste(a4[8], "-", a4[9]),
+                  paste("More than", a4[9])),
+       title = "Collect - Disposal", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-41](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-41-1.png)
+
+
+{% highlight r %}
+x <- bbox(korea.wgs) # x, y axis
+blues <- brewer.pal(5, "Blues") # color
+cacount.class <- classIntervals(korea.cd$collect_15amount, n = 5, 
+                               style = "quantile") # class
+a5 <- cacount.class[[2]]
+
+plot(korea.wgs, col = findColours(cacount.class, blues), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = blues,
+       legend = c(paste("Less than", a5[2]), paste(a5[2], "-", a5[3]), 
+                  paste(a5[3], "-", a5[4]), paste(a5[4], "-", a5[5]),
+                  paste("More than", a5[5])),
+       title = "Collect Amount", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-42](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-42-1.png)
+
+
+{% highlight r %}
+x <- bbox(korea.wgs) # x, y axis
+reds <- brewer.pal(5, "Reds") # color
+dacount.class <- classIntervals(korea.cd$disposal_15amount, n = 5, 
+                               style = "quantile") # class
+a6 <- dacount.class[[2]]
+
+plot(korea.wgs, col = findColours(dacount.class, reds), border = FALSE)
+axis(1, at = seq(x[1], x[3], by = ((x[3] - x[1]) / 4)), 
+     labels = parse(text = degreeLabelsEW(seq(x[1], x[3],
+                                          by = ((x[3] - x[1]) / 4)))))
+axis(2, at = seq(x[2], x[4], by = ((x[4] - x[2]) / 4)), 
+     labels = parse(text = degreeLabelsNS(seq(x[2], x[4], 
+                                          by = ((x[4] - x[2]) / 4)))))
+legend(130.20, 37.40, fill = reds,
+       legend = c(paste("Less than", a6[2]), paste(a6[2], "-", a6[3]), 
+                  paste(a6[3], "-", a6[4]), paste(a6[4], "-", a6[5]),
+                  paste("More than", a6[5])),
+       title = "Collect Amount", cex = 1.4, bty = "n")
+{% endhighlight %}
+
+![plot of chunk unnamed-chunk-43](/assets/contest/2018-08-21-Public-Waste/unnamed-chunk-43-1.png)
