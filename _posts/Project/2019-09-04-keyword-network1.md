@@ -21,27 +21,27 @@ names(test.df)[1] <- "variable"
 head(test.df, 20)
 {% endhighlight %}
 
-{% highlight javascript %}                                                                                                             variable
+{% highlight javascript %}                                                variable
 1  ####  ‘Moments’ and ‘Butterflies’ in the Geographical Political Economy of
-2                                                            Tourism Destinations
-3                                                             Assigned to Session
-4     Authors: Salvador Anton Clave*, Department of Geography, Faculty of Tourism
-5           and Geography, Rovira i Virgili University, Julie Wilson*, Faculty of
-6          Economics and Business Studies, Universitat Oberta de Catalunya / Open
-7    University of Catalonia, Cinta Sanz-Ib??ez, Department of Geography, Faculty
-8                         of Tourism and Geography, Rovira i Virgili University  
-9                                 Topics: Tourism Geography, Economic Geography  
-10      Keywords: Evolutionary Economic Geography; Tourism, Regional Development,
-11  Moments, Butterfly framework, Socio-Ecological Resilience, Cultural Political
-12                                                      Economy, Tourism Spaces  
-13                                                          Session Type: Paper  
-14                                                                Day: 4/4/2019  
-15                                          Start / End Time: 5:00 PM / 6:40 PM  
-16                                       Room: Chairman's Boardroom, Omni, East  
-17                                           Presentation File:  No File Uploaded
-18    ####  ‘As it really is’: Representation, obscurity and visual cultures of
-19                                                      creative space in Toronto
-20                                                            Assigned to Session
+2  Tourism Destinations
+3  Assigned to Session
+4  Authors: Salvador Anton Clave*, Department of Geography, Faculty of Tourism
+5  and Geography, Rovira i Virgili University, Julie Wilson*, Faculty of
+6  Economics and Business Studies, Universitat Oberta de Catalunya / Open
+7  University of Catalonia, Cinta Sanz-Ib??ez, Department of Geography, Faculty
+8  of Tourism and Geography, Rovira i Virgili University
+9  Topics: Tourism Geography, Economic Geography
+10 Keywords: Evolutionary Economic Geography; Tourism, Regional Development,
+11 Moments, Butterfly framework, Socio-Ecological Resilience, Cultural Political
+12 Economy, Tourism Spaces
+13 Session Type: Paper
+14 Day: 4/4/2019
+15 Start / End Time: 5:00 PM / 6:40 PM
+16 Room: Chairman Boardroom, Omni, East
+17 Presentation File:  No File Uploaded
+18 ####  ‘As it really is’: Representation, obscurity and visual cultures of
+19 creative space in Toronto
+20 Assigned to Session
 {% endhighlight %}
 
-데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title이고, 그 외에 Authors, Topics, Keywords 등이 포함되어있다. 
+데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title이고, 그 외에 Authors, Topics, Keywords 등이 포함되어있다.
