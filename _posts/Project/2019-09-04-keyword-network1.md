@@ -11,7 +11,7 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 
 <img src = "/assets/project/keyword-network/aagWebsite.PNG" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
 
-prototype anlysis는 2019년도 AAG 컨퍼런스 데이터를 바탕으로 진행되었으며, 논문의 topic과 keyword만을 위주로 분석하였다. 2019년 데이터는 위 그림에서 보이는 AAG 홈페이지(https://aag.secure-abstracts.com/AAG%20Annual%20Meeting%202019/abstracts-gallery)에서 크롤링하여 취득할 수 있다.
+prototype anlysis는 2019년도 AAG 컨퍼런스 데이터를 바탕으로 진행되었으며, 논문의 topic과 keyword를 위주로 분석하였다. 2019년 데이터는 위 그림에서 보이는 AAG 홈페이지에서 크롤링하여 취득할 수 있다.(link - https://aag.secure-abstracts.com/AAG%20Annual%20Meeting%202019/abstracts-gallery)
 
 {% highlight javascript %}
 # Data import
@@ -44,4 +44,31 @@ head(test.df, 20)
 20 Assigned to Session
 {% endhighlight %}
 
-데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title이고, 그 외에 Authors, Topics, Keywords 등이 포함되어있다.
+데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title, 그 외에 Authors, Topics, Keywords 등이 포함되어있었고, prototype analysis를 위해서는 Topics와 Keywords를 추출해야했다. Topics의 경우에는 짧으면 한 줄, 길면 두 줄이었기 때문에, 규칙적으로 추출하는데 있어서 큰 문제가 없었지만, Keywords의 경우에는 길면 짧은 것은 한 줄, 긴 것은 네 줄도 넘었으므로 규칙적으로 추출하는데 어려움이 있었다. 첫 번째 논문의 경우에도 키워드가 세 줄인 것을 볼 수 있다. 따라서 Keywords의 줄 수에 상관없이 Keywords를 추출할 수 있는 함수를 만들었고, 함수 설명은 다음과 같다(설명의 편의를 위해 코드 앞에 숫자를 입력하였다).
+
+{% highlight javascript %}
+1  aag2019 <- function(data, a, b, n) {
+2    tmp.dif <- data.frame(row1 = grep(a, data[, 1]), row2 = grep(b, data[, 1])-1)
+3    tmp.dif$dif <- tmp.dif$row2 - tmp.dif$row1; dif.max <- max(tmp.dif$dif)
+4
+5    tmp.df <- data.frame(tmp.dif$dif)
+6
+7    for (i in 1:(dif.max+1)) {
+8      tmp <- data.frame(1:n)
+9      tmp.df <- data.frame(tmp.df, tmp)
+10   }
+11
+12   names(tmp.df) <- c("dif", paste0("v", 1:(dif.max+1)))
+13
+14   for (i in 0:dif.max) {
+15     if (i == 0) {
+16       tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+17     } else if (i >= 1) {
+18       tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+19       tmp.df[tmp.df[, 1] <= i-1, i+2] <- ""
+20     }
+21   }
+22
+23   return(tmp.df)
+24 }
+{% endhighlight %}
