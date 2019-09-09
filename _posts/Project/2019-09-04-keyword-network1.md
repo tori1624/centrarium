@@ -44,7 +44,7 @@ head(test.df, 20)
 20 Assigned to Session
 {% endhighlight %}
 
-데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title, 그 외에 Authors, Topics, Keywords 등이 포함되어있었고, prototype analysis를 위해서는 Topics와 Keywords를 추출해야했다. Topics의 경우에는 짧으면 한 줄, 길면 두 줄이었기 때문에, 규칙적으로 추출하는데 있어서 큰 문제가 없었지만, Keywords의 경우에는 길면 짧은 것은 한 줄, 긴 것은 네 줄도 넘었으므로 규칙적으로 추출하는데 어려움이 있었다. 첫 번째 논문의 경우에도 키워드가 세 줄인 것을 볼 수 있다. 따라서 Keywords의 줄 수에 상관없이 Keywords를 추출할 수 있는 함수를 만들었고, 전체저인 함수의 코드는 다음과 같다(설명의 편의를 위해 코드 앞에 숫자를 입력하였다).
+데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title, 그 외에 Authors, Topics, Keywords 등이 포함되어있었고, prototype analysis를 위해서는 Topics와 Keywords를 추출해야했다. Topics의 경우에는 짧으면 한 줄, 길면 두 줄이었기 때문에, 규칙적으로 추출하는데 있어서 큰 문제가 없었지만, Keywords의 경우에는 길면 짧은 것은 한 줄, 긴 것은 네 줄도 넘었으므로 규칙적으로 추출하는데 어려움이 있었다. 첫 번째 논문의 경우에도 키워드가 세 줄인 것을 볼 수 있다. 따라서 Keywords의 줄 수에 상관없이 Keywords를 추출할 수 있는 함수를 만들었고, 전체적인 함수의 코드는 다음과 같다(설명의 편의를 위해 코드 앞에 숫자를 입력하였다).
 
 {% highlight javascript %}
 1  aag2019 <- function(data, a, b, n) {
@@ -73,7 +73,7 @@ head(test.df, 20)
 24 }
 {% endhighlight %}
 
-함수의 전체적인 코드를 봤으니, 이제 코드에 대해 자세히 설명하고자 한다.
+함수의 전체를 한 번에 설명하기보다는 함수의 인자부터 차례대로 자세하게 설명하고자 한다.
 
 {% highlight javascript %}
 1  aag2019 <- function(data, a, b, n) {
@@ -82,3 +82,21 @@ head(test.df, 20)
 {% endhighlight %}
 
 우선, 함수의 인자에는 데이터(data), 데이터에서 뽑아내고자 하는 정보를 구분할 수 있는 단어들(a, b), 데이터에 포함된 논문의 수(n), 총 4가지가 포함되도록 만들었다. 헷갈릴 수 있는 a, b에 대해 예를 들어 설명하면, keywords만을 추출하고자 하는 경우에는 keywords가 위치한 항목에 해당하는 "Keywords:"를 a에, keywords의 다음 항목에 해당하는 "Session Type:"을 b에 입력하면 된다.
+
+{% highlight javascript %}
+2    tmp.dif <- data.frame(row1 = grep(a, data[, 1]), row2 = grep(b, data[, 1])-1)
+3    tmp.dif$dif <- tmp.dif$row2 - tmp.dif$row1; dif.max <- max(tmp.dif$dif)
+{% endhighlight %}
+
+함수의 첫 부분에서 진행되는 작업은 각 논문별로 a, b에 입력된 항목이 몇 번째 줄에 있는지 data frame으로 만들고, 두 값의 차이를 계산하는 것을 통해 각 논문별로 keywords나 title 등이 몇 줄에 걸쳐 작성되어 있는지 파악하는 과정이다. 이 때, 차이의 최대값은 다음 단계에서 활용할 것이므로 `dif.max`라는 객체에 지정해주었다.
+
+{% highlight javascript %}
+5    tmp.df <- data.frame(tmp.dif$dif)
+6
+7    for (i in 1:(dif.max+1)) {
+8      tmp <- data.frame(1:n)
+9      tmp.df <- data.frame(tmp.df, tmp)
+10   }
+11
+12   names(tmp.df) <- c("dif", paste0("v", 1:(dif.max+1)))
+{% endhighlight %}
