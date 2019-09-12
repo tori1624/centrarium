@@ -91,6 +91,26 @@ head(test.df, 20)
 함수의 첫 부분에서 진행되는 작업은 각 논문별로 a, b에 입력된 항목이 몇 번째 줄에 있는지 data frame으로 만들고, 두 값의 차이를 계산하는 것을 통해 각 논문별로 keywords나 title 등이 몇 줄에 걸쳐 작성되어 있는지 파악하는 과정이다. 이 때, 차이의 최대값은 다음 단계에서 활용할 것이므로 `dif.max`라는 객체에 지정해주었다.
 
 {% highlight javascript %}
+head(tmp.dif, 10)
+{% endhighlight %}
+
+{% highlight javascript %}
+   row1 row2 dif
+1     9   11   2
+2    21   22   1
+3    32   33   1
+4    43   43   0
+5    55   55   0
+6    65   65   0
+7    80   80   0
+8    91   92   1
+9   103  104   1
+10  115  115   0
+{% endhighlight %}
+
+2019년 데이터를 활용한 결과는 위와 같다. row1에는 keywords가 처음으로 나오는 row 위치, row2에는 keywords가 마지막으로 나오는 row 위치, dif에는 이 둘의 차이가 입력된다. dif가 2이면 3줄에 걸쳐서 keywords가 작성되어있다는 것을 의미하고, 0이면 keywords가 1줄에만 작성되어있다는 것을 의미한다.
+
+{% highlight javascript %}
 5    tmp.df <- data.frame(tmp.dif$dif)
 6
 7    for (i in 1:(dif.max+1)) {
