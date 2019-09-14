@@ -11,7 +11,7 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 
 <img src = "/assets/project/keyword-network/aagWebsite.PNG" title = "plot1" alt = "plot1" width = "1008" style = "display: block; margin: auto;" />
 
-prototype anlysis는 2019년도 AAG 컨퍼런스 데이터를 바탕으로 진행되었으며, 논문의 topic과 keyword를 위주로 분석하였다. 2019년 데이터는 위 그림에서 보이는 AAG 홈페이지에서 크롤링하여 취득할 수 있다.(link - https://aag.secure-abstracts.com/am2019)
+prototype anlysis는 2019년도 AAG 컨퍼런스 데이터를 바탕으로 진행되었으며, 논문의 topic과 keyword를 위주로 분석하였다. 2019년 데이터는 위 그림에서 보이는 AAG 홈페이지에서 크롤링하여 취득할 수 있다(link - https://aag.secure-abstracts.com/am2019).
 
 {% highlight javascript %}
 # Data import
@@ -120,3 +120,5 @@ head(tmp.dif, 10)
 11
 12   names(tmp.df) <- c("dif", paste0("v", 1:(dif.max+1)))
 {% endhighlight %}
+
+다음으로 진행되는 작업은 여러 줄에 걸쳐 작성되어있는 Title, Authors, Keywords 등을 한 줄로 만들기 위해 틀을 만드는 과정이다. 우선 기존에 만들었던 data frame에서 dif 변수를 추후에 활용할 것이므로, dif 변수를 `tmp.df`의 첫 번째 열에 입력해 놓는다. 그리고 for 구문을 사용하여 차이의 최대값(여기서 `dif.max` 객체를 활용)만큼 새로운 열이 생성되도록 한다. 이 때, data frame에 들어갈 데이터들로 1:n을 사용하였는데, 이는 나중에 다른 값들이 입력될 것이기 때문에, 데이터에 포함된 논문의 수만큼 어떤 값들이 입력되어도 상관이 없다. data frame이 만들어진 이후에는 변수 이름을 "dif", "v1", "v2" 등으로 정리해준다.
