@@ -122,3 +122,57 @@ head(tmp.dif, 10)
 {% endhighlight %}
 
 다음으로 진행되는 작업은 여러 줄에 걸쳐 작성되어있는 Title, Authors, Keywords 등을 한 줄로 만들기 위해 틀을 만드는 과정이다. 우선 기존에 만들었던 data frame에서 dif 변수를 추후에 활용할 것이므로, dif 변수를 `tmp.df`의 첫 번째 열에 입력해 놓는다. 그리고 for 구문을 사용하여 차이의 최대값(여기서 `dif.max` 객체를 활용)만큼 새로운 열이 생성되도록 한다. 이 때, data frame에 들어갈 데이터들로 1:n을 사용하였는데, 이는 나중에 다른 값들이 입력될 것이기 때문에, 데이터에 포함된 논문의 수만큼 어떤 값들이 입력되어도 상관이 없다. data frame이 만들어진 이후에는 변수 이름을 "dif", "v1", "v2" 등으로 정리해준다.
+
+{% highlight javascript %}
+head(tmp.df, 10)
+{% endhighlight %}
+
+{% highlight javascript %}
+   dif v1 v2 v3 v4 v5
+1    2  1  1  1  1  1
+2    1  2  2  2  2  2
+3    1  3  3  3  3  3
+4    0  4  4  4  4  4
+5    0  5  5  5  5  5
+6    0  6  6  6  6  6
+7    0  7  7  7  7  7
+8    1  8  8  8  8  8
+9    1  9  9  9  9  9
+10   0 10 10 10 10 10
+{% endhighlight %}
+
+2019년 데이터를 활용한 결과는 위와 같다. 첫 번째 열에 dif 변수가 있고, 나머지 열에는 단순히 숫자가 나열되어있다.
+
+{% highlight javascript %}
+  for (i in 0:dif.max) {
+    if (i == 0) {
+      tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+    } else if (i >= 1) {
+      tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+      tmp.df[tmp.df[, 1] <= i-1, i+2] <- ""
+    }
+  }
+
+  return(tmp.df)
+{% endhighlight %}
+
+함수의 마지막 단계에서는 여러 줄에 걸쳐 작성된 keywords를 위에서 만든 data frame에 입력하여, 여러 줄의 keywords들이 하나의 row에 입력되도록 하는 작업이 진행된다. 일단 for 구문을 바탕으로 위 data frame의 "v1", "v2", ... 등 새로 만들어진 열 모두에 작업이 이루어지도록 하였다. 다음으로 for 구문 안에 if 구문을 활용하여 i는 0일 때, data frame의 두 번째 열에 keywords의 첫 번째 줄을 입력하고, 다른 작업은 진행되지 않도록 하였다. i는 1 이상일 때는 keywords의 다음 줄이 data frame의 다음 열에 입력되도록 하였다. 이 때, dif 변수를 활용해 다음 줄에 keywords가 작성되지 않았다면, 빈 칸이 입력되도록 하였다. 예를 들어, 한 논문의 keywords가 두 줄에 걸쳐서 작성되어있다면, `tmp.df`에는 두 번째 열과 세 번째 열에만 keywords가 입력되고, 나머지 열에는 빈 칸이 입력되는 것이다. 모든 열에 대해 작업이 마무리되면, data frame을 `return`함으로써 함수의 역할은 끝이 난다.
+
+<img src = "/assets/project/keyword-network/data_example.PNG" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
+
+2019년 데이터를 활용한 결과는 위 그림과 같다. 첫 row의 경우, keywords가 세 줄에 걸쳐서 작성되어있어서 "v3"까지 keywords가 입력되어있는 것을 볼 수 있다.
+
+{% highlight javascript %}
+keywords.df <- aag2019(test.df, "Keywords:", "Session Type:", n)
+
+keywords.df$keywords <- paste(keywords.df$v1, keywords.df$v2, keywords.df$v3,
+                              keywords.df$v4, keywords.df$v5)
+keywords.df$keywords <- substr(keywords.df$keywords, 11, 
+                               nchar(keywords.df$keywords))
+{% endhighlight %}
+
+위에서 만든 함수를 활용하여 `keywords.df`라는 data frame에 결과를 넣었다면, 이제 keywords network analysis를 위한 최종 데이터를 만들 차례이다. 여러 줄에 걸쳐 작성된 keywords들이 한 row에 입력되기는 하였지만, 아직 하나의 데이터로 만들어진 것은 아니다. 따라서 `paste` 함수를 통해 하나로 붙여주고, `substr` 함수를 통해 "Keywords: "의 글자 수 만큼을 제거해준다면 최종 데이터가 완성된다. 최종 데이터의 예시는 다음과 같다.
+
+<img src = "/assets/project/keyword-network/data_example2.PNG" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
+
+다만 이 함수는 단순히 2019년도 AAG 컨퍼런스 데이터를 전처리하기 위한 것이기 때문에, 따로 예외처리 과정을 포함시키지 않았다. 따라서 만약 다른 사용자가 이 함수를 그대로 사용하게 된다면 오류가 발생할 수 있으므로, 사용자의 데이터에 맞게 함수를 수정해야할 것이다.
