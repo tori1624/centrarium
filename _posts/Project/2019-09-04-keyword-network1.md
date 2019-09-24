@@ -44,7 +44,7 @@ head(test.df, 20)
 20 Assigned to Session
 {% endhighlight %}
 
-데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title, 그 외에 Authors, Topics, Keywords 등이 포함되어있었고, prototype analysis를 위해서는 Topics와 Keywords를 추출해야했다. Topics의 경우에는 짧으면 한 줄, 길면 두 줄이었기 때문에, 규칙적으로 추출하는데 있어서 큰 문제가 없었지만, Keywords의 경우에는 길면 짧은 것은 한 줄, 긴 것은 네 줄도 넘었으므로 규칙적으로 추출하는데 어려움이 있었다. 첫 번째 논문의 경우에도 키워드가 세 줄인 것을 볼 수 있다. 따라서 Keywords의 줄 수에 상관없이 Keywords를 추출할 수 있는 함수를 만들었고, 전체적인 함수의 코드는 다음과 같다(설명의 편의를 위해 코드 앞에 숫자를 입력하였다).
+데이터를 불러온 이후, 데이터의 형태를 살펴보면 위와 같이 출력되는 것을 확인할 수 있다. "####" 뒤에 있는 문장이 Title, 그 외에 Authors, Topics, Keywords 등이 포함되어있었고, prototype analysis를 위해서는 Topics와 Keywords를 추출해야했다. Topics의 경우에는 짧으면 한 줄, 길면 두 줄이었기 때문에, 규칙적으로 추출하는데 있어서 큰 문제가 없었지만, Keywords의 경우에는 짧은 것은 한 줄, 긴 것은 네 줄도 넘었으므로 규칙적으로 추출하는데 어려움이 있었다. 첫 번째 논문의 경우에도 키워드가 세 줄인 것을 볼 수 있다. 따라서 Keywords의 줄 수에 상관없이 Keywords를 추출할 수 있는 함수를 만들었고, 전체적인 함수의 코드는 다음과 같다(설명의 편의를 위해 코드 앞에 숫자를 입력하였다).
 
 {% highlight javascript %}
 1  aag2019 <- function(data, a, b, n) {
@@ -144,19 +144,19 @@ head(tmp.df, 10)
 2019년 데이터를 활용한 결과는 위와 같다. 첫 번째 열에 dif 변수가 있고, 나머지 열에는 단순히 숫자가 나열되어있다.
 
 {% highlight javascript %}
-  for (i in 0:dif.max) {
-    if (i == 0) {
-      tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
-    } else if (i >= 1) {
-      tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
-      tmp.df[tmp.df[, 1] <= i-1, i+2] <- ""
-    }
-  }
-
-  return(tmp.df)
+14   for (i in 0:dif.max) {
+15     if (i == 0) {
+16       tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+17     } else if (i >= 1) {
+18       tmp.df[, i+2] <- test.df$variable[grep(a, data[, 1])+i]
+19       tmp.df[tmp.df[, 1] <= i-1, i+2] <- ""
+20     }
+21   }
+22
+23   return(tmp.df)
 {% endhighlight %}
 
-함수의 마지막 단계에서는 여러 줄에 걸쳐 작성된 keywords를 위에서 만든 data frame에 입력하여, 여러 줄의 keywords들이 하나의 row에 입력되도록 하는 작업이 진행된다. 일단 for 구문을 바탕으로 위 data frame의 "v1", "v2", ... 등 새로 만들어진 열 모두에 작업이 이루어지도록 하였다. 다음으로 for 구문 안에 if 구문을 활용하여 i는 0일 때, data frame의 두 번째 열에 keywords의 첫 번째 줄을 입력하고, 다른 작업은 진행되지 않도록 하였다. i는 1 이상일 때는 keywords의 다음 줄이 data frame의 다음 열에 입력되도록 하였다. 이 때, dif 변수를 활용해 다음 줄에 keywords가 작성되지 않았다면, 빈 칸이 입력되도록 하였다. 예를 들어, 한 논문의 keywords가 두 줄에 걸쳐서 작성되어있다면, `tmp.df`에는 두 번째 열과 세 번째 열에만 keywords가 입력되고, 나머지 열에는 빈 칸이 입력되는 것이다. 모든 열에 대해 작업이 마무리되면, data frame을 `return`함으로써 함수의 역할은 끝이 난다.
+함수의 마지막 단계에서는 여러 줄에 걸쳐 작성된 keywords를 위에서 만든 data frame에 입력하여, 여러 줄의 keywords들이 하나의 row에 입력되도록 하는 작업이 진행된다. 일단 for 구문을 바탕으로 위 data frame의 "v1", "v2", ... 등 새로 만들어진 열 모두에 작업이 이루어지도록 하였다. 다음으로 for 구문 안에 if 구문을 활용하여 i는 0일 때, data frame의 두 번째 열에 keywords의 첫 번째 줄을 입력하고, 다른 작업은 진행되지 않도록 하였다. i가 1 이상일 때는 keywords의 다음 줄이 data frame의 다음 열에 입력되도록 하였다. 이 때, dif 변수를 활용해 다음 줄에 keywords가 작성되지 않았다면, 빈 칸이 입력되도록 하였다. 예를 들어, 한 논문의 keywords가 두 줄에 걸쳐서 작성되어있다면, `tmp.df`에는 두 번째 열과 세 번째 열에만 keywords가 입력되고, 나머지 열에는 빈 칸이 입력되는 것이다. 모든 열에 대해 작업이 마무리되면, data frame을 `return`함으로써 함수의 역할은 끝이 난다.
 
 <img src = "/assets/project/keyword-network/data_example.PNG" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
