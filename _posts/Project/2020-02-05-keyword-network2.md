@@ -100,7 +100,7 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 18 keywords.mat[row(keywords.mat) == col(keywords.mat)] <- 0
 {% endhighlight %}
 
-<img src = "/assets/project/keyword-network/post2/data_example1.PNG" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
+<img src = "/assets/project/keyword-network/post2/data_example2.PNG" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
 앞서 만든 `Netmatrix` 객체는 dgCMatrix 형태의 클래스로, 다양한 값들을 포함하고 있다. 이번 분석에서는 행렬 형태의 데이터만 활용할 것이기 때문에, `as.matrix` 함수를 통해 행렬 데이터만 얻었다. 위의 그림에 나와있는 데이터가 `as.matrix` 함수를 통해 얻은 행렬 데이터이다. 키워드별로 동시 발생 빈도를 확인할 수 있고, 대각선에 있는 값들을 통해 전체 네트워크에서 해당 키워드 얼마나 많이 사용되었는지를 나타내는 빈도도 파악할 수 있다. 대각선에 위치한 키워드의 빈도는 추후에 유용하게 사용되기 때문에, 따로 객체로 저장해놓고, 이 행렬에서는 사용되지 않을 것이므로 대각선에 "0"을 입력해준다.
 
