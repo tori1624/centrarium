@@ -39,7 +39,7 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 23
 24 # Make an igraph from adjacency matrix.
 25 # With "Weighted = NULL", multiple edges are created between two nodes.
-26 # Use "weighted = TRUE" to make a signgle-edge between two nodes.
+26 # Use "weighted = TRUE" to make a single-edge between two nodes.
 27 k2019.igraph <- graph_from_adjacency_matrix(keywords.adj, mode = "undirected", 
 28                                             weighted = NULL)
 29
@@ -111,7 +111,7 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 23
 24 # Make an igraph from adjacency matrix.
 25 # With "weighted = NULL", multiple edges are created between two nodes.
-26 # Use "weighted = TRUE" to make a signgle-edge between two nodes.
+26 # Use "weighted = TRUE" to make a single-edge between two nodes.
 27 k2019.igraph <- graph_from_adjacency_matrix(keywords.adj, mode = "undirected", 
 28                                             weighted = NULL)
 {% endhighlight %}
@@ -149,4 +149,6 @@ cover:  "/assets/project/keyword-network/wordcloud.PNG"
 53 write.graph(k2019.igraph, "2019keywords.graphml", format = "graphml")
 {% endhighlight %}
 
-마지막 과정은 엣지에 속성 부여, 노드에 네트워크 클러스터링 분석 결과 속성 부여, 그래프 파일 저장에 관한 것이다. 우선 앞의 과정에서 사용한 single edge 네트워크인 `k2019.igraph`는 키워드들 간의 동시 발생 빈도 값을 가지고 있지 않다. 엣지에 부여하고자 하는 속성은 키워드들 간의 동시 발생 빈도이기 때문에, multiple edges 네트워크를 새로 만들어준다. 새로 만든 그래프의 edge의 weight가 동시 발생 빈도를 나타내므로, 이 값들을 `k2019.igraph` 그래프에 넣어준다. 다음은 네트워크 클러스터링 분석 결과를 노드 속성으로 부여하는 과정이다. 이 분석에서는 `cluster_louvain` 함수가 사용되었지만, 목적에 따라 다른 네트워크 클러스터링 분석 방법을 사용하면 된다. 네트워크 클러스터링 분석은 multiple edges 네트워크로 진행되었으므로 마지막에 진행되었다. 그래프 시각화는 R에서도 `igraph`를 통해 가능하지만, 각 노드들의 세부적인 위치 조정이 어려우므로 "Cytoscape"라는 오픈소스 프로그램에서 진행되었다. 이를 위해 네트워크 객체를 graphml 파일 형식으로 저장하였다. 이번 포스팅에서 사용한 함수들과 중심성 분석, 네트워크 클러스터링 분석 방법은 네트워크 분석에 있어서 작은 부분들만을 차지하고 있다. 따라서 다른 사용자들은 보다 다양한 방법들을 활용하는 것을 통해 새로운 결과물을 만들어 낼 수 있을 것이다.
+마지막 과정은 엣지에 속성 부여, 노드에 네트워크 클러스터링 분석 결과 속성 부여, 그래프 파일 저장에 관한 것이다. 우선 앞의 과정에서 사용한 single edge 네트워크인 `k2019.igraph`는 키워드들 간의 동시 발생 빈도 값을 가지고 있지 않다. 엣지에 부여하고자 하는 속성은 키워드들 간의 동시 발생 빈도이기 때문에, multiple edges 네트워크를 새로 만들어준다. 그리고 새로 만든 그래프의 edge의 weight가 동시 발생 빈도를 나타내므로, 이 값들을 `k2019.igraph` 그래프에 넣어준다. 
+다음은 네트워크 클러스터링 분석 결과를 노드 속성으로 부여하는 과정이다. 이 분석에서는 `cluster_louvain` 함수가 사용되었지만, 목적에 따라 다른 네트워크 클러스터링 분석 방법을 사용하면 된다. 네트워크 클러스터링 분석은 multiple edges 네트워크를 바탕으로 분석하여 마지막에 진행되었다. 그래프 시각화는 R에서도 `igraph`를 통해 가능하지만, 각 노드들의 세부적인 위치 조정이 어렵다는 단점이 존재한다. 따라서 시각화는 "Cytoscape"라는 오픈소스 프로그램에서 이루어졌고, 이를 위해 네트워크 객체를 graphml 파일 형식으로 저장하였다.
+이번 포스팅에서 사용한 함수들과 중심성 분석, 네트워크 클러스터링 분석 방법은 네트워크 분석에 있어서 작은 부분들만을 차지하고 있다. 따라서 다른 사용자들은 보다 다양한 방법들을 활용하는 것을 통해 새로운 결과물을 만들어 낼 수 있을 것이다.
