@@ -31,3 +31,12 @@ permalink: /about/
   <li><b>Lee, Y.</b>, & Hong, S.-Y. (2019). A machine learning approach to the prediction of individual travel mode choices. Journal of the Korean Data & Information Science Society, 30(5), 1011-1024.</li>
   <li>Oh, J., <b>Lee, Y.</b>, Jeong, Y., & Hong, S.-Y. (2019). An analysis of the National Household Travel Survey data for exploring spatial segregation of income groups. Journal of Transport Research, 26(1), 17-29.</li>
 </ul>
+
+<h3>Conference Presentaions</h3>
+<dl>
+  <dt>In English</dt>
+</dl>
+<ul>
+  <li><b>Lee, Y.</br>, Lee, Y., Stanescu, A., & Seong, J. (2019). Summarizing the 2019 AAG conference presentations using keyword network analysis. In: The 74th Annual Meeting of the Southeastern Division of the American Association of Geographers (SEDAAG 2019). Wilmington, NC.(Poster)</li>
+  <li>Choi, C., Kim, Y., <b>Lee, Y.</b>, & Hong, S.-Y. (2018). Evaluating efficiency of spatial analysis in cloud computing platforms. GIScience 2018. Melbourne, Australia.</li>
+</ul>
