@@ -21,5 +21,5 @@ permalink: /about/
   <dt>In English</dt>
 </dl>
 <ul>
-  <li><br>Lee, Y.</br>, Lee, Y., Seong, J. Stanescu, A., & Hwang, C. S. (2020). A Comparison of Network Clustering Algorithms in Keyword Network Analysis: A Case Study with Geography Conference Presentations. International Journal of Geospatial and Environmental Research, 7(3) , 1.</li>
+  <li><b>Lee, Y.</b>, Lee, Y., Seong, J. Stanescu, A., & Hwang, C. S. (2020). A Comparison of Network Clustering Algorithms in Keyword Network Analysis: A Case Study with Geography Conference Presentations. International Journal of Geospatial and Environmental Research, 7(3) , 1.</li>
 </ul>
