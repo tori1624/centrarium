@@ -37,6 +37,6 @@ permalink: /about/
   <dt>In English</dt>
 </dl>
 <ul>
-  <li><b>Lee, Y.</br>, Lee, Y., Stanescu, A., & Seong, J. (2019). Summarizing the 2019 AAG conference presentations using keyword network analysis. In: The 74th Annual Meeting of the Southeastern Division of the American Association of Geographers (SEDAAG 2019). Wilmington, NC.(Poster)</li>
+  <li><b>Lee, Y.</b>, Lee, Y., Stanescu, A., & Seong, J. (2019). Summarizing the 2019 AAG conference presentations using keyword network analysis. In: The 74th Annual Meeting of the Southeastern Division of the American Association of Geographers (SEDAAG 2019). Wilmington, NC.(Poster)</li>
   <li>Choi, C., Kim, Y., <b>Lee, Y.</b>, & Hong, S.-Y. (2018). Evaluating efficiency of spatial analysis in cloud computing platforms. GIScience 2018. Melbourne, Australia.</li>
 </ul>
