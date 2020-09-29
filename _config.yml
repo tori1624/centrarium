@@ -55,7 +55,7 @@ descriptions:
     desc: "Sptial data in R"
     
   - cat: Lecture
-    desc: "Machine learing lecture"
+    desc: "Machine learing & R lecture"
     
   - cat: Contest
     desc: "Results from some contests"
