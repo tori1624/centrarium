@@ -4,7 +4,7 @@ title: "Principal Components Analysis - Breast Cancer Wisconsin (Diagnostic) (1)
 author: "Youngho Lee"
 date: "2020.10.12"
 categories: Lecture
-cover: "/assets/Lecture/2020-10-12-Breast-Cancer/breast cancer.jpeg"
+cover: "/assets/Lecture/2020-10-12-Breast-Cancer/breast-cancer.jpg"
 ---
 
 이번 포스팅은 2020학년도 2학기 지리학과 대학원 수업 중 하나인 홍성연 교수님의 다변량데이터분석의 두 번째 팀과제 결과를 바탕으로 작성되었다. 제시된 자료는 Kaggle 사이트에서 제공되는 유방암 환자 데이터로, 유방암이 양성인지 혹은 악성인지, 종양의 반경, 둘레 면적 등의 정보가 포함되어 있으며, 각 변수들은 평균(mean), 표준편차(se), 상위 3개 값의 평균(worst), 세 개의 값들을 가지고 있다. 유방암은 총 5단계로 구분되는데, 0기는 자연척 치료가 가능하고, 1~2기는 수술을 통한 치료를 진행하며, 3~4기는 생존율이 50% 미만이다. 각 기수마다 치료법의 적용이 달라지는데, 활용 데이터에는 종양이 양성과 악성, 2단계로만 구분되어있다. 따라서 본 분석에서는 주성분 분석(Principal Components Analysis)과 K-Means 군집 분석을 적용하여 종양을 악성과 양성, 2단계보다 많은 4개의 그룹으로 구분하고자 한다.
@@ -173,4 +173,4 @@ mtext("Scree Diagram", 3, line = 1, cex = 1.25)
 
 <img src = "/assets/Lecture/2020-10-12-Breast-Cancer/Scree diagram.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
-마지막은 Scree 다이어그램으로 선에서 급격하게 변하는 지점을 바탕으로 개수를 선정하는 방법으로, 위의 그래프에서는 6~7 정도에서 급격히 변하는 것을 확인할 수 있다. 이 방법에서도 6~7개가 적절한 주성분 개수라고 도출되어, 본 분석에서는 6개의 주성분을 사용하는 것이 적절하다고 판단하였다. 이후 분석 과정은 다음 포스팅에서 설명하고자 한다.
+마지막은 Scree 다이어그램으로 선에서 급격하게 변하는 지점을 바탕으로 개수를 선정하는 방법이다. 위의 그래프에서는 6~7 정도에서 급격히 변하는 것을 확인할 수 있다. 이 방법에서도 6~7개가 적절한 주성분 개수라고 도출되어, 본 분석에서는 6개의 주성분을 사용하는 것이 적절하다고 판단하였다. 이후 분석 과정은 다음 포스팅에서 설명하고자 한다.
