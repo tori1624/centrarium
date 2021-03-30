@@ -81,7 +81,7 @@ legend(-20, 10, pch = 16, col = c("#5B84B1FF", "#FC766AFF"),
 
 <img src = "/assets/Lecture/2020-11-09-Breast-Cancer/Kmeans2_pca.png" title = "plot2" alt = "plot2" width = "1008" style = "display: block; margin: auto;" />
 
-원본 데이터와 마찬가지로 두 개의 그룹으로 잘 나뉘었지만, 분포는 다른 것을 확인할 수 있다.
+원본 데이터와 마찬가지로 두 개의 그룹으로 잘 나뉘었지만, 군집이 구분되는 부분에서 분포가 약간 다른 것을 확인할 수 있다.
 
 {% highlight javascript %}
 par(mar = c(5, 5, 5, 0))
@@ -109,7 +109,7 @@ legend(-20, 10, pch = 16, col = c("#5B84B1FF", "#FC766AFF"),
 
 <img src = "/assets/Lecture/2020-11-09-Breast-Cancer/Kmeans2_actual.png" title = "plot3" alt = "plot3" width = "1008" style = "display: block; margin: auto;" />
 
-위의 코드와 그림은 실제값인 양성(B)과 악성(M)을 시각화 한 것으로, 주성분 데이터를 바탕으로 진행된 군집 분석의 결과와 더 유사해보이는 것으로 나타났다. 하지만 시각적으로 확인하는 것은 주관적일 수 있으므로, 혼동행렬을 통해 객관적인 정확도 검증을 진행하였다.
+위의 코드와 그림은 실제값인 양성(B)과 악성(M)을 시각화 한 것으로, 주성분 데이터를 바탕으로 진행된 군집 분석의 결과와 더 유사해보이는 것으로 나타났다. 하지만 시각적으로 확인하는 것은 주관적일 수 있으므로, 혼동행렬을 통해 객관적인 정확도 검증을 진행해 보았다.
 
 {% highlight javascript %}
 bcw_raw$diagnosis_n <- ifelse(bcw_raw$diagnosis == "M", 1, 2)
@@ -179,7 +179,7 @@ Prediction   1   2
        'Positive' Class : 1
 {% endhighlight %}
 
-(1) 원본 데이터를 바탕으로 진행된 군집 분석의 정확도는 약 85.4%이고, (2) 주성분 데이터를 바탕으로 진행된 군집 분석의 정확도는 약 90.5%로, 주성분 데이터의 군집 분석 결과가 더 우수한 것을 확인할 수 있었다. 이러한 결과를 바탕으로 주성분 데이터를 바탕으로 k가 4인 K-Means 군집 분석을 진행하였고, 시각화 코드와 결과는 아래와 같다.
+(1) 원본 데이터를 바탕으로 진행된 군집 분석의 정확도는 약 85.4%이고, (2) 주성분 데이터를 바탕으로 진행된 군집 분석의 정확도는 약 90.5%로, 주성분 데이터의 군집 분석 결과가 더 우수한 것을 확인할 수 있었다. 이러한 결과를 통해 주성분 분석을 적용한 데이터가 군집 분석에 보다 적합하다는 타당성을 확인하였으며, k가 4인 K-Means 군집 분석을 진행한 시각화 코드와 결과는 아래와 같다.
 
 {% highlight javascript %}
 set.seed(1234)
@@ -224,7 +224,7 @@ legend(-20, 10, pch = 16, col = mycol1, legend = c(1:4))
 
 <img src = "/assets/Lecture/2020-11-09-Breast-Cancer/Kmeans4_pca.png" title = "plot4" alt = "plot4" width = "1008" style = "display: block; margin: auto;" />
 
-분류된 군집을 바탕으로 유방암 진단에 가장 큰 근거가 되는 종양의 크기(radius)를 boxplot을 통해 군집별로 비교하였으며, 코드와 그림은 아래와 같다.
+4개의 군집이 주성분 1, 2를 기준으로 명확히 구분되는 것을 파악할 수 있다. 마지막으로 분류된 군집을 바탕으로 유방암 진단에 가장 큰 근거가 되는 종양의 크기(radius)를 boxplot을 통해 군집별로 비교하였으며, 코드와 그림은 아래와 같다.
 
 {% highlight javascript %}
 par(mar = c(5, 5, 0, 0))
