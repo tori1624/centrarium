@@ -41,7 +41,7 @@ jekyll-archives:
     tag: '/tag/:name/'
 
 # Disqus comments
-# disqus_shortname: bencentra
+# disqus_shortname: Youngho
 
 # Google analytics
 # ga_tracking_id: "UA-XXXX-1"
@@ -95,8 +95,8 @@ social:
 
   - name: GitHub
     icon: github
-    username: bencentra
-    url: https://github.com/bencentra
+    username: Youngho Lee
+    url: https://github.com/tori1624
     desc: Fork me on GitHub
     share: false
 
